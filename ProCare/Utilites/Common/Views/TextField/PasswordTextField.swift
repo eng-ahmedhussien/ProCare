@@ -34,7 +34,11 @@ struct PasswordTextField: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical)
         .padding(.horizontal, 24)
-        .border(Color.gray)
+        .background(Color.white) 
+        .overlay(
+            RoundedRectangle(cornerRadius: 5)
+                .stroke(Color.gray, lineWidth: 1)
+        )
         .padding()
         
     }

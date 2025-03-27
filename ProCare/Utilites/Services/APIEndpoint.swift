@@ -6,24 +6,16 @@
 //
 
 import SwiftUI
+import Combine
+
 
 
 protocol APIEndpoint {
     var baseURL: URL { get }
     var path: String { get }
     var method: HTTPMethod { get }
-    var headers: [String: String]? { get }
-    var parameters: Parameters? { get }
-}
-
-extension APIEndpoint {
-    func asURLRequest() throws -> URLRequest {
-        let url = baseURL.appendingPathComponent(path)
-        var request = URLRequest(url: url)
-        request.httpMethod = method.rawValue
-        headers?.forEach { request.addValue($0.value, forHTTPHeaderField: $0.key) }
-        return request
-    }
+    var headers: HTTPHeader? { get }
+    var parameters: [String: String]? { get }
 }
 
 enum HTTPMethod: String {
@@ -34,20 +26,77 @@ enum HTTPMethod: String {
     case delete = "DELETE"
 }
 
-enum APIError: Error {
-    case invalidResponse
-    case invalidData
-    case invalidURL
-    case requestFailed
-    case custom(statusCode: Int)
-    case decodingFailed
-    case unknown
+extension APIEndpoint {
+    func asURLRequest() throws -> URLRequest {
+
+        let url = baseURL.appendingPathComponent(path)
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        headers?.values.forEach { key, value in
+            request.addValue(value, forHTTPHeaderField: key)
+        }
+        if let parameters = parameters {
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+            } catch {
+                throw APIError.invalidData
+            }
+        }
+
+        return request
+    }
+    
+    func asURLRequestPublisher() -> URLRequest {
+        
+        let url = baseURL.appendingPathComponent(path)
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        headers?.values.forEach { key, value in
+            request.addValue(value, forHTTPHeaderField: key)
+        }
+        if let parameters = parameters {
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+            } catch {
+                print(" ❌ Error encoding parameters in asURLRequestPublisher method: \(error)")
+            }
+        }
+
+        return request
+        
+    }
 }
 
-enum Parameters {
-    case requestNoParameters
+
+enum APIError: Error {
+    case requestFailed
+    case invalidResponse
+    case invalidData
+    case decodingError
+    case custom(statusCode: Int, message: String)
+}
+
+enum HTTPHeader {
+    case custom([String: String])
+    case `default`
+    case `empty`
+
+    var values: [String: String] {
+        switch self {
+        case .custom(let headers):
+            return HTTPHeader.defaultValues.merging(headers) { (_, new) in new }
+        case .default:
+            return HTTPHeader.defaultValues
+        case .empty:
+            return [:]
+
+        }
+    }
     
-//    case requestParameters(parameters: [String: Any], encoding: APIEncoding)
-//    
-//    case requestWithMultipart(parameters: [String: Any], multipartParamters: MultipartType)
+    private static var defaultValues: [String: String] {
+           return [
+               "accept": "*/*",
+               "Content-Type": "application/json"
+           ]
+       }
 }

@@ -34,3 +34,20 @@ extension String {
     }
     
 }
+
+
+enum Language: String {
+    
+    case arabic = "ar"
+    case english = "en"
+    
+    var locale: Locale {
+        switch self {
+        case .arabic:
+            return Locale(identifier: Language.arabic.rawValue)
+        case .english:
+            return Locale(identifier: Language.english.rawValue)
+        }
+    }
+    
+}

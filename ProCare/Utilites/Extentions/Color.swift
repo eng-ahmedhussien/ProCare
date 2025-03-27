@@ -9,6 +9,10 @@
 import SwiftUI
 
 extension Color {
-    static let primary = Color("Accent")
+    static let theme = ColorTheme()
 
+}
+
+struct ColorTheme{
+    let primary                      = Color("primary")
 }

@@ -29,9 +29,22 @@
 		6BEEF19A2D8E0115009FD8B7 /* ProCareUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProCareUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6B48D8D12D94B53A00C065D5 /* Exceptions for "ProCare" folder in "ProCare" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6BEEF17F2D8E0114009FD8B7 /* ProCare */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6BEEF1822D8E0114009FD8B7 /* ProCare */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6B48D8D12D94B53A00C065D5 /* Exceptions for "ProCare" folder in "ProCare" target */,
+			);
 			path = ProCare;
 			sourceTree = "<group>";
 		};
@@ -399,6 +412,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ProCare/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ProCare/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -428,6 +442,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ProCare/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ProCare/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

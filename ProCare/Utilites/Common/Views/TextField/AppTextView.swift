@@ -33,7 +33,11 @@ struct MainTextFieldStyle : TextFieldStyle {
             .frame(maxWidth: .infinity)
             .padding(.vertical)
             .padding(.horizontal, 24)
-            .border(Color.gray)
+            .background(Color.white) // Add a background color
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(Color.gray, lineWidth: 1)
+            )
             .padding()
     }
 }

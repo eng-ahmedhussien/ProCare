@@ -24,7 +24,9 @@ struct SolidButtonStyle: ButtonStyle {
             .font(.body)
             .foregroundColor(isDisabled ? .gray.opacity(0.8) : .white )
             .padding()
+           
             .background(backgroundView(configuration))
+            .cornerRadius(10)
             .disabled(isDisabled)
         
     }
@@ -32,7 +34,7 @@ struct SolidButtonStyle: ButtonStyle {
     @ViewBuilder private func backgroundView( _ configuration: Configuration) -> some View {
         Capsule()
             .strokeBorder( isDisabled ? .gray :  .clear , lineWidth: 1 )
-            .background( Capsule().fill( isDisabled ? Color("bgDisabledButton") : Color("Mainbutton") ) )
+            .background( isDisabled ? Color("bgDisabledButton") : .theme.primary  )
     }
     
 }
@@ -51,7 +53,7 @@ struct BorderButtonStyle: ButtonStyle {
         configuration.label
             .frame(width: width)
             .font(.body)
-            .foregroundColor(isDisabled ? .gray.opacity(0.8) : Color("Mainbutton") )
+            .foregroundColor(isDisabled ? .gray.opacity(0.8) : .red )
             .padding()
             .background(backgroundView(configuration))
     }
@@ -74,7 +76,7 @@ struct PlainButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.body)
-            .foregroundColor(isDisabled ? .gray.opacity(0.8) : Color("Mainbutton") )
+            .foregroundColor(isDisabled ? .gray.opacity(0.8) : .black )
             .padding()
     }
 }
