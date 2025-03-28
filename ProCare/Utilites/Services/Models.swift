@@ -21,30 +21,39 @@ enum ResponseStatus : Int, Codable {
     case Conflict = 3
 }
 
+struct ApiError: Error {
 
-//struct APIResponseError: Codable {
-//    let type: String?
-//    let title: String?
-//    let status: Int?
-//    let errors: Errors?
-//    let traceID: String?
-//
-//    enum CodingKeys: String, CodingKey {
-//        case type, title, status, errors
-//        case traceID = "traceId"
-//    }
-//}
-//
-//// MARK: - Errors
-//struct Errors: Codable {
-//    let phoneNumber: [String]?
-//
-//    enum CodingKeys: String, CodingKey {
-//        case phoneNumber = "PhoneNumber"
-//    }
-//}
+    var statusCode: Int!
+    let errorCode: String
+    var message: String
 
-struct APIResponseError: Codable {
+    init(statusCode: Int = 0, errorCode: String, message: String) {
+        self.statusCode = statusCode
+        self.errorCode = errorCode
+        self.message = message
+    }
+
+    var errorCodeNumber: String {
+        let numberString = errorCode.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        return numberString
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case errorCode
+        case message
+    }
+}
+
+extension ApiError: Decodable {
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        errorCode = try container.decode(String.self, forKey: .errorCode)
+        message = try container.decode(String.self, forKey: .message)
+    }
+}
+
+struct APIResponseError: Codable , Error{
     let type: String?
     let title: String?
     let status: Int?
@@ -52,3 +61,4 @@ struct APIResponseError: Codable {
     let traceId: String?
 
 }
+

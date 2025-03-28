@@ -43,7 +43,7 @@ struct SiginUPScreen: View {
             Spacer()
             
             if let errorMessage = vm.errorMessage {
-                Text(errorMessage)
+                Text(errorMessage.errors?.values.flatMap { $0 }.joined(separator: "\n") ?? "")
                     .foregroundColor(.red)
                     .padding()
             }
@@ -67,7 +67,7 @@ struct SiginUPScreen: View {
 //                        await vm.signUp(parameters: parameter)
 //                    }
                     
-                    vm.signUpComin(parameters: parameter)
+                    vm.signUpPublisher(parameters: parameter)
                     
                 } label: {
                     Text("Sign Up")
