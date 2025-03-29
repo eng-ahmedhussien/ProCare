@@ -22,33 +22,53 @@ protocol APIEndpoint {
 
 
 extension APIEndpoint {
+    
     func asURLRequest() throws -> URLRequest {
-
-//        var urlComponents = URLComponents()
-//        urlComponents.host =  baseURL.absoluteString
-//        urlComponents.path = path
-////        if let queryItems = queryItems {
-////            urlComponents.queryItems = queryItems
-////        }
-//        guard let url = urlComponents.url else {
-//            debugPrint("❌ URL error")
-//            throw APIResponseError(type: nil, title: nil, status:10 , errors: ["URL" : ["URL error"]], traceId: nil)
+       /// let url = baseURL.appendingPathComponent(path)
+        
+        // Ensure the baseURL is valid
+        guard var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
+            let errorMessage = "URL error: Invalid baseURL"
+            NetworkLogger.logError(request: nil, response: nil, data: nil, error: errorMessage)
+            throw APIResponseError(type: nil, title: nil, status: 10, errors: ["URL": [errorMessage]], traceId: nil)
+        }
+        
+        // Append path correctly
+        urlComponents.path += path
+        
+        // Append query parameters if available
+//        if let queryItems = queryItems {
+//            urlComponents.queryItems = queryItems
 //        }
+        
+        // Validate the final URL
+        guard let finalURL = urlComponents.url else {
+            let errorMessage = "URL error: Failed to construct URL"
+            NetworkLogger.logError(request: nil, response: nil, data: nil, error: errorMessage)
+            throw APIResponseError(type: nil, title: nil, status: 10, errors: ["URL": [errorMessage]], traceId: nil)
+        }
 
-        let url = baseURL.appendingPathComponent(path)
-        var request = URLRequest(url: url)
+        // Create request
+        var request = URLRequest(url: finalURL)
         request.httpMethod = method.rawValue
+        
+        // Set headers
         headers?.values.forEach { key, value in
             request.addValue(value, forHTTPHeaderField: key)
         }
+
+        // Set HTTP body if parameters exist
         if let parameters = parameters {
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
             } catch {
-                debugPrint("❌ Error encoding http body")
-                throw APIResponseError(type: nil, title: nil, status:10 , errors: ["parameters" : ["Error encoding http body"]], traceId: nil)
+
+                let errorMessage = "Error encoding HTTP body: \(error.localizedDescription)"
+                NetworkLogger.logError(request: request, response: nil, data: nil, error: errorMessage)
+                throw APIResponseError(type: nil, title: nil, status: 10, errors: ["parameters": [errorMessage]], traceId: nil)
             }
         }
+        
 
         return request
     }

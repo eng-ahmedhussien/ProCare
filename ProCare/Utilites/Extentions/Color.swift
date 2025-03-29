@@ -14,5 +14,5 @@ extension Color {
 }
 
 struct ColorTheme{
-    let primary                      = Color("primary")
+    let appPrimary                      = Color("appPrimary")
 }

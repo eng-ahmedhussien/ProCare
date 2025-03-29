@@ -34,7 +34,7 @@ struct SolidButtonStyle: ButtonStyle {
     @ViewBuilder private func backgroundView( _ configuration: Configuration) -> some View {
         Capsule()
             .strokeBorder( isDisabled ? .gray :  .clear , lineWidth: 1 )
-            .background( isDisabled ? Color("bgDisabledButton") : .theme.primary  )
+            .background( isDisabled ? Color("bgDisabledButton") : .theme.appPrimary  )
     }
     
 }
