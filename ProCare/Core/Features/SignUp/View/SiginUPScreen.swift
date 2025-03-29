@@ -48,26 +48,19 @@ struct SiginUPScreen: View {
                     .padding()
             }
             
-//            "firstName": "ahmed",
-//             "lastName": "hussien",
-//             "phoneNumber": "+201553855450",
-//             "password": "@Benten10",
-//             "confirmPassword": "@Benten10"
-            
             VStack(spacing: 0){
                 Button {
-                   // Task {
+                    Task {
                         let parameter = [
                             "firstName": name,
-                             "lastName": secondName,
-                             "phoneNumber": phone,
-                             "password": password,
-                             "confirmPassword": confirmPassword
+                            "lastName": secondName,
+                            "phoneNumber": phone,
+                            "password": password,
+                            "confirmPassword": confirmPassword
                         ]
-//                        await vm.signUp(parameters: parameter)
-//                    }
+                        await vm.signUp(parameters: parameter)
+                    }
                     
-                    vm.signUpPublisher(parameters: parameter)
                     
                 } label: {
                     Text("Sign Up")
