@@ -11,9 +11,9 @@ import SwiftUI
 struct ProCareApp: App {
     var body: some Scene {
         WindowGroup {
-            //RouterView()
-            
-            SiginUPScreen()
+            RouterView()
+           // OTPScreen()
+          //  SiginUPScreen()
         }
     }
 }

@@ -126,13 +126,14 @@ final class SignUpVM: ObservableObject {
     }
 
     
-    func signUp(parameters: [String: String]) async {
+    func signUp(parameters: [String: String], completion: @escaping (String?) -> Void) async {
         do {
             let response = try await apiClient.signUp(parameters: parameters)
             
             await MainActor.run {
                 if response.status == .Success, let otp = response.data {
                     self.otp = otp
+                    completion(otp)
                     self.errorMessage = nil
                 } else {
                     self.errorMessage =  APIResponseError(type: nil, title: nil, status: 4, errors: ["error":[response.message]], traceId: nil)

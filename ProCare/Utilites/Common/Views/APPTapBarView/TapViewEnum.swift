@@ -10,43 +10,28 @@ import SwiftUI
 
 enum TapViewEnum : Identifiable, CaseIterable, View {
     
-    case shop, offers, home, Services, cart
+    case profile, home, history
     var id: Self { self }
     
     var tabItem : TabItem {
         switch self {
-        case .shop:
-                .init(image: "shopsIcon", title: "shop")
-        case .offers:
+        case .profile:
                 .init(image: "discountIcon", title: "offersTapBar")
         case .home:
                 .init(image: "homeIcon", title: "home")
-        case .Services:
-                .init(image: "location", title: "servicesTapBar")
-        case .cart:
-                .init(image: "profileIcon", title: "cartTapBar")
+        case .history:
+                .init(image: "homeIcon", title: "home")
         }
     }
     
     var body: some View {
         switch self {
-        case .shop:
-            VStack{
-                Text("shopTapBar")
-                Button("Change Language".localized()) {
-                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                        UIApplication.shared.open(url)
-                    }
-                }
-            }
-        case .offers:
+        case .profile:
             Text("OffersView")
         case .home:
             Text("OffersView")
-        case .Services:
+        case .history:
             Text("MainServicesView")
-        case .cart:
-            Text("CartPageView")
         }
     }
 }
@@ -57,3 +42,13 @@ enum TapViewEnum : Identifiable, CaseIterable, View {
     TapViewEnum.home.body
 }
 
+
+
+//VStack{
+//    Text("shopTapBar")
+//    Button("Change Language".localized()) {
+//        if let url = URL(string: UIApplication.openSettingsURLString) {
+//            UIApplication.shared.open(url)
+//        }
+//    }
+//}

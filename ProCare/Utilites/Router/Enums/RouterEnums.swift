@@ -10,6 +10,8 @@ import SwiftUI
 
 enum Screen: Identifiable, Hashable {
     case tapbar
+    case RootScreen
+
     
     var id: Self { return self }
 }
@@ -21,7 +23,7 @@ enum SheetView: Identifiable, Hashable {
 }
 
 enum FullScreen: Identifiable, Hashable {
-    case addHabit
+    case otpScreen
 
     var id: Self { return self }
 }
@@ -30,15 +32,15 @@ extension FullScreen {
     // Conform to Hashable
     func hash(into hasher: inout Hasher) {
         switch self {
-        case .addHabit:
-            hasher.combine("addHabit")
+        case .otpScreen:
+            hasher.combine("otpScreen")
         }
     }
     
     // Conform to Equatable
     static func == (lhs: FullScreen, rhs: FullScreen) -> Bool {
         switch (lhs, rhs) {
-        case (.addHabit, .addHabit):
+        case (.otpScreen, .otpScreen):
             return true
         }
     }

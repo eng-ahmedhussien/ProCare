@@ -68,6 +68,8 @@ class AppRouter : RouterProtocol {
         switch screen {
         case.tapbar:
             TapBarView()
+        case .RootScreen:
+            RootScreen()
         }
     }
     
@@ -82,8 +84,8 @@ class AppRouter : RouterProtocol {
     @ViewBuilder
     func build(_ fullScreenCover: FullScreen) -> some View {
         switch fullScreenCover {
-        case .addHabit:
-            Text("empty fullScreenCover")
+        case .otpScreen:
+            OTPScreen()
         }
     }
 
