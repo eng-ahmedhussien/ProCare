@@ -29,7 +29,7 @@ enum TapViewEnum : Identifiable, CaseIterable, View {
         case .profile:
             Text("OffersView")
         case .home:
-            Text("OffersView")
+            homeView()
         case .history:
             Text("MainServicesView")
         }
@@ -52,3 +52,20 @@ enum TapViewEnum : Identifiable, CaseIterable, View {
 //        }
 //    }
 //}
+
+
+struct homeView : View {
+    @EnvironmentObject var auth: AuthManger
+    var body: some View {
+        VStack{
+            Button {
+                auth.deleteToken()
+            } label: {
+                Text("create account".localized())
+                    .font(.title3)
+                    .underline()
+            }
+            .plain()
+        }
+    }
+}

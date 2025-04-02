@@ -86,6 +86,8 @@ class AppRouter : RouterProtocol {
         switch fullScreenCover {
         case .otpScreen:
             OTPScreen()
+        case.tapbarFullScreen:
+            TapBarView()
         }
     }
 

@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct RootScreen: View {
-    
-    @State var loggedIn: Bool = false
+    @EnvironmentObject var auth: AuthManger
     
     var body: some View {
-        if loggedIn {
-            TapBarView()
+        if auth.isLoggedIn {
+            RouterView()
         } else {
-            SiginUPScreen()
+            LoginScreen()
         }
     }
 }

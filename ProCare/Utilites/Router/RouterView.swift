@@ -12,8 +12,7 @@ struct RouterView: View {
     
     var body: some View {
         NavigationStack(path: $appRouter.path) {
-            //TapBarView()
-            appRouter.build(.RootScreen)
+            appRouter.build(.tapbar)
                 .navigationDestination(for: Screen.self) { screen in
                     appRouter.build(screen)
                 }

@@ -24,27 +24,36 @@ enum SheetView: Identifiable, Hashable {
 
 enum FullScreen: Identifiable, Hashable {
     case otpScreen
+    case tapbarFullScreen
 
-    var id: Self { return self }
+    var id: Self {  self }
 }
 
-extension FullScreen {
-    // Conform to Hashable
-    func hash(into hasher: inout Hasher) {
-        switch self {
-        case .otpScreen:
-            hasher.combine("otpScreen")
-        }
-    }
-    
-    // Conform to Equatable
-    static func == (lhs: FullScreen, rhs: FullScreen) -> Bool {
-        switch (lhs, rhs) {
-        case (.otpScreen, .otpScreen):
-            return true
-        }
-    }
-}
+//extension FullScreen {
+//    // Conform to Hashable
+//    func hash(into hasher: inout Hasher) {
+//        switch self {
+//        case .otpScreen:
+//            hasher.combine("otpScreen")
+//        case .tapbar:
+//            hasher.combine("tapbar")
+//        }
+//    }
+//    
+//    // Conform to Equatable
+//    static func == (lhs: FullScreen, rhs: FullScreen) -> Bool {
+//        switch (lhs, rhs) {
+//        case (.otpScreen, .otpScreen):
+//            return true
+//        case (.tapbar, .tapbar):
+//            return true
+//        case (.tapbar, .otpScreen):
+//            <#code#>
+//        case (.otpScreen, .tapbar):
+//            <#code#>
+//        }
+//    }
+//}
 
 // Wrapper for Any View Navigation
 struct AnyViewContainer: Identifiable, Hashable {

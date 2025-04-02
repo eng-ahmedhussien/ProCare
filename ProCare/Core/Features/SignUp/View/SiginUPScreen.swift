@@ -8,17 +8,17 @@
 import SwiftUI
 
 
-struct SiginUPScreen: View {
+struct SignUPScreen: View {
     
     @State var name: String = ""
     @State var secondName: String = ""
     @State var phone: String = ""
     @State var password: String = ""
     @State var confirmPassword: String = ""
+    @State private var gotLogin = false
     
     @StateObject var vm = SignUpVM()
     @EnvironmentObject var appRouter: AppRouter
-    
     
     var body: some View {
         VStack{
@@ -74,7 +74,7 @@ struct SiginUPScreen: View {
                 .solid(width: 300)
                 
                 Button {
-                    print("sign up".localized())
+                    gotLogin.toggle()
                 } label: {
                     Text("have account?".localized())
                         .font(.title3)
@@ -83,11 +83,14 @@ struct SiginUPScreen: View {
             }
             
         }
+        .fullScreenCover(isPresented: $gotLogin) {
+            LoginScreen()
+        }
     }
 }
 
 #Preview {
-    SiginUPScreen()
+    SignUPScreen()
 }
 
 
