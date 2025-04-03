@@ -56,7 +56,7 @@ class NetworkLogger {
         let headers = request.allHTTPHeaderFields ?? [:]
         let body = request.httpBody?.prettyPrintedJSONString ?? "No Body"
 
-        logger.info("🚀 [API Request] Method: \(method), URL: \(url)")
+        logger.info("🚀🚀🚀 [API Request] Method: \(method), URL: \(url)")
         logger.debug("🏷 [Headers]: \(headers)")
         logger.debug("📦 [Body]: \(body)")
     }
@@ -67,7 +67,7 @@ class NetworkLogger {
         let statusCode = response.statusCode
         let responseBody = data.prettyPrintedJSONString ?? "No Response Body"
 
-        logger.info("✅ [API Response] URL: \(url)")
+        logger.info("✅✅✅ [API Response] URL: \(url)")
         logger.debug("🔢 [Status Code]: \(statusCode)")
         logger.debug("📦 [Response Bod]: \(responseBody)")
     }

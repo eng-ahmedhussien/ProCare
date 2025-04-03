@@ -116,19 +116,32 @@ import Combine
 @MainActor
 final class SignUpVM: ObservableObject {
 
+    @Published var name: String = ""
+    @Published var secondName: String = ""
+    @Published var phone: String = ""
+    @Published var password: String = ""
+    @Published var confirmPassword: String = ""
+    
     @Published var otp : String = ""
+    @Published var errorMessage: APIResponseError?
     private let apiClient: SignUpApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
-    @Published var errorMessage: APIResponseError?
     
     init(apiClient: SignUpApiClintProtocol = SignUpApiClint()) {
         self.apiClient = apiClient
     }
 
     
-    func signUp(parameters: [String: String], completion: @escaping (String?) -> Void) async {
+    func signUp(completion: @escaping (String?) -> Void) async {
+        let parameter = [
+            "firstName": name,
+            "lastName": secondName,
+            "phoneNumber": phone,
+            "password": password,
+            "confirmPassword": confirmPassword
+        ]
         do {
-            let response = try await apiClient.signUp(parameters: parameters)
+            let response = try await apiClient.signUp(parameters: parameter)
             
             await MainActor.run {
                 if response.status == .Success, let otp = response.data {

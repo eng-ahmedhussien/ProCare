@@ -8,19 +8,29 @@
 import Foundation
 
 
-struct LoginModel: Codable {
-    let status: ResponseStatus?
-    let message: String?
-    let internalMessage: String?
-    let data: UserDataLogin?
-    let subStatus: Int?
-}
-
 // MARK: - DataClass
 struct UserDataLogin: Codable {
     let token, firstName, lastName, phoneNumber: String?
     let birthOfDate: String?
-    let role, loginStatus: Int?
+    let role: Roles?
+    let loginStatus: LoginStatus?
 }
+
+
+enum LoginStatus : Int, Codable {
+    case Success = 1
+    case InValidCredintials = 2
+    case UserLockedOut = 3
+    case UserNotConfirmed = 4
+    case Error = 5
+}
+
+enum Roles : Int, Codable {
+    case Patient = 0
+    case Nurse = 1
+    case Admin = 2
+    case SuperAdmin = 3
+}
+
 
 

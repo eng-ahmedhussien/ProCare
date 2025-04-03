@@ -68,6 +68,10 @@ struct LoginScreen: View {
         .fullScreenCover(isPresented: $gotSignUp) {
             SignUPScreen()
         }
+        .fullScreenCover(isPresented: $vm.goToOTP) {
+            OTPScreen()
+        }
+
       
     }
 }

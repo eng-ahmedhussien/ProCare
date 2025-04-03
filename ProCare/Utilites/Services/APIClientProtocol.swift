@@ -134,12 +134,7 @@ extension ApiClient {
         switch httpResponse.statusCode {
         case 200...299:
             let decodedResponse = try self.decoder.decode(APIResponse<T>.self, from: data)
-            guard decodedResponse.status == .Success else {
-                let errorMessage = "API Error: \(decodedResponse.status) - \(decodedResponse.message)"
-                NetworkLogger.logError(request: request, response: httpResponse, data: data, error: errorMessage)
-                throw createAPIError(from: decodedResponse)
-            }
-            return decodedResponse
+            return decodedResponse // ✅ Return response even if status is not .Success
 
         default:
             if let decodedError = try? self.decoder.decode(APIResponseError.self, from: data) {

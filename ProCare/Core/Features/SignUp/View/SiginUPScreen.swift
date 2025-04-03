@@ -10,15 +10,11 @@ import SwiftUI
 
 struct SignUPScreen: View {
     
-    @State var name: String = ""
-    @State var secondName: String = ""
-    @State var phone: String = ""
-    @State var password: String = ""
-    @State var confirmPassword: String = ""
     @State private var gotLogin = false
-    
+    @State private var gotOTP = false
     @StateObject var vm = SignUpVM()
     @EnvironmentObject var appRouter: AppRouter
+    
     
     var body: some View {
         VStack{
@@ -32,12 +28,12 @@ struct SignUPScreen: View {
             
             VStack{
                 HStack{
-                    TextField("name".localized(), text: $name)
-                    TextField("second name".localized(), text: $secondName)
+                    TextField("name".localized(), text: $vm.name)
+                    TextField("second name".localized(), text: $vm.secondName)
                 }
-                TextField("phone".localized(), text: $phone)
-                TextField("password".localized(), text: $password)
-                TextField("confirm password".localized(), text: $confirmPassword)
+                TextField("phone".localized(), text: $vm.phone)
+                TextField("password".localized(), text: $vm.password)
+                TextField("confirm password".localized(), text: $vm.confirmPassword)
             }
             .mainTextFieldStyle()
             .autocapitalization(.none)
@@ -54,16 +50,10 @@ struct SignUPScreen: View {
             VStack(spacing: 0){
                 Button {
                     Task {
-                        let parameter = [
-                            "firstName": name,
-                            "lastName": secondName,
-                            "phoneNumber": phone,
-                            "password": password,
-                            "confirmPassword": confirmPassword
-                        ]
-                        await vm.signUp(parameters: parameter){ otp in
-                            print(otp ?? "nil")
-                            appRouter.presentFullScreenCover(.otpScreen)
+                       
+                        await vm.signUp(){ otp in
+                            debugPrint(otp ?? "nil")
+                            gotOTP.toggle()
                         }
                     }
                 } label: {
@@ -85,6 +75,9 @@ struct SignUPScreen: View {
         }
         .fullScreenCover(isPresented: $gotLogin) {
             LoginScreen()
+        }
+        .fullScreenCover(isPresented: $gotOTP) {
+            OTPScreen(phonNumber: vm.phone)
         }
     }
 }

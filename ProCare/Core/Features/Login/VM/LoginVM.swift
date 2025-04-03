@@ -14,6 +14,7 @@ class LoginVM: ObservableObject {
     @Published var phone: String = ""
     @Published var password: String = ""
     @Published var userDataLogin : UserDataLogin?
+    @Published var goToOTP = false
     private let apiClient: LoginApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
 
@@ -33,18 +34,33 @@ class LoginVM: ObservableObject {
             let response = try await apiClient.login(parameters: parameter)
             
             await MainActor.run {
-                if response.status == .Success, let userDataLogin = response.data {
+                if  let userDataLogin = response.data {
                     self.userDataLogin = userDataLogin
-                    if let token = userDataLogin.token {
-                        AuthManger.shared.saveToken(token)
+                    
+                    switch userDataLogin.loginStatus {
+                    case .Success:
+                        if let token = userDataLogin.token {
+                            AuthManger.shared.saveToken(token)
+                        }
+                    case .InValidCredintials:
+                        debugPrint("InValidCredintials")
+                    case .UserLockedOut:
+                        debugPrint("UserLockedOut")
+                    case .UserNotConfirmed:
+                        goToOTP = true
+                    case .Error:
+                        debugPrint("Error")
+                    case .none:
+                        debugPrint("none")
                     }
+                    
                 } else {
-                   
+                    debugPrint("Response received but no user data")
                 }
             }
         } catch let APIError{
             await MainActor.run {
-                //self.errorMessage = APIError as? APIResponseError
+                debugPrint("Unexpected error: \(APIError.localizedDescription)")
             }
         }
     }

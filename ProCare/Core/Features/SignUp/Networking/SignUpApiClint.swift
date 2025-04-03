@@ -16,7 +16,7 @@ protocol SignUpApiClintProtocol {
 class SignUpApiClint: ApiClient<SignUpEndpoints>, SignUpApiClintProtocol {
 
     func signUp(parameters: [String: String]) async throws -> APIResponse<String>{
-        return try await request(SignUpEndpoints.signUp(parameters: parameters))
+        return try await request(SignUpEndpoints.signUp(parameters: parameters)) 
     }
     
     func signUp(parameters: [String: String])-> AnyPublisher<APIResponse<String>, APIResponseError>{
