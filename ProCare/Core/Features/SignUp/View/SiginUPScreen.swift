@@ -79,6 +79,9 @@ struct SignUPScreen: View {
         .fullScreenCover(isPresented: $gotOTP) {
             OTPScreen(phonNumber: vm.phone)
         }
+        .alert(isPresented: .constant(vm.errorMessage != nil)) {
+            Alert(title: Text("Error"), message: Text(vm.errorMessage?.errors?.values.flatMap { $0 }.joined(separator: "\n") ?? "Unknown error"))
+        }
     }
 }
 

@@ -17,38 +17,55 @@ struct OTPScreen: View {
     @State var pinTwo: String = ""
     @State var pinThree: String = ""
     @State var pinFour: String = ""
-    
+    @State private var isLoading = false
     var phonNumber: String = ""
     @StateObject var vm = OTPVM()
     
     var body: some View {
-            VStack {
-    
-                VStack(alignment: .leading){
-                    Text("please".localized())
-                    Text("enter otp!".localized())
-                }
-                .font(.title.bold())
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-                
-                pinView
+        VStack {
+            VStack(alignment: .leading){
+                Text("please".localized())
+                Text("enter otp!".localized())
+            }
+            .font(.title.bold())
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
             
-                Button {
-                    let parameter = [
-                        "phoneNumber": phonNumber,
-                        "code": pinOne + pinTwo + pinThree + pinFour
-                    ]
-                    Task {
-                        await vm.confirmCode(parameter: parameter)
+            pinView
+         
+            
+            ResendOTPView(vm: vm, phonNumber: phonNumber)
+            
+            Button {
+                let parameter = [
+                    "phoneNumber": phonNumber,
+                    "code": pinOne + pinTwo + pinThree + pinFour
+                ]
+                isLoading = true
+                Task {
+                    
+                    await vm.confirmCode(parameter: parameter)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        isLoading = false
                     }
-                   
-                } label: {
+                }
+                
+            } label: {
+                
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .scaleEffect(2)
+                }
+                else{
                     Text("Verify".localized())
                         .font(.title3)
+                        .foregroundColor(.white)
                 }
-                .solid(width: 300,isDisabled: pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty)
             }
+            .solid(width: 300,isDisabled: pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty)
+        }
+        .disabled(isLoading)
         
     }
 }
@@ -112,13 +129,13 @@ struct OtpModifer: ViewModifier {
     @Binding var pin : String
     @Binding var isFocused: Bool // Add a binding for focus state
     var textLimt = 1
-
+    
     func limitText(_ upper : Int) {
         if pin.count > upper {
             self.pin = String(pin.prefix(upper))
         }
     }
-
+    
     func body(content: Content) -> some View {
         content
             .multilineTextAlignment(.center)

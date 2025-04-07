@@ -121,9 +121,9 @@ final class SignUpVM: ObservableObject {
     @Published var phone: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
-    
     @Published var otp : String = ""
     @Published var errorMessage: APIResponseError?
+    
     private let apiClient: SignUpApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
     

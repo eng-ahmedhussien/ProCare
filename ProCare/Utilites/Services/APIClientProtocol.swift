@@ -29,46 +29,79 @@ class ApiClient<EndpointType: APIEndpoint>: ApiProtocol {
         configuration.timeoutIntervalForResource = 300 // seconds for whole resource request to complete ,.
         return URLSession(configuration: configuration)
     }
-
+    
     // MARK: - request async
     func request<T: Codable>(_ endpoint: EndpointType) async throws -> APIResponse<T> {
-        let request = try endpoint.asURLRequest()
-        // 🔹 Log the request
-        NetworkLogger.logRequest(request)
+        
+        var request: URLRequest?
+        var data: Data?
+        var response: URLResponse?
+        
         do {
-            let (data, response) = try await session.data(for: request)
-            // 🔹 Process and log response
-            let apiResponse = try self.manageResponse(data: data, response: response, request: request, responseType: T.self)
-            NetworkLogger.logResponse(request: request, response: response as! HTTPURLResponse, data: data)
-            return apiResponse
-        } catch {
             
-           // NetworkLogger.logError(request: request, response: nil, data: nil, error: error.localizedDescription)
-            
-            if let urlError = error as? URLError {
+            request = try endpoint.asURLRequest()
+            if let request = request {
+                NetworkLogger.logRequest(request)
+                (data, response) = try await session.data(for: request)
+                guard let data = data, let response = response else {
+                    throw APIResponseError(
+                        type: nil,
+                        title: "No response or data",
+                        status: nil,
+                        errors: ["network": ["No data or response received"]],
+                        traceId: nil
+                    )
+                }
+                let apiResponse = try self.manageResponse(data: data, response: response, request: request, responseType: T.self)
+                if let httpResponse = response as? HTTPURLResponse {
+                    NetworkLogger.logResponse(
+                        request: request,
+                        response: httpResponse,
+                        data: data
+                    )
+                }
+                return apiResponse
+                
+            }else {
+                
                 throw APIResponseError(
-                    type: "Network Error",
-                    title: "Failed to reach server",
-                    status: urlError.errorCode,
-                    errors: ["Network": [urlError.localizedDescription]],
+                    type: nil,
+                    title: "Invalid request",
+                    status: nil,
+                    errors: ["request": ["Request could not be created"]],
                     traceId: nil
                 )
             }
-            if let apiError = error as? APIResponseError {
-                throw apiError
-            }
             
-            throw APIResponseError(
-                type: nil,
-                title: nil,
-                status: 10,
-                errors: ["HTTP": ["Unknown API error \(error.localizedDescription)"]],
-                traceId: nil
+        } catch let error as APIResponseError {
+            
+            NetworkLogger.logError(
+                request: request,
+                response: response as? HTTPURLResponse,
+                data: data,
+                error: error.errors?.values.first?.first ?? " 💥 Errors array is  empty 💥"
             )
+            throw error
+            
+        }catch let error as URLError {
+            
+            handleURLError(error, request)
+            throw error // optional: rethrow if you want to pass it up
+            
+        } catch {
+            
+            NetworkLogger.logError(
+                request: request,
+                response: response as? HTTPURLResponse,
+                data: data,
+                error: " 💥 Unknown error: \(error.localizedDescription) 💥"
+            )
+            throw error
+            
         }
     }
 
-
+    
     // MARK: -  request AnyPublisher
     func request<T: Codable>(_ endpoint: EndpointType) -> AnyPublisher<APIResponse<T>, APIResponseError> {
         do {
@@ -81,7 +114,7 @@ class ApiClient<EndpointType: APIEndpoint>: ApiProtocol {
                 .dataTaskPublisher(for: request)
                 .tryMap { output in
                     let apiResponse = try self.manageResponse(data: output.data, response: output.response, request: request, responseType: T.self)
-
+                    
                     if let httpResponse = output.response as? HTTPURLResponse {
                         NetworkLogger.logResponse(request: request, response: httpResponse, data: output.data)
                     }
@@ -121,32 +154,33 @@ class ApiClient<EndpointType: APIEndpoint>: ApiProtocol {
 }
 
 
-// MARK: - manageResponse
+
 extension ApiClient {
+    // MARK: - manageResponse
     private func manageResponse<T: Decodable>(data: Data, response: URLResponse, request: URLRequest, responseType: T.Type) throws -> APIResponse<T> {
         
         guard let httpResponse = response as? HTTPURLResponse else {
             let errorMessage = "Invalid HTTP response"
-            NetworkLogger.logError(request: request, response: nil, data: nil, error: errorMessage)
+            //NetworkLogger.logError(request: request, response: nil, data: nil, error: errorMessage)
             throw APIResponseError(type: nil, title: nil, status: 10, errors: ["HTTP": [errorMessage]], traceId: nil)
         }
-
+        
         switch httpResponse.statusCode {
         case 200...299:
             let decodedResponse = try self.decoder.decode(APIResponse<T>.self, from: data)
             return decodedResponse // ✅ Return response even if status is not .Success
-
+            
         default:
             if let decodedError = try? self.decoder.decode(APIResponseError.self, from: data) {
-                NetworkLogger.logError(request: request, response: httpResponse, data: data, error: "API Error Response")
+              //  NetworkLogger.logError(request: request, response: httpResponse,data: data,error: "manageResponse func error : \(decodedError.errors?.first?.value.first ?? " Unknown error")")
                 throw decodedError
             }
             let errorMessage = "Unexpected status code: \(httpResponse.statusCode)"
-            NetworkLogger.logError(request: request, response: httpResponse, data: data, error: errorMessage)
-            throw APIResponseError(type: nil, title: nil, status: 10, errors: ["HTTP": ["Unexpected response"]], traceId: nil)
+            //NetworkLogger.logError(request: request, response: httpResponse, data: data, error: errorMessage)
+            throw APIResponseError(type: nil, title: nil, status: 10, errors: ["decodedError": ["manageResponse func error : \(errorMessage)"]], traceId: nil)
         }
     }
-
+    
     // Helper function to create APIResponseError
     private func createAPIError<T>(from response: APIResponse<T>) -> APIResponseError {
         return APIResponseError(
@@ -157,7 +191,34 @@ extension ApiClient {
             traceId: nil
         )
     }
-
+    
+    // MARK: - handleURLError
+    private func handleURLError(_ error: URLError,_ request: URLRequest?) {
+         
+         switch error.code {
+         case .notConnectedToInternet:
+             NetworkLogger.logError( request: request, error: "🔌 No internet connection")
+             // Show offline alert, fallback to cache, etc.
+             
+         case .timedOut:
+             NetworkLogger.logError( request: request, error: "⏱ Request timed out")
+             // Retry or prompt user
+             
+         case .networkConnectionLost:
+             NetworkLogger.logError( request: request, error: "📡 Connection lost during request")
+             // Retry or notify user
+             
+         case .cannotFindHost, .cannotConnectToHost:
+             NetworkLogger.logError( request: request, error: "❌ Cannot connect to server")
+             // Inform user or log
+             
+         case .dnsLookupFailed:
+             NetworkLogger.logError( request: request, error: "🌐 DNS lookup failed")
+             // May indicate network issues
+         default:
+             NetworkLogger.logError( request: request, error: "⚠️ URLError: \(error.code.rawValue) - \(error.localizedDescription)")
+         }
+     }
 }
 
 

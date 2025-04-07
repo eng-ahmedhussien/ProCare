@@ -13,6 +13,7 @@ class OTPVM : ObservableObject{
     @Published var userDataLogin : UserDataLogin?
     private let apiClient:  OTPApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
+    @Published var errorMessage: APIResponseError?
 
     
     init(apiClient: OTPApiClintProtocol = OTPApiClint()) {
@@ -31,14 +32,25 @@ class OTPVM : ObservableObject{
                         AuthManger.shared.saveToken(token)
                     }
                 } else {
-                   
                 }
             }
+        } catch let APIError{
+            await MainActor.run {
+                self.errorMessage = APIError as? APIResponseError
+            }
+        }
+    }
+    
+    func resendCode(parameter: [String : String]) async {
+
+        do {
+             try await apiClient.resendCode(parameters: parameter)
         } catch let APIError{
             await MainActor.run {
                 //self.errorMessage = APIError as? APIResponseError
             }
         }
     }
+    
     
 }

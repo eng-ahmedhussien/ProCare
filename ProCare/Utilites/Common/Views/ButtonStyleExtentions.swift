@@ -53,7 +53,7 @@ struct BorderButtonStyle: ButtonStyle {
         configuration.label
             .frame(width: width)
             .font(.body)
-            .foregroundColor(isDisabled ? .gray.opacity(0.8) : appPrimary  )
+            .foregroundColor(isDisabled ? .gray.opacity(0.8) : .appPrimary  )
             .padding()
             .background(backgroundView(configuration))
     }

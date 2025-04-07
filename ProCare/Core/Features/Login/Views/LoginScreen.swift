@@ -65,12 +65,16 @@ struct LoginScreen: View {
             }
             
         }
+//        .redacted(reason: .privacy)
         .fullScreenCover(isPresented: $gotSignUp) {
             SignUPScreen()
         }
         .fullScreenCover(isPresented: $vm.goToOTP) {
-            OTPScreen()
+            OTPScreen(phonNumber: vm.phone)
         }
+//        .alert(isPresented: .constant(vm.errorMessage != nil)) {
+//            Alert(title: Text("Error"), message: Text(vm.errorMessage ?? "Unknown error"))
+//        }
 
       
     }

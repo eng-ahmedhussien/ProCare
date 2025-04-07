@@ -83,6 +83,12 @@ class NetworkLogger {
         logger.debug("🔢 [Status Code]: \(statusCode)")
         logger.debug("📦 [Response Body]: \(responseBody)")
     }
+    
+    static func logError(request: URLRequest?, error: String) {
+        let url = request?.url?.absoluteString ?? "No URL"
+        logger.error(" ❌ [URL]: \(url)")
+        logger.debug("❌ [Error]: \(error)")
+    }
 }
 
 // MARK: - Pretty Printed JSON Extension
