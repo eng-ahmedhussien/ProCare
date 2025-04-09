@@ -11,6 +11,7 @@ struct LoginScreen: View {
     
     @StateObject var vm = LoginVM()
     @State private var gotSignUp = false
+    @EnvironmentObject var appRouter: AppRouter
     
     var body: some View {
         VStack{
@@ -46,7 +47,9 @@ struct LoginScreen: View {
             VStack(spacing: 0){
                 Button {
                     Task {
-                        await vm.login()
+                        await vm.login(){
+                            appRouter.presentFullScreenCover(.otpScreen)
+                        }
                     }
                 } label: {
                     Text("log in".localized())
@@ -55,7 +58,7 @@ struct LoginScreen: View {
                 .solid(width: 300)
                 
                 Button {
-                    gotSignUp = true
+                    appRouter.presentFullScreenCover(.signUp)
                 } label: {
                     Text("create account".localized())
                         .font(.title3)
@@ -63,25 +66,10 @@ struct LoginScreen: View {
                 }
                 .plain()
             }
-            
         }
-//        .redacted(reason: .privacy)
-        .fullScreenCover(isPresented: $gotSignUp) {
-            SignUPScreen()
-        }
-        .fullScreenCover(isPresented: $vm.goToOTP) {
-            OTPScreen(phonNumber: vm.phone)
-        }
-//        .alert(isPresented: .constant(vm.errorMessage != nil)) {
-//            Alert(title: Text("Error"), message: Text(vm.errorMessage ?? "Unknown error"))
-//        }
-
-      
     }
 }
 
 #Preview {
     LoginScreen()
-//        .environment(\.locale, Locale(identifier: "ar"))
-//        .environment(\.layoutDirection, .rightToLeft) // Ensures proper RTL layout
 }

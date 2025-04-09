@@ -23,7 +23,7 @@ class LoginVM: ObservableObject {
         self.apiClient = apiClient
     }
 
-    func login() async {
+    func login(completion: @escaping () -> Void) async {
         
         let parameter = [
             "phoneNumber": phone,
@@ -47,7 +47,7 @@ class LoginVM: ObservableObject {
                     case .UserLockedOut:
                         debugPrint("UserLockedOut")
                     case .UserNotConfirmed:
-                        goToOTP = true
+                        completion()
                     case .Error:
                         debugPrint("Error")
                     case .none:

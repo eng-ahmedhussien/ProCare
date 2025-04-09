@@ -12,7 +12,8 @@ struct RootScreen: View {
     
     var body: some View {
         if auth.isLoggedIn {
-            RouterView()
+           // RouterView()
+            TapBarView()
         } else {
             LoginScreen()
         }

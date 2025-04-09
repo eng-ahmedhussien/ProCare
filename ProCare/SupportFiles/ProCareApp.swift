@@ -11,7 +11,8 @@ import SwiftUI
 struct ProCareApp: App {
     var body: some Scene {
         WindowGroup {
-            RootScreen()
+           // RootScreen()
+            RouterView()
                 .environmentObject(AuthManger.shared)
         }
     }

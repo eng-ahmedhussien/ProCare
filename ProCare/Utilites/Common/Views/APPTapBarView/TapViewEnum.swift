@@ -56,12 +56,31 @@ enum TapViewEnum : Identifiable, CaseIterable, View {
 
 struct homeView : View {
     @EnvironmentObject var auth: AuthManger
+    @EnvironmentObject var appRouter: AppRouter
     var body: some View {
         VStack{
             Button {
+                appRouter.push(.homeView2)
+            } label: {
+                Text("logOut".localized())
+                    .font(.title3)
+                    .underline()
+            }
+            .plain()
+        }
+    }
+}
+
+struct homeView2 : View {
+    @EnvironmentObject var auth: AuthManger
+    @EnvironmentObject var appRouter: AppRouter
+    var body: some View {
+        VStack{
+            Button {
+                appRouter.popToRoot()
                 auth.deleteToken()
             } label: {
-                Text("create account".localized())
+                Text("logOut".localized())
                     .font(.title3)
                     .underline()
             }

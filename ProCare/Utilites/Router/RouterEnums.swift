@@ -9,8 +9,9 @@ import Foundation
 import SwiftUI
 
 enum Screen: Identifiable, Hashable {
-    case tapbar
+    case tapBar
     case RootScreen
+    case homeView2
 
     
     var id: Self { return self }
@@ -24,7 +25,9 @@ enum SheetView: Identifiable, Hashable {
 
 enum FullScreen: Identifiable, Hashable {
     case otpScreen
-    case tapbarFullScreen
+    case tapBarFullScreen
+    case signUp
+    case login
 
     var id: Self {  self }
 }
