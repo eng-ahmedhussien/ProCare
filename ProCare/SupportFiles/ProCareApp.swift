@@ -12,7 +12,10 @@ struct ProCareApp: App {
     var body: some Scene {
         WindowGroup {
            // RootScreen()
-            RouterView()
+//            NavigationStack{
+//                PhoneScreen()
+//            }
+           RouterView()
                 .environmentObject(AuthManger.shared)
         }
     }

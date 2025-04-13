@@ -62,3 +62,5 @@ struct APIResponseError: Codable , Error{
 
 }
 
+
+struct EmptyData: Codable {}

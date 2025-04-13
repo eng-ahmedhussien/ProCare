@@ -9,6 +9,8 @@ import SwiftUI
 
 
 struct PasswordTextField: View {
+    
+    @State  var placeHolder: String = "text"
     @Binding var password: String
     @State private var isPasswordVisible: Bool = false
     
@@ -16,9 +18,9 @@ struct PasswordTextField: View {
         HStack {
             Group {
                 if isPasswordVisible {
-                    TextField("Password", text: $password)
+                    TextField(placeHolder, text: $password)
                 } else {
-                    SecureField("Password", text: $password)
+                    SecureField(placeHolder, text: $password)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -31,15 +33,15 @@ struct PasswordTextField: View {
                     .padding(.trailing, 8) 
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical)
-        .padding(.horizontal, 24)
-        .background(Color.white) 
-        .overlay(
-            RoundedRectangle(cornerRadius: 5)
-                .stroke(Color.gray, lineWidth: 1)
-        )
-        .padding()
+//        .frame(maxWidth: .infinity)
+//        .padding(.vertical)
+//        .padding(.horizontal, 24)
+//        .background(Color.white) 
+//        .overlay(
+//            RoundedRectangle(cornerRadius: 5)
+//                .stroke(Color.gray, lineWidth: 1)
+//        )
+//        .padding()
         
     }
 }

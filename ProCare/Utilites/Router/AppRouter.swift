@@ -23,11 +23,12 @@ protocol RouterProtocol: ObservableObject {
 }
 
 
-class AppRouter : RouterProtocol {
+class AppRouter: RouterProtocol {
     @Published var path: NavigationPath = NavigationPath()
     @Published var sheetView: SheetView?
     @Published var fullScreen: FullScreen?
     
+    //MARK: - functions
     func push(_ screen: Screen) {
         path.append(screen)
     }
@@ -60,41 +61,5 @@ class AppRouter : RouterProtocol {
     func dismissFullScreenOver() {
         self.fullScreen = nil
     }
-    
-    
-    // MARK: - Presentation Style Providers
-    @ViewBuilder
-    func build(_ screen: Screen) -> some View {
-        switch screen {
-        case.tapBar:
-            TapBarView()
-        case .RootScreen:
-            RootScreen()
-        case .homeView2:
-            homeView2()
-        }
-    }
-    
-    @ViewBuilder
-    func build(_ sheet: SheetView) -> some View {
-        switch sheet {
-        case .detailTask:
-           Text("empty sheet")
-        }
-    }
-    
-    @ViewBuilder
-    func build(_ fullScreenCover: FullScreen) -> some View {
-        switch fullScreenCover {
-        case .otpScreen:
-            OTPScreen()
-        case.tapBarFullScreen:
-            TapBarView()
-        case .signUp:
-            SignUPScreen()
-        case .login:
-            LoginScreen()
-        }
-    }
-
 }
+

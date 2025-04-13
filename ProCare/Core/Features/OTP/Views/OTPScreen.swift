@@ -9,18 +9,29 @@ import SwiftUI
 import Combine
 
 struct OTPScreen: View {
+    
+    //MARK: - Properties
+    @State private var pinOne: String = ""
+    @State private var pinTwo: String = ""
+    @State private var pinThree: String = ""
+    @State private var pinFour: String = ""
+    
+    @State private var isLoading = false
+    @StateObject var vm = OTPVM()
+    @StateObject var resetPasswordFlowVM = ResetPasswordFlowVM()
+    @FocusState private var pinFocusState : FocusPin?
+    @EnvironmentObject var appRouter: AppRouter
+    
+    var phonNumber: String = ""
+    var comeFrom: ComeFrom = .login
+    
     enum FocusPin {
         case  pinOne, pinTwo, pinThree, pinFour
     }
-    @FocusState private var pinFocusState : FocusPin?
-    @State var pinOne: String = ""
-    @State var pinTwo: String = ""
-    @State var pinThree: String = ""
-    @State var pinFour: String = ""
-    @State private var isLoading = false
-    var phonNumber: String = ""
-    @StateObject var vm = OTPVM()
-    
+    enum ComeFrom {
+        case login, signUp, forgetPassword
+    }
+    //MARK: - Body
     var body: some View {
         VStack {
             VStack(alignment: .leading){
@@ -33,43 +44,17 @@ struct OTPScreen: View {
             
             pinView
          
-            
             ResendOTPView(vm: vm, phonNumber: phonNumber)
             
-            Button {
-                let parameter = [
-                    "phoneNumber": phonNumber,
-                    "code": pinOne + pinTwo + pinThree + pinFour
-                ]
-                isLoading = true
-                Task {
-                    
-                    await vm.confirmCode(parameter: parameter)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                        isLoading = false
-                    }
-                }
-                
-            } label: {
-                
-                if isLoading {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        .scaleEffect(2)
-                }
-                else{
-                    Text("Verify".localized())
-                        .font(.title3)
-                        .foregroundColor(.white)
-                }
-            }
-            .solid(width: 300,isDisabled: pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty)
+            VerifyButton
         }
-        .disabled(isLoading)
+//        .disabled(vm.viewState == .loading)
+//        .appNavigationBar(title:"otp".localized())
         
     }
 }
 
+//MARK: - Extension
 extension OTPScreen {
     var pinView: some View {
         HStack(spacing:15) {
@@ -79,6 +64,7 @@ extension OTPScreen {
                     if newVal.count == 1 { pinFocusState = .pinTwo }
                 }
                 .focused($pinFocusState, equals: .pinOne)
+                .textContentType(.oneTimeCode)
             
             TextField("", text: $pinTwo)
                 .otpModifer(pin: $pinTwo, isFocused: .constant(pinFocusState == .pinTwo))
@@ -91,6 +77,7 @@ extension OTPScreen {
                     
                 }
                 .focused($pinFocusState, equals: .pinTwo)
+                .textContentType(.oneTimeCode)
             
             TextField("", text: $pinThree)
                 .otpModifer(pin: $pinThree, isFocused: .constant(pinFocusState == .pinThree))
@@ -102,6 +89,7 @@ extension OTPScreen {
                     }
                 }
                 .focused($pinFocusState, equals: .pinThree)
+                .textContentType(.oneTimeCode)
             
             TextField("", text: $pinFour)
                 .otpModifer(pin: $pinFour, isFocused: .constant(pinFocusState == .pinFour))
@@ -111,11 +99,50 @@ extension OTPScreen {
                     }
                 }
                 .focused($pinFocusState, equals: .pinFour)
+                .textContentType(.oneTimeCode)
         }
         .padding(.vertical)
         .onAppear {
             pinFocusState = .pinOne
         }
+    }
+    
+    var VerifyButton: some View {
+        Button {
+            let parameter = [
+                "phoneNumber": phonNumber,
+                "code": pinOne + pinTwo + pinThree + pinFour
+            ]
+            isLoading = true
+            Task {
+                switch comeFrom {
+                case .login, .signUp:
+                    await vm.confirmCode(parameter: parameter)
+                case .forgetPassword:
+                    await resetPasswordFlowVM.checkCode(phoneNumber:phonNumber, otp: pinOne + pinTwo + pinThree + pinFour){ status in
+                        if status {
+                            appRouter.push(.NewPasswordScreen(phone: phonNumber))
+                        }
+                    }
+                }
+                
+                isLoading = false
+            }
+            
+        } label: {
+            
+            if isLoading {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .scaleEffect(2)
+            }
+            else{
+                Text("Verify".localized())
+                    .font(.title3)
+                    .foregroundColor(.white)
+            }
+        }
+        .solid(width: 300,isDisabled: pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty)
     }
 }
 
@@ -123,35 +150,3 @@ extension OTPScreen {
 #Preview {
     OTPScreen()
 }
-
-struct OtpModifer: ViewModifier {
-    
-    @Binding var pin : String
-    @Binding var isFocused: Bool // Add a binding for focus state
-    var textLimt = 1
-    
-    func limitText(_ upper : Int) {
-        if pin.count > upper {
-            self.pin = String(pin.prefix(upper))
-        }
-    }
-    
-    func body(content: Content) -> some View {
-        content
-            .multilineTextAlignment(.center)
-            .keyboardType(.numberPad)
-            .onReceive(Just(pin)) {_ in limitText(textLimt)}
-            .frame(width: 45, height: 60)
-            .background(
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(isFocused ? Color.red : Color.gray, lineWidth: 2) // Change border color when focused
-            )
-    }
-}
-
-extension View {
-    func otpModifer(pin: Binding<String>, isFocused: Binding<Bool>) -> some View {
-        modifier(OtpModifer(pin: pin, isFocused: isFocused))
-    }
-}
-

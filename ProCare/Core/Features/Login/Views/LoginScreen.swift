@@ -10,7 +10,6 @@ import SwiftUI
 struct LoginScreen: View {
     
     @StateObject var vm = LoginVM()
-    @State private var gotSignUp = false
     @EnvironmentObject var appRouter: AppRouter
     
     var body: some View {
@@ -26,9 +25,15 @@ struct LoginScreen: View {
             .padding()
             
             VStack(alignment: .leading,spacing: 0){
-                TextField("phone".localized(), text: $vm.phone)
-                TextField("password".localized(), text: $vm.password)
+                Group {
+                    TextField("phone".localized(), text: $vm.phone)
+                    TextField("password".localized(), text: $vm.password)
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 12)
+                
                 Button {
+                    appRouter.push(.PhoneScreen)
                 } label: {
                     Text("forget password ?".localized())
                         .foregroundStyle(.appPrimary)
@@ -36,9 +41,8 @@ struct LoginScreen: View {
                         .underline()
                 }
                 .plain()
-                
             }
-            .mainTextFieldStyle()
+            //.mainTextFieldStyle()
             .autocapitalization(.none)
             .disableAutocorrection(true)
             

@@ -8,7 +8,7 @@
 import SwiftUI
 
 //MARK: SolidButton
-struct SolidButtonStyle: ButtonStyle {
+struct SolidButtonStyle: ViewModifier {
     
     let width: CGFloat
     let isDisabled: Bool
@@ -18,20 +18,18 @@ struct SolidButtonStyle: ButtonStyle {
         self.isDisabled = isDisabled
     }
     
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+    func body(content: Content) -> some View {
+            content
             .frame(width: width)
             .font(.body)
-            .foregroundColor(isDisabled ? .gray.opacity(0.8) : .white )
+            .foregroundColor(.white )
             .padding()
-           
-            .background(backgroundView(configuration))
+            .background(backgroundView())
             .cornerRadius(10)
             .disabled(isDisabled)
-        
     }
     
-    @ViewBuilder private func backgroundView( _ configuration: Configuration) -> some View {
+    @ViewBuilder private func backgroundView() -> some View {
         Capsule()
             .strokeBorder( isDisabled ? .gray :  .clear , lineWidth: 1 )
             .background( isDisabled ? .gray : .appPrimary  )
@@ -39,7 +37,7 @@ struct SolidButtonStyle: ButtonStyle {
     
 }
 //MARK: BorderButton
-struct BorderButtonStyle: ButtonStyle {
+struct BorderButtonStyle: ViewModifier {
     
     let width: CGFloat
     let isDisabled: Bool
@@ -49,32 +47,31 @@ struct BorderButtonStyle: ButtonStyle {
         self.isDisabled = isDisabled
     }
     
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+    func body(content: Content) -> some View {
+        content
             .frame(width: width)
             .font(.body)
             .foregroundColor(isDisabled ? .gray.opacity(0.8) : .appPrimary  )
             .padding()
-            .background(backgroundView(configuration))
+            .background(backgroundView())
     }
     
-    @ViewBuilder private func backgroundView( _ configuration: Configuration) -> some View {
+    @ViewBuilder private func backgroundView() -> some View {
         Capsule()
             .strokeBorder( isDisabled ? .gray.opacity(0.8) : Color("Mainbutton") , lineWidth: 1 )
     }
     
 }
 //MARK: PlainButton
-struct PlainButtonStyle: ButtonStyle {
-    
+struct PlainButtonStyle: ViewModifier {
     let isDisabled: Bool
     
     init( isDisabled: Bool) {
         self.isDisabled = isDisabled
     }
     
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+    func body(content: Content) -> some View {
+        content
             .font(.body)
             .foregroundColor(isDisabled ? .gray.opacity(0.8) : .black )
             .padding()
@@ -82,74 +79,15 @@ struct PlainButtonStyle: ButtonStyle {
 }
 
 extension View {
-    
     func solid(width: CGFloat = 100,isDisabled: Bool = false) -> some View {
-        buttonStyle(SolidButtonStyle(width: width, isDisabled: isDisabled))
+        modifier(SolidButtonStyle(width: width, isDisabled: isDisabled))
     }
     
     func border(width: CGFloat = 100,isDisabled: Bool = false) -> some View {
-        buttonStyle(BorderButtonStyle(width: width, isDisabled: isDisabled))
+        modifier(BorderButtonStyle(width: width, isDisabled: isDisabled))
     }
     
     func plain(isDisabled: Bool = false) -> some View {
-        buttonStyle(PlainButtonStyle(isDisabled: isDisabled))
+        modifier(PlainButtonStyle(isDisabled: isDisabled))
     }
 }
-
-//struct GradientStyle: ButtonStyle {
-//  @Environment(\.isEnabled) private var isEnabled
-//  private let colors: [Color]
-//
-//  init(colors: [Color] = [.mint.opacity(0.6), .mint, .mint.opacity(0.6), .mint]) {
-//    self.colors = colors
-//  }
-//
-//  func makeBody(configuration: Configuration) -> some View {
-//    HStack {
-//      configuration.label
-//    }
-//    .font(.body.bold())
-//    .foregroundColor(isEnabled ? .white : .black)
-//    .padding()
-//    .frame(height: 44)
-//    .background(backgroundView(configuration: configuration))
-//    .cornerRadius(10)
-//  }
-//
-//  @ViewBuilder private func backgroundView(configuration: Configuration) -> some View {
-//    if !isEnabled {
-//      disabledBackground
-//    }
-//    else if configuration.isPressed {
-//      pressedBackground
-//    } else {
-//      enabledBackground
-//    }
-//  }
-//
-//  private var enabledBackground: some View {
-//    LinearGradient(
-//      colors: colors,
-//      startPoint: .topLeading,
-//      endPoint: .bottomTrailing)
-//  }
-//
-//  private var disabledBackground: some View {
-//    LinearGradient(
-//      colors: [.gray],
-//      startPoint: .topLeading,
-//      endPoint: .bottomTrailing)
-//  }
-//
-//  private var pressedBackground: some View {
-//    LinearGradient(
-//      colors: colors,
-//      startPoint: .topLeading,
-//      endPoint: .bottomTrailing)
-//    .opacity(0.4)
-//  }
-//}
-//
-//extension ButtonStyle where Self == GradientStyle {
-//  static var gradient: GradientStyle { .init() }
-//}

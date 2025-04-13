@@ -22,7 +22,9 @@ struct RouterView: View {
                 .fullScreenCover(item: $appRouter.fullScreen) { fullScreen in
                     appRouter.build(fullScreen)
                 }
-                .navigationTitle("appRouter")
+                .navigationDestination(for: AnyViewContainer.self) { container in
+                    container.view
+                }
         }
         .environmentObject(appRouter)
     }

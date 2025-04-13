@@ -35,7 +35,7 @@ struct SignUPScreen: View {
                 TextField("password".localized(), text: $vm.password)
                 TextField("confirm password".localized(), text: $vm.confirmPassword)
             }
-            .mainTextFieldStyle()
+            //.mainTextFieldStyle()
             .autocapitalization(.none)
             .disableAutocorrection(true)
             
