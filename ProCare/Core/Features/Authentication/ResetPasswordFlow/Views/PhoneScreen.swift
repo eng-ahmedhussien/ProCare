@@ -11,14 +11,13 @@ struct PhoneScreen: View {
     
     @StateObject var vm = ResetPasswordFlowVM()
     @EnvironmentObject var appRouter: AppRouter
+    private var isFormValid: Bool {
+        ValidationRule.phone.validate(vm.phone) == nil
+    }
     
     var body: some View {
         VStack {
-            TextField("phone", text: $vm.phone)
-                .mainTextFieldStyle(errorMessage: vm.phonePrompt)
-                .padding(.top,20)
-                .padding(.horizontal,10)
-                .keyboardType(.phonePad)
+            AppTextField(text: $vm.phone, placeholder: "phone".localized(), validationRules: [.phone])
             
             Spacer()
             
@@ -39,8 +38,8 @@ struct PhoneScreen: View {
                         .font(.title3)
                 }
             }
-            .solid(width: 300, isDisabled: !vm.isPhoneValid())
-            .disabled(!vm.isPhoneValid())
+            .buttonStyle(.solid, width: 300, disabled: isFormValid == false)
+            .disabled(isFormValid == false)
             .padding()
         }
         .disabled(vm.viewState == .loading)

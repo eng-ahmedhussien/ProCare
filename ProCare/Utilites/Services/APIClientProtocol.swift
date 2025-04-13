@@ -153,8 +153,6 @@ class ApiClient<EndpointType: APIEndpoint>: ApiProtocol {
     }
 }
 
-
-
 extension ApiClient {
     // MARK: - manageResponse
     private func manageResponse<T: Decodable>(data: Data, response: URLResponse, request: URLRequest, responseType: T.Type) throws -> APIResponse<T> {

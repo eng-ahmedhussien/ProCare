@@ -142,7 +142,7 @@ extension OTPScreen {
                     .foregroundColor(.white)
             }
         }
-        .solid(width: 300,isDisabled: pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty)
+        .buttonStyle(.solid, width: 300, disabled: pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty)
     }
 }
 

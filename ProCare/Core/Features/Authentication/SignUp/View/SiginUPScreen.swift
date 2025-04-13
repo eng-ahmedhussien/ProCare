@@ -61,7 +61,7 @@ struct SignUPScreen: View {
                         .font(.title3)
                         ///. font(.system(size: 24, weight: .bold, design: .default))
                 }
-                .solid(width: 300)
+                .buttonStyle(.solid, width: 300)
                 
                 Button {
                     gotLogin.toggle()
@@ -69,7 +69,7 @@ struct SignUPScreen: View {
                     Text("have account?".localized())
                         .font(.title3)
                 }
-                .plain()
+                .buttonStyle(.plain)
             }
             
         }

@@ -76,13 +76,11 @@ class ResetPasswordFlowVM: ObservableObject {
                     completion(isValid)
                     debugPrint("Code valid: \(isValid)")
                 } else {
-                    viewState = .error
                     debugPrint("Code check returned nil")
                     completion(false)
                 }
             }
         } catch {
-            viewState = .error
             debugPrint("Check code error: \(error.localizedDescription)")
             completion(false)
         }
@@ -100,7 +98,6 @@ class ResetPasswordFlowVM: ObservableObject {
                     completion()
             }
         } catch {
-            viewState = .error
             await MainActor.run {
                 debugPrint("Unexpected error: \(error.localizedDescription)")
             }

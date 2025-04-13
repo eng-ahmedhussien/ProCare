@@ -11,6 +11,10 @@ struct LoginScreen: View {
     
     @StateObject var vm = LoginVM()
     @EnvironmentObject var appRouter: AppRouter
+    private var isFormValid: Bool {
+        ValidationRule.phone.validate(vm.phone) == nil &&
+        ValidationRule.password.validate(vm.password) == nil
+    }
     
     var body: some View {
         VStack{
@@ -26,8 +30,8 @@ struct LoginScreen: View {
             
             VStack(alignment: .leading,spacing: 0){
                 Group {
-                    TextField("phone".localized(), text: $vm.phone)
-                    TextField("password".localized(), text: $vm.password)
+                    AppTextField(text: $vm.phone, placeholder: "phone number".localized(), validationRules: [.phone])
+                    AppTextField(text: $vm.password, placeholder: "password".localized(), validationRules: [.password], isSecure: true)
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 12)
@@ -40,9 +44,8 @@ struct LoginScreen: View {
                         .font(.title3)
                         .underline()
                 }
-                .plain()
+                .buttonStyle(.plain)
             }
-            //.mainTextFieldStyle()
             .autocapitalization(.none)
             .disableAutocorrection(true)
             
@@ -59,7 +62,7 @@ struct LoginScreen: View {
                     Text("log in".localized())
                         .font(.title3)
                 }
-                .solid(width: 300)
+                .buttonStyle(.solid, width: 300, disabled: isFormValid == false)
                 
                 Button {
                     appRouter.presentFullScreenCover(.signUp)
@@ -68,7 +71,7 @@ struct LoginScreen: View {
                         .font(.title3)
                         .underline()
                 }
-                .plain()
+                .buttonStyle(.plain)
             }
         }
     }
