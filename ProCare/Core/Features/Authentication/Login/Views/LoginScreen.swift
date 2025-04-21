@@ -59,8 +59,13 @@ struct LoginScreen: View {
                         }
                     }
                 } label: {
-                    Text("log in".localized())
-                        .font(.title3)
+                    if vm.viewState == .loading {
+                        ProgressView()
+                            .appProgressStyle()
+                    } else {
+                        Text("log in".localized())
+                            .font(.title3)
+                    }
                 }
                 .buttonStyle(.solid, width: 300, disabled: isFormValid == false)
                 

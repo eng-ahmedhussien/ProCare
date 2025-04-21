@@ -9,31 +9,91 @@ import Foundation
 import Security
 import SwiftUI
 
-class AuthManger: ObservableObject {
-    static let shared = AuthManger()
+//final class AuthManager: ObservableObject {
+//    static let shared = AuthManager()
+//
+//    @Published private(set) var token: String?
+//    @Published private(set) var userData: UserDataLogin?
+//
+//    private init() {
+//        self.token = UserDefaults.standard.string(forKey: "auth_token")
+//
+//        if let data = UserDefaults.standard.data(forKey: "user_data"),
+//           let decoded = try? JSONDecoder().decode(UserDataLogin.self, from: data) {
+//            self.userData = decoded
+//        }
+//    }
+//
+//    var isLoggedIn: Bool {
+//        return token != nil
+//    }
+//
+//    func saveToken(_ token: String) {
+//        self.token = token
+//        UserDefaults.standard.set(token, forKey: "auth_token")
+//    }
+//
+//    func saveUserData(_ userData: UserDataLogin) {
+//        self.userData = userData
+//        if let encoded = try? JSONEncoder().encode(userData) {
+//            UserDefaults.standard.set(encoded, forKey: "user_data")
+//        }
+//    }
+//
+//    func getToken() -> String? {
+//        return token
+//    }
+//
+//    func getUserData() -> UserDataLogin? {
+//        return userData
+//    }
+//
+//    func logout() {
+//        token = nil
+//        userData = nil
+//        UserDefaults.standard.removeObject(forKey: "auth_token")
+//        UserDefaults.standard.removeObject(forKey: "user_data")
+//    }
+//}
 
-    @AppStorage("auth_token") private var token: String?
+final class AuthManager: ObservableObject {
+    static let shared = AuthManager()
 
-    private init() {}
+    @Published private(set) var token: String?
+    @Published private(set) var userData: UserDataLogin?
 
-    func saveToken(_ token: String) {
-        self.token = token
-    }
-
-    func getToken() -> String? {
-        return token
-    }
-
-    func deleteToken() {
-        token = nil
+    private init() {
+        token = AppUserDefaults.shared.get(forKey: .authToken)
+        userData = AppUserDefaults.shared.getCodable(UserDataLogin.self, forKey: .userData)
     }
 
     var isLoggedIn: Bool {
         return token != nil
     }
 
+    func saveToken(_ token: String) {
+        self.token = token
+        AppUserDefaults.shared.set(token, forKey: .authToken)
+    }
+
+    func saveUserData(_ userData: UserDataLogin) {
+        self.userData = userData
+        AppUserDefaults.shared.setCodable(userData, forKey: .userData)
+    }
+
+    func getToken() -> String? {
+        return token
+    }
+
+    func getUserData() -> UserDataLogin? {
+        return userData
+    }
+
     func logout() {
-        deleteToken()
+        token = nil
+        userData = nil
+        AppUserDefaults.shared.remove(forKey: .authToken)
+        AppUserDefaults.shared.remove(forKey: .userData)
     }
 }
 

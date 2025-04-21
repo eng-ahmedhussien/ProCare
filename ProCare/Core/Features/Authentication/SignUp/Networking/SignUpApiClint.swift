@@ -25,21 +25,3 @@ class SignUpApiClint: ApiClient<SignUpEndpoints>, SignUpApiClintProtocol {
 }
 
 
-//
-//final class UserRepository {
-//    private let apiClient: ApiProtocol
-//
-//    init(apiClient: ApiProtocol = ApiClient()) {
-//        self.apiClient = apiClient
-//    }
-//
-//    // Async/Await API Call
-//    func signUp(parameters: [String: String]) async throws -> APIResponse<String> {
-//        return try await apiClient.asyncRequest(endpoint: SignUpEndpoints.signUp(parameters: parameters), responseModel: APIResponse<String>.self)
-//    }
-//
-//    // Combine API Call
-//    func signUpPublisher(parameters: [String: String]) -> AnyPublisher<APIResponse<String>, APIResponseError> {
-//        return apiClient.combineRequest(endpoint: SignUpEndpoints.signUp(parameters: parameters), responseModel: APIResponse<String>.self)
-//    }
-//}

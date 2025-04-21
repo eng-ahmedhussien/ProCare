@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 @MainActor
 class OTPVM : ObservableObject{
@@ -29,8 +30,9 @@ class OTPVM : ObservableObject{
                     viewState = .loaded
                     self.userDataLogin = userDataLogin
                     if let token = userDataLogin.token {
-                        AuthManger.shared.saveToken(token)
+                        AuthManager.shared.saveToken(token)
                     }
+                    AuthManager.shared.saveUserData(userDataLogin)
                 } else {
                 }
         } catch let APIError{

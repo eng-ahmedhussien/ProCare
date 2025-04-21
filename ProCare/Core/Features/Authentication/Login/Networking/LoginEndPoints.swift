@@ -12,14 +12,10 @@ enum LoginEndPoints : APIEndpoint {
     
     case login(parameters: [String: String])
     
-    var baseURL: URL {
-        return URL(string: "http://procare.runasp.net/api/Auth")!
-    }
-    
     var path: String {
         switch self {
         case .login:
-            return "/Login"
+            return "/Auth/Login"
         }
     }
     

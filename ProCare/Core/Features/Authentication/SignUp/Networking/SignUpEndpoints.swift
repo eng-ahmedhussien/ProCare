@@ -10,17 +10,12 @@ import Foundation
 
 
 enum SignUpEndpoints: APIEndpoint {
-    
     case signUp(parameters: [String: String])
-    
-    var baseURL: URL {
-        return URL(string: "http://procare.runasp.net/api/Auth")!
-    }
     
     var path: String {
         switch self {
         case .signUp:
-            return "/register"
+            return "/Auth/register"
         }
     }
     

@@ -15,6 +15,7 @@ class LoginVM: ObservableObject {
     @Published var password: String = ""
     @Published var userDataLogin : UserDataLogin?
     @Published var goToOTP = false
+    @Published var viewState: ViewState = .empty
     private let apiClient: LoginApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
 
@@ -24,7 +25,7 @@ class LoginVM: ObservableObject {
     }
 
     func login(completion: @escaping () -> Void) async {
-        
+        viewState = .loading
         let parameter = [
             "phoneNumber": phone,
             "password": password
@@ -36,12 +37,14 @@ class LoginVM: ObservableObject {
             await MainActor.run {
                 if  let userDataLogin = response.data {
                     self.userDataLogin = userDataLogin
-                    
+                    viewState = .loaded
                     switch userDataLogin.loginStatus {
                     case .Success:
+                       
                         if let token = userDataLogin.token {
-                            AuthManger.shared.saveToken(token)
+                            AuthManager.shared.saveToken(token)
                         }
+                        AuthManager.shared.saveUserData(userDataLogin)
                     case .InValidCredintials:
                         debugPrint("InValidCredintials")
                     case .UserLockedOut:

@@ -46,8 +46,6 @@ struct AppTextField: View {
     @State private var showError = false
     @State private var errorMessage = ""
     @State private var showPassword = false
-    @FocusState private var isFocused: Bool
-    @State private var hasInteracted = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -59,7 +57,6 @@ struct AppTextField: View {
                         TextField(placeholder, text: $text)
                     }
                 }
-               // .focused($isFocused)
                 .onChange(of: text, perform: { _ in
                     if text.isEmpty {
                         resetValidation()

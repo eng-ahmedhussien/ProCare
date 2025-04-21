@@ -22,7 +22,8 @@ protocol APIEndpoint {
 
 
 extension APIEndpoint {
-    
+    var baseURL: URL  { URL(string: "http://procare.runasp.net/api")! }
+    var parameters: [String: String]? { nil }
     func asURLRequest() throws -> URLRequest {
        /// let url = baseURL.appendingPathComponent(path)
         
@@ -75,12 +76,11 @@ extension APIEndpoint {
 }
 
 
-
-
 enum HTTPHeader {
     case custom([String: String])
     case `default`
     case `empty`
+    case  authHeader
 
     var values: [String: String] {
         switch self {
@@ -90,16 +90,26 @@ enum HTTPHeader {
             return HTTPHeader.defaultValues
         case .empty:
             return [:]
+        case .authHeader:
+            return HTTPHeader.bearer
 
         }
     }
     
     private static var defaultValues: [String: String] {
-           return [
-               "accept": "*/*",
-               "Content-Type": "application/json"
-           ]
-       }
+        return [
+            "accept": "ar-EG",
+            "Content-Type": "application/json"
+        ]
+    }
+    
+    private static var bearer: [String: String] {
+        guard let token = UserDefaults.standard.string(forKey: "auth_token")  else { return [:] }
+        return [
+            "accept": "*/*",
+            "Authorization": "Bearer \(token)"
+        ]
+    }
 }
 
 

@@ -27,9 +27,9 @@ enum TapViewEnum : Identifiable, CaseIterable, View {
     var body: some View {
         switch self {
         case .profile:
-            Text("OffersView")
-        case .home:
             homeView()
+        case .home:
+            HomePage()
         case .history:
             Text("MainServicesView")
         }
@@ -55,7 +55,9 @@ enum TapViewEnum : Identifiable, CaseIterable, View {
 
 
 struct homeView : View {
-    @EnvironmentObject var auth: AuthManger
+   // @EnvironmentObject var auth: AuthManger
+    @EnvironmentObject var authManager: AuthManager
+
     @EnvironmentObject var appRouter: AppRouter
     var body: some View {
         VStack{
@@ -72,13 +74,12 @@ struct homeView : View {
 }
 
 struct homeView2 : View {
-    @EnvironmentObject var auth: AuthManger
     @EnvironmentObject var appRouter: AppRouter
     var body: some View {
         VStack{
             Button {
                 appRouter.popToRoot()
-                auth.deleteToken()
+                AuthManager.shared.logout()
             } label: {
                 Text("logOut".localized())
                     .font(.title3)

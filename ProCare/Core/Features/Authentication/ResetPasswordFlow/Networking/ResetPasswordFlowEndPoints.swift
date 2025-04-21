@@ -11,19 +11,15 @@ enum ResetPasswordFlowEndPoints : APIEndpoint {
     case resendCode(parameters: [String: String])
     case checkCode(parameters: [String: String])
     case resetPassword(parameters: [String: String])
-    
-    var baseURL: URL {
-        return URL(string: "http://procare.runasp.net/api/Auth")!
-    }
-    
+
     var path: String {
         switch self {
         case .resendCode:
-            return "/ResendCode"
+            return "/Auth/ResendCode"
         case .checkCode:
-            return "/CheckCode"
+            return "/Auth/CheckCode"
         case .resetPassword:
-            return "/ResetPassword"
+            return "/Auth/ResetPassword"
         }
     }
     

@@ -16,7 +16,8 @@ struct ProCareApp: App {
 //                PhoneScreen()
 //            }
            RouterView()
-                .environmentObject(AuthManger.shared)
+              //  .environmentObject(authManager)
+                //.environmentObject(AuthManger.shared)
         }
     }
 }

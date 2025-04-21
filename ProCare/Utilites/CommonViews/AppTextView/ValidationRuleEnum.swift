@@ -20,7 +20,8 @@ extension ValidationRule {
     func validate(_ value: String) -> String? {
         switch self {
         case .isEmpty:
-            return value.isEmpty ? "This field cannot be empty" : nil
+            let newText = value.trimmingCharacters(in: .whitespacesAndNewlines)
+            return newText.isEmpty ? "This field cannot be empty" : nil
             
         case .phone:
             let phoneRegex = "^(?:\\+?20|0)?1[0125][0-9]{8}$"

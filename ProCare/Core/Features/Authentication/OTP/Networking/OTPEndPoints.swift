@@ -12,16 +12,13 @@ enum OTPEndPoints : APIEndpoint {
     case confirmCode(parameters: [String: String])
     case resendCode(parameters: [String: String])
     
-    var baseURL: URL {
-        return URL(string: "http://procare.runasp.net/api/Auth")!
-    }
     
     var path: String {
         switch self {
         case .confirmCode:
-            return "/ConfirmCode"
+            return "/Auth/ConfirmCode"
         case .resendCode:
-            return "/ResendCode"
+            return "/Auth/ResendCode"
         }
     }
     
