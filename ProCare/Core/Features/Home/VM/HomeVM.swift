@@ -12,6 +12,7 @@ class HomeVM: ObservableObject {
     // MARK: - Published Properties
     @Published var viewState: ViewState = .empty
     @Published var categories: [Category] = []
+    @Published var subCategories: [NursingServices] = []
     
     private let homeApiClint: HomeApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
@@ -25,9 +26,9 @@ class HomeVM: ObservableObject {
         viewState = .loading
         do {
             let response = try await homeApiClint.categories()
-            if let _ = response.data {
+            if let data = response.data {
                 viewState = .loaded
-                self.categories = response.data ?? []
+                self.categories = data
             } else {
                 debugPrint("Response received but no user data")
             }
@@ -35,4 +36,20 @@ class HomeVM: ObservableObject {
             debugPrint("Unexpected error: \(error.localizedDescription)")
         }
     }
+    
+    func getSubCategories(id: Int) async {
+        viewState = .loading
+        do {
+            let response = try await homeApiClint.subCategories(id: id)
+            if let data = response.data {
+                viewState = .loaded
+                self.subCategories = data
+            } else {
+                debugPrint("Response received but no user data")
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+    
 }

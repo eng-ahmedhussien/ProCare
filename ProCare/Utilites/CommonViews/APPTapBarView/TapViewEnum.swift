@@ -10,28 +10,28 @@ import SwiftUI
 
 enum TapViewEnum : Identifiable, CaseIterable, View {
     
-    case profile, home, history
+    case  home, orders, profile
     var id: Self { self }
     
     var tabItem : TabItem {
         switch self {
-        case .profile:
-                .init(image: "discountIcon", title: "offersTapBar")
         case .home:
-                .init(image: "homeIcon", title: "home")
-        case .history:
-                .init(image: "homeIcon", title: "home")
+                .init(image: "homeTap", title: "home")
+        case .orders:
+                .init(image: "ordersTap", title: "orders")
+        case .profile:
+                .init(image: "profileTap", title: "profile")
         }
     }
     
     var body: some View {
         switch self {
-        case .profile:
-            homeView()
         case .home:
             HomePage()
-        case .history:
-            Text("MainServicesView")
+        case .orders:
+            Text("orders")
+        case .profile:
+            homeView()
         }
     }
 }

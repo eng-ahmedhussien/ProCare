@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginScreen: View {
-    
+    @EnvironmentObject var popUpControl: PopUpHelper
     @StateObject var vm = LoginVM()
     @EnvironmentObject var appRouter: AppRouter
     private var isFormValid: Bool {
@@ -27,6 +27,27 @@ struct LoginScreen: View {
             .font(.title.bold())
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
+            .onTapGesture {
+                popUpControl.show(
+                    VStack(spacing: 20) {
+                        Text("This is a custom popup!")
+                        Button("Close") {
+                            popUpControl.dismiss()
+                        }
+                    }
+                    .frame(maxWidth: 300)
+                )
+                
+                popUpControl.show(
+                    VStack {
+                        Text("Tap outside or 'Close' to dismiss")
+                        Button("Close") {
+                            popUpControl.dismiss()
+                        }
+                    },
+                    dismissOnBackgroundTap: true
+                )
+            }
             
             VStack(alignment: .leading,spacing: 0){
                 Group {

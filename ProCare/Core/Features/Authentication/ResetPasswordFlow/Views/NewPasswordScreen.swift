@@ -12,6 +12,8 @@ struct NewPasswordScreen: View {
     @StateObject var vm = ResetPasswordFlowVM()
     @EnvironmentObject var appRouter: AppRouter
     var phone: String = ""
+    var resetToken: String = ""
+    
     private var isFormValid: Bool {
         ValidationRule.password.validate(vm.password) == nil &&
         ValidationRule.confirmPassword($vm.password).validate(vm.confirmPassword) == nil
@@ -31,7 +33,7 @@ struct NewPasswordScreen: View {
             
             Button {
                 Task {
-                    await vm.resetPassword(phoneNumber: phone) {
+                    await vm.resetPassword(phoneNumber: phone,resetToken: resetToken) {
                         appRouter.popToRoot()
                     }
                 }

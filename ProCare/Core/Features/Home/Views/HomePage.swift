@@ -11,6 +11,9 @@ struct HomePage: View {
     @ObservedObject var authManager = AuthManager.shared
     @StateObject var vm = HomeVM()
     @State private var isLoading = true
+    @State private var refreshTask: Task<Void, Never>? // for refreshable problem
+    @EnvironmentObject var appRouter: AppRouter
+
     var body: some View {
         VStack(spacing: 0) {
             header
@@ -21,14 +24,20 @@ struct HomePage: View {
         }
         .redacted(reason: isLoading ? .placeholder : [])
         .task {
-            await loadData()
+            refreshTask?.cancel() // Cancel any previous
+            refreshTask = Task {
+                await loadData()
+            }
         }
         .refreshable {
-            await loadData()
+            refreshTask?.cancel()
+            refreshTask = Task {
+                await loadData()
+            }
         }
         
     }
-    
+
    private func loadData() async {
        guard authManager.isLoggedIn else {
            debugPrint("⚠️ User not logged in — skipping .task")
@@ -78,6 +87,22 @@ extension HomePage{
                     HStack{
                         ForEach(vm.categories, id: \.id) { category in
                             ServiceIconView(title: category.name ?? "", icon: category.imageUrl ?? "")
+                                .onTapGesture {
+                                    switch category.id {
+                                    case 2:
+                                        appRouter.pushView(NursingServicesPage(vm: vm, id: category.id ?? 0))
+                                    case 3:
+                                        debugPrint("ambulance")
+                                    case 4:
+                                        debugPrint("doctor")
+                                    case 5:
+                                        debugPrint("pharmacy")
+                                    case .none:
+                                        debugPrint("none")
+                                    case .some(_):
+                                        debugPrint("some")
+                                    }
+                                }
                         }
                         .padding(.horizontal)
                     }
@@ -88,4 +113,11 @@ extension HomePage{
 
 #Preview {
     HomePage()
+}
+
+enum SubCategories: Int {
+    case nursing = 2
+    case ambulance = 3
+    case doctor = 4
+    case pharmacy = 5
 }

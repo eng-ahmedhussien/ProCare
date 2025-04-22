@@ -24,8 +24,9 @@ extension AppRouter {
             OTPScreen()
         case.PhoneScreen:
             PhoneScreen()
-        case .NewPasswordScreen(let phone):
-            NewPasswordScreen(phone: phone)
+        case .NewPasswordScreen(let phone, let resetToken):
+            NewPasswordScreen(phone: phone, resetToken: resetToken)
+
         }
     }
     
@@ -61,7 +62,7 @@ enum Screen: Identifiable, Hashable {
     case homeView2
     case otpScreen
     case PhoneScreen
-    case NewPasswordScreen(phone: String)
+    case NewPasswordScreen(phone: String, resetToken: String)
 
     var id: Self { return self }
 }

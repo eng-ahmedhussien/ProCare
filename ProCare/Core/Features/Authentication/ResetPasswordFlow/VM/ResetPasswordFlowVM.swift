@@ -65,30 +65,34 @@ class ResetPasswordFlowVM: ObservableObject {
         }
     }
 
-    func checkCode(phoneNumber: String, otp: String, completion: @escaping (Bool) -> Void) async {
+    func checkCode(phoneNumber: String, otp: String, completion: @escaping (String) -> Void) async {
         viewState = .loading
         let parameters = ["phoneNumber": phoneNumber, "code": otp]
         do {
             let response = try await apiClient.checkCode(parameters: parameters)
             await MainActor.run {
-                if let isValid = response.data {
+                if let _ = response.data?.isValid {
                     viewState = .loaded
-                    completion(isValid)
-                    debugPrint("Code valid: \(isValid)")
+                    completion(response.data?.resetToken ?? "")
+                    debugPrint("Code valid: \(response.data?.resetToken)")
                 } else {
                     debugPrint("Code check returned nil")
-                    completion(false)
+                    completion("nil")
                 }
             }
         } catch {
             debugPrint("Check code error: \(error.localizedDescription)")
-            completion(false)
+            completion("nil")
         }
     }
     
-    func resetPassword(phoneNumber: String, completion: @escaping () -> Void) async {
+    func resetPassword(phoneNumber: String, resetToken: String,completion: @escaping () -> Void) async {
         viewState = .loading
-        let parameters = ["phoneNumber": phoneNumber, "newPassword": password]
+        let parameters = [
+            "phoneNumber": phoneNumber,
+            "newPassword": password,
+            "resetToken": resetToken
+        ]
         
         do {
             let _ = try await apiClient.resetPassword(parameters: parameters)

@@ -10,17 +10,21 @@ import Foundation
 enum HomeEndPoints: APIEndpoint {
 
     case categories
+    case subCategories(id : Int)
     
     var path: String {
         switch self {
         case .categories:
             return "/ServiceCategory/GetMobileCategories"
+        case .subCategories(let id):
+            return "/SubCategory/GetMobileSubCategories/\(id)"
+            
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .categories:
+        case .categories, .subCategories:
             return .get
         }
     }

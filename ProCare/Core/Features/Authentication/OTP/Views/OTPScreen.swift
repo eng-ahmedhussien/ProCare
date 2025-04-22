@@ -119,10 +119,12 @@ extension OTPScreen {
                 case .login, .signUp:
                     await vm.confirmCode(parameter: parameter)
                 case .forgetPassword:
-                    await resetPasswordFlowVM.checkCode(phoneNumber:phonNumber, otp: pinOne + pinTwo + pinThree + pinFour){ status in
-                        if status {
-                            appRouter.push(.NewPasswordScreen(phone: phonNumber))
-                        }
+                    await resetPasswordFlowVM.checkCode(phoneNumber:phonNumber, otp: pinOne + pinTwo + pinThree + pinFour){ resetToken in
+                        //if status {
+                        appRouter.push(.NewPasswordScreen(phone: phonNumber,resetToken: resetToken))
+                       // }
+                        
+                        
                     }
                 }
                 

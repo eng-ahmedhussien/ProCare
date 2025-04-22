@@ -24,6 +24,36 @@ protocol APIEndpoint {
 extension APIEndpoint {
     var baseURL: URL  { URL(string: "http://procare.runasp.net/api")! }
     var parameters: [String: String]? { nil }
+    
+    
+//    func asURLRequest() throws -> URLRequest {
+//        // Use baseURL and safely append path
+//        let finalURL = baseURL.appendingPathComponent(path)
+//
+//        var request = URLRequest(url: finalURL)
+//        request.httpMethod = method.rawValue
+//
+//        headers?.values.forEach { key, value in
+//            request.addValue(value, forHTTPHeaderField: key)
+//        }
+//
+//        if let parameters = parameters {
+//            do {
+//                request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+//            } catch {
+//                throw APIResponseError(
+//                    type: nil,
+//                    title: nil,
+//                    status: 10,
+//                    errors: ["parameters": ["Encoding error: \(error.localizedDescription)"]],
+//                    traceId: nil
+//                )
+//            }
+//        }
+//
+//        return request
+//    }
+    
     func asURLRequest() throws -> URLRequest {
        /// let url = baseURL.appendingPathComponent(path)
         
@@ -104,7 +134,7 @@ enum HTTPHeader {
     }
     
     private static var bearer: [String: String] {
-        guard let token = UserDefaults.standard.string(forKey: "auth_token")  else { return [:] }
+        guard let token = AuthManager.shared.getToken()  else { return [:] }
         return [
             "accept": "*/*",
             "Authorization": "Bearer \(token)"
