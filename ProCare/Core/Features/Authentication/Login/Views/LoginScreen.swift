@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginScreen: View {
-    @EnvironmentObject var popUpControl: PopUpHelper
+    @EnvironmentObject var popUpControl: AppPopUpManger
     @StateObject var vm = LoginVM()
     @EnvironmentObject var appRouter: AppRouter
     private var isFormValid: Bool {
@@ -29,22 +29,13 @@ struct LoginScreen: View {
             .padding()
             .onTapGesture {
                 popUpControl.show(
-                    VStack(spacing: 20) {
-                        Text("This is a custom popup!")
-                        Button("Close") {
-                            popUpControl.dismiss()
-                        }
-                    }
-                    .frame(maxWidth: 300)
-                )
-                
-                popUpControl.show(
                     VStack {
                         Text("Tap outside or 'Close' to dismiss")
                         Button("Close") {
                             popUpControl.dismiss()
                         }
-                    },
+                    } .frame(width: 200, height: 200)
+                    ,
                     dismissOnBackgroundTap: true
                 )
             }

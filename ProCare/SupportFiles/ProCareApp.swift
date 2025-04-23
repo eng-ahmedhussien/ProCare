@@ -9,15 +9,17 @@ import SwiftUI
 
 @main
 struct ProCareApp: App {
+    @StateObject var authManager = AuthManager.shared
+    @StateObject var appRouter: AppRouter = AppRouter()
+    @StateObject var appPopUpManger: AppPopUpManger = AppPopUpManger()
+    
     var body: some Scene {
         WindowGroup {
-           // RootScreen()
-//            NavigationStack{
-//                PhoneScreen()
-//            }
            RouterView()
-              //  .environmentObject(authManager)
-                //.environmentObject(AuthManger.shared)
+                .environmentObject(authManager)
+                .environmentObject(appRouter)
+                .implementPopupView(using: appPopUpManger)
+                .id(authManager.isLoggedIn)
         }
     }
 }

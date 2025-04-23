@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct RouterView: View {
-    @StateObject var appRouter: AppRouter = AppRouter()
-    
+    @EnvironmentObject var appRouter: AppRouter
     var body: some View {
         NavigationStack(path: $appRouter.path) {
             appRouter.build(.RootScreen)
@@ -26,7 +25,6 @@ struct RouterView: View {
                     container.view
                 }
         }
-        .environmentObject(appRouter)
     }
 }
 

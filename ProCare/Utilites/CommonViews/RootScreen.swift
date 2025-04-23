@@ -8,18 +8,15 @@
 import SwiftUI
 
 struct RootScreen: View {
-    @StateObject var authManager = AuthManager.shared
-    
+    @EnvironmentObject var authManager : AuthManager
     var body: some View {
         Group {
             if authManager.isLoggedIn {
-                // RouterView()
                 TapBarView()
             } else {
                 LoginScreen()
             }
         }
-        .id(authManager.isLoggedIn)
     }
 }
 
