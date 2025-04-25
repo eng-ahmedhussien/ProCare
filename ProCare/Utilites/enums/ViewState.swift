@@ -11,6 +11,5 @@ import Foundation
 enum ViewState {
     case loading
     case loaded
-   // case error
     case empty
 }

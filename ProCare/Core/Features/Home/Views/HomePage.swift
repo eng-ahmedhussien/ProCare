@@ -11,27 +11,26 @@ struct HomePage: View {
     @ObservedObject var authManager = AuthManager.shared
     @StateObject var vm = HomeVM()
     @State private var isLoading = true
-    @State private var refreshTask: Task<Void, Never>? // for refreshable problem
     @EnvironmentObject var appRouter: AppRouter
 
     var body: some View {
         VStack(spacing: 0) {
             header
-
+//            NavigationLink("NursesListView") {
+//                NursesListPage()
+//            }
             ScrollView {
                 services
             }
         }
         .redacted(reason: isLoading ? .placeholder : [])
-        .task {
-            refreshTask?.cancel() // Cancel any previous
-            refreshTask = Task {
+        .onAppear{
+            Task {
                 await loadData()
             }
         }
         .refreshable {
-            refreshTask?.cancel()
-            refreshTask = Task {
+           Task {
                 await loadData()
             }
         }

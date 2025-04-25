@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct LoginScreen: View {
-    @EnvironmentObject var popUpControl: AppPopUpManger
     @StateObject var vm = LoginVM()
     @EnvironmentObject var appRouter: AppRouter
+    
     private var isFormValid: Bool {
         ValidationRule.phone.validate(vm.phone) == nil &&
         ValidationRule.password.validate(vm.password) == nil
@@ -27,18 +27,6 @@ struct LoginScreen: View {
             .font(.title.bold())
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
-            .onTapGesture {
-                popUpControl.show(
-                    VStack {
-                        Text("Tap outside or 'Close' to dismiss")
-                        Button("Close") {
-                            popUpControl.dismiss()
-                        }
-                    } .frame(width: 200, height: 200)
-                    ,
-                    dismissOnBackgroundTap: true
-                )
-            }
             
             VStack(alignment: .leading,spacing: 0){
                 Group {

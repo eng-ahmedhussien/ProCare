@@ -137,7 +137,8 @@ enum HTTPHeader {
         guard let token = AuthManager.shared.getToken()  else { return [:] }
         return [
             "accept": "*/*",
-            "Authorization": "Bearer \(token)"
+            "Authorization": "Bearer \(token)",
+            "Content-Type": "application/json"
         ]
     }
 }

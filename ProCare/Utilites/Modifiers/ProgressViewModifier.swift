@@ -9,15 +9,16 @@ import SwiftUI
 
 
 struct ProgressViewStyle: ViewModifier {
+    var color: Color
     func body(content: Content) -> some View {
         content
-            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+            .progressViewStyle(CircularProgressViewStyle(tint: color))
             .scaleEffect(1.5)
     }
 }
 
 extension  View {
-    func appProgressStyle() -> some View {
-        modifier(ProgressViewStyle())
+    func appProgressStyle(color: Color = .white) -> some View {
+        modifier(ProgressViewStyle(color: color))
     }
 }
