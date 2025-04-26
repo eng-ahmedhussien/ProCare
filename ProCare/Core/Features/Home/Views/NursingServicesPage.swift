@@ -10,7 +10,6 @@ import SwiftUI
 struct NursingServicesPage: View {
     @ObservedObject var vm : HomeVM
     @State private var isLoading = true
-    @State private var refreshTask: Task<Void, Never>? // for refreshable problem
     var id  = 0
 
     var body: some View {
@@ -51,15 +50,13 @@ struct NursingServicesPage: View {
             .padding(.top)
         }
         .redacted(reason: isLoading ? .placeholder : [])
-        .task {
-            refreshTask?.cancel() // Cancel any previous
-            refreshTask = Task {
-                await loadData()
-            }
+        .onAppear {
+                Task {
+                    await loadData()
+                }
         }
         .refreshable {
-            refreshTask?.cancel()
-            refreshTask = Task {
+            Task {
                 await loadData()
             }
         }

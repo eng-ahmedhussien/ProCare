@@ -75,11 +75,12 @@ struct homeView : View {
 
 struct homeView2 : View {
     @EnvironmentObject var appRouter: AppRouter
+    @EnvironmentObject var authManager: AuthManager
     var body: some View {
         VStack{
             Button {
                 appRouter.popToRoot()
-                AuthManager.shared.logout()
+                authManager.logout()
             } label: {
                 Text("logOut".localized())
                     .font(.title3)

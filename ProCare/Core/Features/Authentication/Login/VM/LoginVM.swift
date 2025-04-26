@@ -16,15 +16,15 @@ class LoginVM: ObservableObject {
     @Published var userDataLogin : UserDataLogin?
     @Published var goToOTP = false
     @Published var viewState: ViewState = .empty
+    
     private let apiClient: LoginApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
-
     
     init(apiClient: LoginApiClintProtocol = LoginApiClint()) {
         self.apiClient = apiClient
     }
 
-    func login(completion: @escaping () -> Void) async {
+    func login(completion: @escaping (_ userSate: UserState) -> Void) async {
         viewState = .loading
         let parameter = [
             "phoneNumber": phone,
@@ -40,17 +40,15 @@ class LoginVM: ObservableObject {
                     viewState = .loaded
                     switch userDataLogin.loginStatus {
                     case .Success:
-                       
-                        if let token = userDataLogin.token {
-                            AuthManager.shared.saveToken(token)
+                        if userDataLogin.token != nil {
+                            completion(.withToken)
                         }
-                        AuthManager.shared.saveUserData(userDataLogin)
                     case .InValidCredintials:
                         debugPrint("InValidCredintials")
                     case .UserLockedOut:
                         debugPrint("UserLockedOut")
                     case .UserNotConfirmed:
-                        completion()
+                        completion(.userNotConfirmed)
                     case .Error:
                         debugPrint("Error")
                     case .none:
@@ -69,4 +67,9 @@ class LoginVM: ObservableObject {
     }
     
     
+}
+
+enum UserState {
+    case userNotConfirmed
+    case withToken
 }

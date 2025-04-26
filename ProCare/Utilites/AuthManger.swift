@@ -55,45 +55,38 @@ import SwiftUI
 //        UserDefaults.standard.removeObject(forKey: "user_data")
 //    }
 //}
+@MainActor
+class AuthManager: ObservableObject {
+    @Published var isLoggedIn: Bool = false
+    @Published var userDataLogin: UserDataLogin? = nil
 
-final class AuthManager: ObservableObject {
-    static let shared = AuthManager()
+    private let defaults = AppUserDefaults.shared
 
-    @Published private(set) var token: String?
-    @Published private(set) var userData: UserDataLogin?
-
-    private init() {
-        token = AppUserDefaults.shared.get(forKey: .authToken)
-        userData = AppUserDefaults.shared.getCodable(UserDataLogin.self, forKey: .userData)
+    init() {
+        loadUserData()
     }
-
-    var isLoggedIn: Bool {
-        return token != nil
+    
+    private func loadUserData() {
+        if let savedUserData = defaults.getCodable(UserDataLogin.self, forKey: .userData) {
+            self.userDataLogin = savedUserData
+            self.isLoggedIn = (savedUserData.token?.isEmpty == false)
+        } else {
+            self.isLoggedIn = false
+        }
     }
-
-    func saveToken(_ token: String) {
-        self.token = token
-        AppUserDefaults.shared.set(token, forKey: .authToken)
+    
+    func login(userDataLogin: UserDataLogin) {
+        self.userDataLogin = userDataLogin
+        self.isLoggedIn = userDataLogin.token?.isEmpty == false
+        defaults.setCodable(userDataLogin, forKey: .userData)
+        defaults.set(userDataLogin.token ?? "", forKey: .authToken)
     }
-
-    func saveUserData(_ userData: UserDataLogin) {
-        self.userData = userData
-        AppUserDefaults.shared.setCodable(userData, forKey: .userData)
-    }
-
-    func getToken() -> String? {
-        return token
-    }
-
-    func getUserData() -> UserDataLogin? {
-        return userData
-    }
-
+    
     func logout() {
-        token = nil
-        userData = nil
-        AppUserDefaults.shared.remove(forKey: .authToken)
-        AppUserDefaults.shared.remove(forKey: .userData)
+        defaults.remove(forKey: .userData)
+        defaults.remove(forKey: .authToken)
+        self.userDataLogin = nil
+        self.isLoggedIn = false
     }
 }
 

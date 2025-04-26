@@ -75,7 +75,7 @@ extension NursesListPage {
 
 #Preview {
     let mockVM = NursesVM()
-    mockVM.nurseList = AppMockManger.shared.NursesListMockModel
+    mockVM.nurseList = MockManger.shared.NursesListMockModel
     return NursesListPage(vm: mockVM)
 }
 

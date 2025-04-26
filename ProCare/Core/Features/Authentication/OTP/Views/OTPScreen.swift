@@ -21,6 +21,7 @@ struct OTPScreen: View {
     @StateObject var resetPasswordFlowVM = ResetPasswordFlowVM()
     @FocusState private var pinFocusState : FocusPin?
     @EnvironmentObject var appRouter: AppRouter
+    @EnvironmentObject var authManager: AuthManager
     
     var phonNumber: String = ""
     var comeFrom: ComeFrom = .login
@@ -117,7 +118,10 @@ extension OTPScreen {
             Task {
                 switch comeFrom {
                 case .login, .signUp:
-                    await vm.confirmCode(parameter: parameter)
+                    await vm.confirmCode(parameter: parameter){
+                        guard let userDataLogin = vm.userDataLogin else { return }
+                        authManager.login(userDataLogin: userDataLogin)
+                    }
                 case .forgetPassword:
                     await resetPasswordFlowVM.checkCode(phoneNumber:phonNumber, otp: pinOne + pinTwo + pinThree + pinFour){ resetToken in
                         //if status {

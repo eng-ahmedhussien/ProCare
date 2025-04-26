@@ -8,8 +8,8 @@
 import Foundation
 import Combine
 
-class AppMockManger: ObservableObject{
-    static let shared = AppMockManger()
+class MockManger: ObservableObject{
+    static let shared = MockManger()
     
     let NursesListMockModel = [
         Nurse(

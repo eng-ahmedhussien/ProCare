@@ -22,7 +22,7 @@ class HomeVM: ObservableObject {
     }
     
     // MARK: - API Methods
-    func getCategories() async {
+    func getCategories(onUnauthorized: @escaping () -> Void) async {
         viewState = .loading
         do {
             let response = try await homeApiClint.categories()
@@ -30,10 +30,16 @@ class HomeVM: ObservableObject {
                 viewState = .loaded
                 self.categories = data
             } else {
-                debugPrint("Response received but no user data")
+                debugPrint("HomeVM: Response received but no user data")
             }
-        } catch {
-            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+        catch {
+            if let apiError = error as? APIResponseError, apiError.status == 401 {
+                debugPrint("HomeVM: Unauthorized error detected")
+                onUnauthorized()
+            } else {
+                debugPrint("HomeVM: Unexpected error: \(error.localizedDescription)")
+            }
         }
     }
     

@@ -10,7 +10,7 @@ import SwiftUI
 struct LoginScreen: View {
     @StateObject var vm = LoginVM()
     @EnvironmentObject var appRouter: AppRouter
-    
+    @EnvironmentObject var authManager: AuthManager
     private var isFormValid: Bool {
         ValidationRule.phone.validate(vm.phone) == nil &&
         ValidationRule.password.validate(vm.password) == nil
@@ -54,8 +54,14 @@ struct LoginScreen: View {
             VStack(spacing: 0){
                 Button {
                     Task {
-                        await vm.login(){
-                            appRouter.presentFullScreenCover(.otpScreen)
+                        await vm.login(){ state in
+                            switch state {
+                            case .userNotConfirmed:
+                                appRouter.presentFullScreenCover(.otpScreen)
+                            case .withToken:
+                                guard let data = vm.userDataLogin else { return }
+                                authManager.login(userDataLogin: data )
+                            }
                         }
                     }
                 } label: {

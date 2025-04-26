@@ -53,6 +53,6 @@ struct NurseCellView: View {
 }
 
 #Preview {
-    NurseCellView(nurse: AppMockManger.shared.nurseMockModel)
+    NurseCellView(nurse: MockManger.shared.nurseMockModel)
 }
 

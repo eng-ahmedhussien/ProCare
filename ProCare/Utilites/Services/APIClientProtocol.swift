@@ -38,11 +38,14 @@ class ApiClient<EndpointType: APIEndpoint>: ApiProtocol {
         var response: URLResponse?
         
         do {
-            
             request = try endpoint.asURLRequest()
+            
             if let request = request {
+                // 🚀🚀🚀 API Request
                 NetworkLogger.logRequest(request)
+                
                 (data, response) = try await session.data(for: request)
+                
                 guard let data = data, let response = response else {
                     throw APIResponseError(
                         type: nil,
@@ -52,18 +55,16 @@ class ApiClient<EndpointType: APIEndpoint>: ApiProtocol {
                         traceId: nil
                     )
                 }
+                
                 let apiResponse = try self.manageResponse(data: data, response: response, request: request, responseType: T.self)
+                //✅✅✅ API Response
                 if let httpResponse = response as? HTTPURLResponse {
-                    NetworkLogger.logResponse(
-                        request: request,
-                        response: httpResponse,
-                        data: data
-                    )
+                    NetworkLogger.logResponse(request: request, response: httpResponse, data: data)
                 }
+                
                 return apiResponse
                 
             }else {
-                
                 throw APIResponseError(
                     type: nil,
                     title: "Invalid request",
@@ -74,7 +75,6 @@ class ApiClient<EndpointType: APIEndpoint>: ApiProtocol {
             }
             
         } catch let error as APIResponseError {
-            
             NetworkLogger.logError(
                 request: request,
                 response: response as? HTTPURLResponse,
@@ -84,12 +84,10 @@ class ApiClient<EndpointType: APIEndpoint>: ApiProtocol {
             throw error
             
         }catch let error as URLError {
-            
             handleURLError(error, request)
             throw error // optional: rethrow if you want to pass it up
             
         } catch {
-            
             NetworkLogger.logError(
                 request: request,
                 response: response as? HTTPURLResponse,
@@ -159,7 +157,6 @@ extension ApiClient {
         
         guard let httpResponse = response as? HTTPURLResponse else {
             let errorMessage = "Invalid HTTP response"
-            //NetworkLogger.logError(request: request, response: nil, data: nil, error: errorMessage)
             throw APIResponseError(type: nil, title: nil, status: 10, errors: ["HTTP": [errorMessage]], traceId: nil)
         }
         
@@ -167,14 +164,14 @@ extension ApiClient {
         case 200...299:
             let decodedResponse = try self.decoder.decode(APIResponse<T>.self, from: data)
             return decodedResponse // ✅ Return response even if status is not .Success
-            
+        case 401:
+            let errorMessage = "Error: Unauthorized: \(httpResponse.statusCode)"
+            throw APIResponseError(type: nil, title: nil, status: 401, errors: ["Unauthorized": ["manageResponse func error : \(errorMessage)"]], traceId: nil)
         default:
             if let decodedError = try? self.decoder.decode(APIResponseError.self, from: data) {
-              //  NetworkLogger.logError(request: request, response: httpResponse,data: data,error: "manageResponse func error : \(decodedError.errors?.first?.value.first ?? " Unknown error")")
                 throw decodedError
             }
             let errorMessage = "Unexpected status code: \(httpResponse.statusCode)"
-            //NetworkLogger.logError(request: request, response: httpResponse, data: data, error: errorMessage)
             throw APIResponseError(type: nil, title: nil, status: 10, errors: ["decodedError": ["manageResponse func error : \(errorMessage)"]], traceId: nil)
         }
     }
@@ -192,7 +189,6 @@ extension ApiClient {
     
     // MARK: - handleURLError
     private func handleURLError(_ error: URLError,_ request: URLRequest?) {
-         
          switch error.code {
          case .notConnectedToInternet:
              NetworkLogger.logError( request: request, error: "🔌 No internet connection")
@@ -219,4 +215,43 @@ extension ApiClient {
      }
 }
 
+extension ApiClient {
+    
+    func requestWithRetry<T: Codable>(
+        _ endpoint: EndpointType,
+        retries: Int = 3,
+        delay: TimeInterval = 2
+    ) async throws -> APIResponse<T> {
+        var currentAttempt = 0
+        
+        while currentAttempt <= retries {
+            do {
+                return try await request(endpoint)
+            } catch let error as URLError {
+                currentAttempt += 1
+                
+                // Only retry for specific URLError codes
+                switch error.code {
+                case .timedOut, .networkConnectionLost, .notConnectedToInternet:
+                    if currentAttempt > retries {
+                        throw error
+                    }
+                    try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                default:
+                    throw error
+                }
+            } catch {
+                throw error
+            }
+        }
+        
+        throw APIResponseError(
+            type: nil,
+            title: "Maximum retries reached",
+            status: nil,
+            errors: ["Retry": ["Exceeded maximum retry attempts"]],
+            traceId: nil
+        )
+    }
+}
 

@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct HomePage: View {
-    @ObservedObject var authManager = AuthManager.shared
+    
     @StateObject var vm = HomeVM()
-    @State private var isLoading = true
+    @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
+    @EnvironmentObject var locationManager: LocationManager
+    
+    @State private var isLoading = true
 
     var body: some View {
         VStack(spacing: 0) {
             header
-//            NavigationLink("NursesListView") {
-//                NursesListPage()
-//            }
+            
+            NavigationLink("NursesListView") {
+                NursesListPage()
+            }
+            
             ScrollView {
                 services
             }
@@ -42,7 +47,9 @@ struct HomePage: View {
            debugPrint("⚠️ User not logged in — skipping .task")
            return
        }
-         await vm.getCategories()
+       await vm.getCategories {
+           authManager.logout()
+       }
         isLoading = false
     }
 
@@ -57,14 +64,15 @@ extension HomePage{
                         .padding(.trailing)
                         .foregroundColor(.white.opacity(0.9))
                     
-                    Text("hello \(authManager.userData?.firstName ?? "")")
+                    Text("hello \(authManager.userDataLogin?.firstName ?? "")")
                         .font(.title)
                         .foregroundColor(.white)
                 }
                 
                 HStack {
                     Image(.location)
-                    Text("cairo 114")
+                    Text("\(locationManager.address)")
+                        .lineLimit(2)
                 }
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.9))
@@ -76,11 +84,11 @@ extension HomePage{
     }
     
     var services: some View {
-        VStack(alignment: .trailing, spacing: 20){
+        VStack(alignment: .leading, spacing: 20){
             Text("services")
                 .font(.title2)
                 .fontWeight(.medium)
-                .padding(.trailing)
+                .padding(.horizontal)
             
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack{

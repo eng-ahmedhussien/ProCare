@@ -44,7 +44,7 @@ import SwiftUI
 //    ViewWithPopUp()
 //}
 
-class AppPopUpManger: ObservableObject {
+class AppPopUp: ObservableObject {
     @Published var showPopUp: Bool = false
     var popUpContent: AnyView = AnyView(EmptyView())
     var tapOutsideToDismiss: Bool = true

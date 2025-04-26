@@ -10,7 +10,7 @@ import SwiftUI
 struct GenericPopUp<Content: View>: View {
     let content: Content
     let tapOutsideToDismiss: Bool
-    @EnvironmentObject var popUpHelper: AppPopUpManger
+    @EnvironmentObject var popUpHelper: AppPopUp
 
     init(
         dismissOnBackgroundTap: Bool = true,
@@ -42,7 +42,7 @@ struct GenericPopUp<Content: View>: View {
 }
 
 extension View {
-    func implementPopupView(using appPopUpManger: AppPopUpManger) -> some View {
+    func implementPopupView(using appPopUpManger: AppPopUp) -> some View {
         ZStack {
             self
                 .environmentObject(appPopUpManger)

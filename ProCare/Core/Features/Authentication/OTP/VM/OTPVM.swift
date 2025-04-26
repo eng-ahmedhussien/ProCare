@@ -22,19 +22,17 @@ class OTPVM : ObservableObject{
         self.apiClient = apiClient
     }
     
-    func confirmCode(parameter: [String : String]) async {
+    func confirmCode(parameter: [String : String], completion: @escaping () -> Void) async {
         viewState = .loading
         do {
             let response = try await apiClient.confirmCode(parameters: parameter)
-                if response.status == .Success, let userDataLogin = response.data {
-                    viewState = .loaded
-                    self.userDataLogin = userDataLogin
-                    if let token = userDataLogin.token {
-                        AuthManager.shared.saveToken(token)
-                    }
-                    AuthManager.shared.saveUserData(userDataLogin)
-                } else {
+            if response.status == .Success, let userDataLogin = response.data {
+                viewState = .loaded
+                self.userDataLogin = userDataLogin
+                if let _ = userDataLogin.token {
+                    completion()
                 }
+            }
         } catch let APIError{
             await MainActor.run {
                 self.errorMessage = APIError as? APIResponseError
