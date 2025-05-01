@@ -120,6 +120,7 @@ extension OTPScreen {
                 case .login, .signUp:
                     await vm.confirmCode(parameter: parameter){
                         guard let userDataLogin = vm.userDataLogin else { return }
+                        appRouter.popToRoot()
                         authManager.login(userDataLogin: userDataLogin)
                     }
                 case .forgetPassword:

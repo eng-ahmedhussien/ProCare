@@ -57,7 +57,7 @@ struct LoginScreen: View {
                         await vm.login(){ state in
                             switch state {
                             case .userNotConfirmed:
-                                appRouter.presentFullScreenCover(.otpScreen)
+                                appRouter.pushView(OTPScreen(phonNumber: vm.phone))
                             case .withToken:
                                 guard let data = vm.userDataLogin else { return }
                                 authManager.login(userDataLogin: data )

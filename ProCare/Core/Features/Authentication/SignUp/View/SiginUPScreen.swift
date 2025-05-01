@@ -69,6 +69,7 @@ extension SignUPScreen {
             Task {
                 await vm.signUp(){ otp in
                     debugPrint(otp ?? "nil")
+                    appRouter.dismissFullScreenOver()
                     appRouter.pushView(OTPScreen(phonNumber: vm.phone))
                 
                 }
