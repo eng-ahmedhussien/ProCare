@@ -14,14 +14,29 @@ struct ProCareApp: App {
     @StateObject var appPopUpManger: AppPopUp = AppPopUp()
     @StateObject var locationManager = LocationManager()
     
+    @State private var isLoading = true
+
     var body: some Scene {
         WindowGroup {
-           RouterView()
-                .environmentObject(authManager)
-                .environmentObject(appRouter)
-                .environmentObject(locationManager)
-                .implementPopupView(using: appPopUpManger)
-                .id(authManager.isLoggedIn)
+            Group {
+                if isLoading {
+                    LoadingPage()
+                } else {
+                    RouterView()
+                        .environmentObject(authManager)
+                        .environmentObject(appRouter)
+                        .environmentObject(locationManager)
+                        .implementPopupView(using: appPopUpManger)
+                        .id(authManager.isLoggedIn)
+                }
+            }
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    isLoading = false
+                }
+            }
         }
     }
 }
+
+

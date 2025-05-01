@@ -97,7 +97,7 @@ extension HomePage{
                                 .onTapGesture {
                                     switch category.id {
                                     case 2:
-                                        appRouter.pushView(NursingServicesPage(vm: vm, id: category.id ?? 0))
+                                        appRouter.pushView(NursingServicesPage(id: category.id ?? 0).environmentObject(vm))
                                     case 3:
                                         debugPrint("ambulance")
                                     case 4:

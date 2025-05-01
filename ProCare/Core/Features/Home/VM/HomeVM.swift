@@ -13,19 +13,19 @@ class HomeVM: ObservableObject {
     @Published var viewState: ViewState = .empty
     @Published var categories: [Category] = []
     @Published var subCategories: [NursingServices] = []
-    
-    private let homeApiClint: HomeApiClintProtocol
+  
+    private let apiClint: HomeApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
     
-    init(homeApiClint: HomeApiClintProtocol = HomeApiClint()) {
-        self.homeApiClint = homeApiClint
+    init(apiClint: HomeApiClintProtocol = HomeApiClint()) {
+        self.apiClint = apiClint
     }
     
     // MARK: - API Methods
     func getCategories(onUnauthorized: @escaping () -> Void) async {
         viewState = .loading
         do {
-            let response = try await homeApiClint.categories()
+            let response = try await apiClint.categories()
             if let data = response.data {
                 viewState = .loaded
                 self.categories = data
@@ -46,7 +46,7 @@ class HomeVM: ObservableObject {
     func getSubCategories(id: Int) async {
         viewState = .loading
         do {
-            let response = try await homeApiClint.subCategories(id: id)
+            let response = try await apiClint.subCategories(id: id)
             if let data = response.data {
                 viewState = .loaded
                 self.subCategories = data
@@ -59,3 +59,5 @@ class HomeVM: ObservableObject {
     }
     
 }
+
+

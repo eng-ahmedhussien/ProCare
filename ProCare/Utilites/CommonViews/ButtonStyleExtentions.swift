@@ -17,17 +17,19 @@ struct CustomButtonStyle: ViewModifier {
     
     let kind: CustomButtonKind
     let width: CGFloat?
+    let hight: CGFloat?
     let disabled: Bool
     
-    init(kind: CustomButtonKind = .solid, width: CGFloat? = nil, disabled: Bool = false) {
+    init(kind: CustomButtonKind = .solid, width: CGFloat? = nil,hight: CGFloat? = nil ,disabled: Bool = false) {
         self.kind = kind
         self.width = width
+        self.hight = hight
         self.disabled = disabled
     }
     
     func body(content: Content) -> some View {
         content
-            .frame(width: width)
+            .frame(width: width,height: hight)
             .font(.body)
             .foregroundColor(foregroundColor)
             .padding()
@@ -63,8 +65,8 @@ struct CustomButtonStyle: ViewModifier {
 }
 
 extension View {
-    func buttonStyle(_ kind: CustomButtonKind, width: CGFloat? = nil, disabled: Bool = false) -> some View {
-        modifier(CustomButtonStyle(kind: kind, width: width, disabled: disabled))
+    func buttonStyle(_ kind: CustomButtonKind, width: CGFloat? = nil,hight: CGFloat? = nil ,disabled: Bool = false) -> some View {
+        modifier(CustomButtonStyle(kind: kind, width: width, hight: hight,disabled: disabled))
     }
 }
 
@@ -74,7 +76,7 @@ extension View {
             Text("Solid")
                 .buttonStyle(.solid, width: 120, disabled: false)
             Text("Solid")
-                .buttonStyle(.solid, width: 120, disabled: true)
+                .buttonStyle(.solid,hight: 5, disabled: true)
         }
 
         Text("Border")

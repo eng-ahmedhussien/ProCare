@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct NursingServicesPage: View {
-    @ObservedObject var vm : HomeVM
+    @EnvironmentObject var vm : HomeVM
+    @EnvironmentObject var appRouter: AppRouter
     @State private var isLoading = true
     var id  = 0
-
+    
+    @State var isSelected = false
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
@@ -43,9 +45,24 @@ struct NursingServicesPage: View {
                     }
                     .padding()
                     .frame(maxWidth: .infinity, maxHeight: 100, alignment: .leading)
-                    .cardBackground(color: .white, cornerRadius: 10, shadowRadius: 2, shadowColor: .gray)
+                    .backgroundCard(color: .white, cornerRadius: 10, shadowRadius: 2, shadowColor: .gray)
+                    .onTapGesture {
+                        if nursingServices.fromCallCenter ?? false{
+                            debugPrint(nursingServices.name ?? "")
+                        }else {
+                            switch nursingServices.id {
+                            case 1 :
+                                appRouter.pushView(ServiceListPage(id: nursingServices.id ?? 0))
+                            case 2 :
+                                debugPrint(nursingServices.name ?? "")
+                            default:
+                                debugPrint(" not supported")
+                            }
+                        }
+                    }
                 }
                  .padding(.horizontal)
+                 
             }
             .padding(.top)
         }
@@ -69,7 +86,6 @@ struct NursingServicesPage: View {
         await vm.getSubCategories(id: id)
         isLoading = false
     }
-    
 }
 
 
@@ -118,5 +134,5 @@ struct NursingServicesPage: View {
            )
        ]
     mockVM.subCategories = mockNursingServices
-    return NursingServicesPage(vm: mockVM, id: 2)
+    return NursingServicesPage( id: 2).environmentObject(mockVM)
 }

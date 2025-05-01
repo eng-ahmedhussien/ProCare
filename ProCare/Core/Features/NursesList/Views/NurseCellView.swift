@@ -47,7 +47,7 @@ struct NurseCellView: View {
                    
             }
             .padding()
-            .cardBackground(color: .white, cornerRadius: 10, shadowRadius: 2, shadowColor: .gray)
+            .backgroundCard(color: .white, cornerRadius: 10, shadowRadius: 2, shadowColor: .gray)
             .padding()
     }
 }

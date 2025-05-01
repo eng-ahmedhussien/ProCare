@@ -20,6 +20,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var isPermissionRestricted = false
     @Published var shouldShowLocationDeniedPopup: Bool = false
     
+    private var lastGeocodedLocation: CLLocation?
+    private var lastGeocodeTime: Date?
+    private let geocodeDistanceThreshold: CLLocationDistance = 50 // meters
+    private let geocodeTimeThreshold: TimeInterval = 10 // seconds
+    
     override init() {
         super.init()
         manager.delegate = self
@@ -62,8 +67,24 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let newLocation = locations.first else { return }
         location = newLocation
-        reverseGeocode(location: newLocation)
+        
+        if shouldGeocode(location: newLocation) {
+            reverseGeocode(location: newLocation)
+        }
     }
+    
+    private func shouldGeocode(location: CLLocation) -> Bool {
+        let now = Date()
+        
+        if let lastLoc = lastGeocodedLocation, let lastTime = lastGeocodeTime {
+            let distance = location.distance(from: lastLoc)
+            let timeElapsed = now.timeIntervalSince(lastTime)
+            return distance > geocodeDistanceThreshold || timeElapsed > geocodeTimeThreshold
+        }
+        
+        return true // no previous data
+    }
+    
     private func reverseGeocode(location: CLLocation) {
         let locale = Locale(identifier: "ar") // Arabic locale
         

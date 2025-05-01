@@ -16,7 +16,7 @@ protocol APIEndpoint {
     var method: HTTPMethod { get }
     var headers: HTTPHeader? { get }
     var parameters: [String: String]? { get }
-   // var queryItems: [URLQueryItem]? { get }
+    var queryItems: [URLQueryItem]? { get }
     //var mockFile: String? { get }
 }
 
@@ -24,7 +24,7 @@ protocol APIEndpoint {
 extension APIEndpoint {
     var baseURL: URL  { URL(string: "http://procare.runasp.net/api")! }
     var parameters: [String: String]? { nil }
-    
+    var queryItems: [URLQueryItem]? { nil }
     
 //    func asURLRequest() throws -> URLRequest {
 //        // Use baseURL and safely append path
@@ -68,9 +68,9 @@ extension APIEndpoint {
         urlComponents.path += path
         
         // Append query parameters if available
-//        if let queryItems = queryItems {
-//            urlComponents.queryItems = queryItems
-//        }
+        if let queryItems = queryItems {
+            urlComponents.queryItems = queryItems
+        }
         
         // Validate the final URL
         guard let finalURL = urlComponents.url else {

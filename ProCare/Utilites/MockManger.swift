@@ -37,4 +37,17 @@ class MockManger: ObservableObject{
     ]
     
     let nurseMockModel = Nurse(id: "1", fullName: "Noor", specialization: "Noor", specializationId: 1, licenseNumber: "Noor", image: "Noor", rating: "Noor", latitude: "Noor", longitude: "Noor")
+    
+    
+    let serviceListMockModel = [
+        ServiceItem(id: 1, name: "Wound Care", description: "Cleaning wounds and changing bandages professionally.", price: 250, subCategoryId: 1),
+        ServiceItem(id: 2, name: "Wound Care", description: "Cleaning wounds and changing bandages professionally.", price: 250, subCategoryId: 1),
+        ServiceItem(id: 3, name: "Wound Care", description: "Cleaning wounds and changing bandages professionally.", price: 250, subCategoryId: 1),
+        ServiceItem(id: 4, name: "Wound Care", description: "Cleaning wounds and changing bandages professionally.", price: 250, subCategoryId: 1),
+        ServiceItem(id: 5, name: "Wound Care", description: "Cleaning wounds and changing bandages professionally.", price: 250, subCategoryId: 1),
+        ServiceItem(id: 6, name: "Wound Care", description: "Cleaning wounds and changing bandages professionally.", price: 250, subCategoryId: 1)
+    ]
+    let serviceMockModel =
+        ServiceItem(id: 1, name: "Wound Care", description: "Cleaning wounds and changing bandages professionally.", price: 250, subCategoryId: 1)
+        
 }

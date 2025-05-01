@@ -15,7 +15,7 @@ struct cardBackground: View {
                 .foregroundStyle(.tint)
             Text("Hello, world!")
         }.padding()
-            .cardBackground(color: .white, cornerRadius: 10, shadowRadius: 5, shadowColor: .black.opacity(5),shadowX:10,shadowY:10)
+            .backgroundCard(color: .white, cornerRadius: 10, shadowRadius: 5, shadowColor: .black.opacity(5),shadowX:10,shadowY:10)
     }
 }
 
@@ -24,7 +24,7 @@ struct cardBackground: View {
 }
 
 extension View {
-    func cardBackground(color: Color = Color.white,
+    func backgroundCard(color: Color = Color.white,
                         cornerRadius: CGFloat = 10,
                         shadowRadius: CGFloat = 0,
                         shadowColor: Color = Color.clear,
