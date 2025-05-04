@@ -56,8 +56,8 @@ struct CustomButtonStyle: ViewModifier {
                 .strokeBorder(disabled ? .gray : .clear, lineWidth: 1)
                 .background(disabled ? Color.gray : Color.appPrimary)
         case .border:
-            Capsule()
-                .strokeBorder(disabled ? .gray.opacity(0.8) : Color("Mainbutton"), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 10)
+                .strokeBorder(disabled ? .gray.opacity(0.8) : .appPrimary, lineWidth: 1)
         case .plain:
             EmptyView()
         }

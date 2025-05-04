@@ -12,7 +12,7 @@ struct RootScreen: View {
     var body: some View {
         Group {
             if authManager.isLoggedIn {
-                TapBarView()
+                    TapBarView()
             } else {
                 LoginScreen()
             }

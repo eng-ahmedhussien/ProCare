@@ -41,4 +41,5 @@ class AppUserDefaults {
 enum AppUserDefaultsKey: String {
     case authToken = "auth_token"
     case userData = "user_data"
+    case profileData = "profile_data"
 }

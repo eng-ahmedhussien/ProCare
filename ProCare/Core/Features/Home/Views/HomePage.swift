@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomePage: View {
     
-    @StateObject var vm = HomeVM()
+    @StateObject var vm: HomeVM
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var locationManager: LocationManager
@@ -119,7 +119,10 @@ extension HomePage{
 }
 
 #Preview {
-    HomePage()
+    HomePage(vm: HomeVM())
+        .environmentObject(AuthManager())
+        .environmentObject(AppRouter())
+        .environmentObject(LocationManager())
 }
 
 enum SubCategories: Int {

@@ -12,6 +12,7 @@ struct AppTextFieldPreview: View {
     @State private var confirmPassword = ""
     @State private var age = ""
     @State private var phoneNumber = ""
+    @State private var name = ""
     
     var body: some View {
         VStack(spacing: 20) {
@@ -28,6 +29,9 @@ struct AppTextFieldPreview: View {
             
             AppTextField(text: $phoneNumber,placeholder: "Enter mobile number",  validationRules: [.isEmpty, .phone]
             )
+            
+            AppTextField(text: $name,placeholder: "name",  validationRules: [.isEmpty], style:  .plain
+            )
         }
         .padding()
     }
@@ -42,6 +46,7 @@ struct AppTextField: View {
     var placeholder: String
     var validationRules: [ValidationRule]
     var isSecure: Bool = false
+    var style: AppTextFieldStyle = .bordered // default style
     
     @State private var showError = false
     @State private var errorMessage = ""
@@ -57,6 +62,7 @@ struct AppTextField: View {
                         TextField(placeholder, text: $text)
                     }
                 }
+               // .textFieldStyle(style)
                 .onChange(of: text, perform: { _ in
                     if text.isEmpty {
                         resetValidation()
@@ -75,10 +81,36 @@ struct AppTextField: View {
                 }
             }
             .padding()
+//            .overlay(
+//                RoundedRectangle(cornerRadius: 8)
+//                    .stroke(showError ? .red : .gray, lineWidth: 1)
+//            )
             .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(showError ? .red : .gray, lineWidth: 1)
+                Group {
+                    switch style {
+                    case .bordered:
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(showError ? Color.red : Color.gray, lineWidth: 1)
+                    case .plain:
+                        if showError {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.red, lineWidth: 1)
+                        }
+                    }
+                }
             )
+//            .background(
+//                Group {
+//                    switch style {
+//                    case .plain:
+//                        Color.clear
+//                            .stroke(showError ? .red : .gray, lineWidth: 1)
+//                    case .bordered:
+//                        RoundedRectangle(cornerRadius: 8)
+//                            .stroke(showError ? .red : .gray, lineWidth: 1)
+//                    }
+//                }
+//            )
             
             if showError {
                 Text(errorMessage)
@@ -107,4 +139,9 @@ struct AppTextField: View {
             }
         }
     }
+}
+
+enum AppTextFieldStyle {
+    case plain
+    case bordered
 }

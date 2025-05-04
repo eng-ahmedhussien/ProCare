@@ -27,11 +27,11 @@ enum TapViewEnum : Identifiable, CaseIterable, View {
     var body: some View {
         switch self {
         case .home:
-            HomePage()
+            HomePage(vm: HomeVM())
         case .orders:
-            Text("orders")
-        case .profile:
             homeView()
+        case .profile:
+            ProfilePage()
         }
     }
 }
