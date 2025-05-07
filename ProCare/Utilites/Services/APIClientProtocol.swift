@@ -79,7 +79,7 @@ class ApiClient<EndpointType: APIEndpoint>: ApiProtocol {
                 request: request,
                 response: response as? HTTPURLResponse,
                 data: data,
-                error: error.errors?.values.first?.first ?? " 💥 Errors array is  empty 💥"
+                error: "\(error.title ?? "") : \(error.errors?.values.first?.first ?? "💥 Errors array is  empty 💥" )"
             )
             throw error
             
@@ -162,8 +162,15 @@ extension ApiClient {
         
         switch httpResponse.statusCode {
         case 200...299:
-            let decodedResponse = try self.decoder.decode(APIResponse<T>.self, from: data)
-            return decodedResponse // ✅ Return response even if status is not .Success
+            do {
+                      let decodedResponse = try self.decoder.decode(APIResponse<T>.self, from: data)
+                      return decodedResponse // ✅ Return response even if status is not .Success
+            } catch {
+                throw handleDecodingError(error, for: T.self, data: data)
+            }
+            
+            
+            
         case 401:
             let errorMessage = "Error: Unauthorized: \(httpResponse.statusCode)"
             throw APIResponseError(type: nil, title: nil, status: 401, errors: ["Unauthorized": ["manageResponse func error : \(errorMessage)"]], traceId: nil)
@@ -213,6 +220,45 @@ extension ApiClient {
              NetworkLogger.logError( request: request, error: "⚠️ URLError: \(error.code.rawValue) - \(error.localizedDescription)")
          }
      }
+    
+    // MARK: - handleDecodingError
+    private func handleDecodingError<T>( _ error: Error,for type: T.Type, data: Data) -> APIResponseError {
+        var errorMessage = "Decoding failed for type: \(T.self)"
+        var errorDetails: [String] = []
+
+        if let decodingError = error as? DecodingError {
+            switch decodingError {
+            case .typeMismatch(let type, let context):
+                errorMessage = "Type mismatch for type \(type)"
+                errorDetails.append("\(context.debugDescription) - CodingPath: \(context.codingPath.map(\.stringValue).joined(separator: " → "))")
+
+            case .valueNotFound(let type, let context):
+                errorMessage = "Value not found for type \(type)"
+                errorDetails.append("\(context.debugDescription) - CodingPath: \(context.codingPath.map(\.stringValue).joined(separator: " → "))")
+
+            case .keyNotFound(let key, let context):
+                errorMessage = "Missing key: \(key.stringValue)"
+                errorDetails.append("\(context.debugDescription) - CodingPath: \(context.codingPath.map(\.stringValue).joined(separator: " → "))")
+
+            case .dataCorrupted(let context):
+                errorMessage = "Data corrupted"
+                errorDetails.append("\(context.debugDescription) - CodingPath: \(context.codingPath.map(\.stringValue).joined(separator: " → "))")
+
+            @unknown default:
+                errorMessage = "Unknown decoding error"
+            }
+        } else {
+            errorMessage = "Unexpected decoding error: \(error.localizedDescription)"
+        }
+
+        return APIResponseError(
+            type: "DecodingError",
+            title: errorMessage,
+            status: 10,
+            errors: ["Decoding": errorDetails],
+            traceId: nil
+        )
+    }
 }
 
 extension ApiClient {

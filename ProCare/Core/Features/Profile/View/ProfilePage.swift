@@ -15,6 +15,7 @@ struct ProfilePage: View {
     @State private var isEditingUserInfo: Bool = false
     @State private var isEditingLocation: Bool = false
     @State private var uploadImage: Bool = false
+    
     private let screenHeight = UIScreen.main.bounds.height
     private let screenWidth = UIScreen.main.bounds.width
     private var isFormValid: Bool {
@@ -38,6 +39,11 @@ struct ProfilePage: View {
 
         }
         .background(.gray.opacity(0.1))
+        .onAppear {
+            Task{
+               await  vm.getProfile()
+            }
+        }
     }
 }
 
@@ -144,7 +150,7 @@ extension ProfilePage{
                     .font(.headline)
                 Spacer()
                 Button(action: {
-                    
+                    appRouter.pushView(UpdateAddressView(vm: vm))
                 }) {
                     Image(systemName: "pencil.and.ellipsis.rectangle")
                         .foregroundStyle(.appPrimary)

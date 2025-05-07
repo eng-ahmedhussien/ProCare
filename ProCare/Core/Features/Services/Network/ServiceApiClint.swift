@@ -12,6 +12,6 @@ protocol ServiceApiClintProtocol {
 
 class ServiceApiClint: ApiClient<ServiceEndPoints>, ServiceApiClintProtocol {
     func GetServices(parameters: [String: String] ,id: Int) async throws -> APIResponse<ServiceData> {
-        return try await request(ServiceEndPoints.Services(parameters: parameters, id: id))
+        return try await request(ServiceEndPoints.services(parameters: parameters, subCategoryId: id))
     }
 }

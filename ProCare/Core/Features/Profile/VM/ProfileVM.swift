@@ -11,13 +11,20 @@ import Combine
 @MainActor
 class ProfileVM: ObservableObject {
     
-    @Published var firstName: String = "ahmed"
-    @Published var lastName: String = "hussien"
+    // MARK: Profile
+    @Published var firstName: String = ""
+    @Published var lastName: String = ""
     @Published var dateOfBirth: Date?
     @Published var location: String?
     @Published var gender: Gender?
-    
     @Published var viewState: ViewState = .empty
+    
+    // MARK: - Governorates
+    @Published var governorates: [Governorates] = []
+    @Published var citys: [City] = []
+    @Published var selectedGovernorate: Int?
+    @Published var selectedCity: Int?
+    @Published var addressInDetails = ""
     
     var minimumDate: Date {
         Calendar.current.date(byAdding: .year, value: -18, to: Date())!
@@ -35,12 +42,7 @@ class ProfileVM: ObservableObject {
         do {
             let response = try await apiClient.getProfile()
             if let profileData = response.data {
-                AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
-                firstName = profileData.firstName ?? ""
-                lastName = profileData.lastName ?? ""
-                gender = Gender(rawValue: profileData.gender ?? 0) ?? .notSpecified
-                dateOfBirth =  dateFromString(profileData.birthDate ?? "") ?? Date()
-                location = profileData.city ?? "" + " - " + (profileData.governorate ?? "") + "- " + (profileData.addressNotes ?? "")
+                putProfileData(profileData)
             } else {
                 debugPrint("Response received but no user data")
             }
@@ -64,6 +66,80 @@ class ProfileVM: ObservableObject {
         }
     }
     
+    func updateProfile() async{
+        viewState = .loading
+        let parameters :[String : Any]  = [
+            "FirstName": firstName,
+            "LastName": lastName,
+            "BirthDate": dateToString(dateOfBirth ?? .now),
+            "GovernorateId": selectedGovernorate ?? 0,
+            "CityId": selectedCity ?? 0,
+            "AddressNotes": addressInDetails,
+            "Gender": gender?.rawValue ?? 0
+        ]
+        
+        do {
+            let response = try await apiClient.updateProfile(parameters: parameters)
+            if let profileData = response.data {
+                viewState = .loaded
+                Task {
+                    await  self.getProfile()
+                }
+                //getProfile
+               // putProfileData(profileData)
+            } else {
+                debugPrint("Response received but no user data")
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchGovernorates() async {
+        do {
+            let response = try await apiClient.getGovernorates()
+            if let governorates = response.data {
+                self.governorates = governorates
+                Task {
+                    await  self.fetchCityByGovernorateId(id: self.selectedGovernorate ?? 0)
+                }
+            } else {
+                debugPrint("Response received but no user data")
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchCityByGovernorateId(id: Int) async {
+        do {
+            let response = try await apiClient.getCityByGovernorateId(id: id)
+            if let cities = response.data {
+                self.citys = cities
+            } else {
+                debugPrint("Response received but no user data")
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+    
+}
+
+extension ProfileVM {
+    private func putProfileData( _ profileData : Profile) {
+        AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
+        firstName = profileData.firstName ?? ""
+        lastName = profileData.lastName ?? ""
+        gender = Gender(rawValue: profileData.gender ?? 0) ?? .notSpecified
+        dateOfBirth =  dateFromString(profileData.birthDate ?? "") ?? Date()
+        location = "\(profileData.city ?? "") - \(profileData.governorate ?? "") - \(profileData.addressNotes ?? "")"
+        
+        //MARK: location
+        selectedGovernorate = profileData.governorateId ?? 1
+        selectedCity = profileData.cityId ?? 1
+        addressInDetails = profileData.addressNotes ?? ""
+    }
 }
 
 
@@ -72,4 +148,11 @@ func dateFromString(_ dateString: String) -> Date? {
     formatter.dateFormat = "yyyy-MM-dd"
     formatter.locale = Locale(identifier: "en_US_POSIX") // Recommended for fixed format parsing
     return formatter.date(from: dateString)
+}
+
+
+func dateToString(_ date: Date, format: String = "yyyy-MM-dd") -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = format
+    return formatter.string(from: date)
 }
