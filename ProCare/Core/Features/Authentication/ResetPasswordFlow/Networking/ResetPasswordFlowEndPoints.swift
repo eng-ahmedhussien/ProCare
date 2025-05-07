@@ -37,14 +37,14 @@ enum ResetPasswordFlowEndPoints : APIEndpoint {
         }
     }
     
-    var parameters: [String: String]? {
+    var task: Parameters {
         switch self {
         case .resendCode(let parameters):
-            return parameters
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         case .checkCode(let parameters):
-            return parameters
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         case .resetPassword(let parameters):
-            return parameters
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         }
     }
 }

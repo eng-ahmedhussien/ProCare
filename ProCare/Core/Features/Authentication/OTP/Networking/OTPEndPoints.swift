@@ -36,12 +36,12 @@ enum OTPEndPoints : APIEndpoint {
         }
     }
     
-    var parameters: [String: String]? {
+    var task: Parameters {
         switch self {
         case .confirmCode(let parameters):
-            return parameters
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         case .resendCode(let parameters):
-            return parameters
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         }
     }
 }

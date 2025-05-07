@@ -9,7 +9,6 @@ import Foundation
 
 
 enum LoginEndPoints : APIEndpoint {
-    
     case login(parameters: [String: String])
     
     var path: String {
@@ -33,10 +32,11 @@ enum LoginEndPoints : APIEndpoint {
         }
     }
     
-    var parameters: [String: String]? {
+    var task: Parameters {
         switch self {
-        case .login(let parameters):
-            return parameters
+        case .login(let params):
+            return .requestParameters(parameters: params, encoding: .JSONEncoding())
+
         }
     }
 }

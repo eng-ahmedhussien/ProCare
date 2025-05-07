@@ -32,11 +32,12 @@ enum SignUpEndpoints: APIEndpoint {
         }
     }
     
-    var parameters: [String: String]? {
+    var task: Parameters {
         switch self {
         case .signUp(let parameters):
-            return parameters
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         }
     }
+    
 }
 

@@ -6,11 +6,17 @@
 //
 
 import Foundation
+import UIKit
 
 enum ProfileEndPoints : APIEndpoint {
     case getProfile
     case deleteProfile
-    case updateProfile(parameters: [String: Any])
+    //case updateProfile(parameters: [String: Any])
+    case updateProfile(params: [String: Any], image: UIImage? = nil )
+    
+    //MARK: location
+    case getGovernorates
+    case getCityByGovernorateId(id: Int)
     
     var path: String {
         switch self {
@@ -20,12 +26,16 @@ enum ProfileEndPoints : APIEndpoint {
             return "/Profile/DeleteAccount"
         case .updateProfile:
             return "/Profile/UpdatePatientProfile"
+        case .getGovernorates:
+            return "/Governorate/GetMobileGovernorates"
+        case .getCityByGovernorateId(let id):
+            return "/City/GetCityByGovernorateId/\(id)"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .getProfile:
+        case .getProfile, .getGovernorates, .getCityByGovernorateId:
             return .get
         case .deleteProfile:
             return .delete
@@ -41,12 +51,18 @@ enum ProfileEndPoints : APIEndpoint {
         }
     }
     
-    var parameters: [String : Any]? {
+    var task: Parameters {
         switch self {
-        case .getProfile, .deleteProfile:
-            return nil
-        case .updateProfile(let parameters):
-            return parameters
+        case .getProfile, .deleteProfile, .getGovernorates, .getCityByGovernorateId:
+            return .requestNoParameters
+        case .updateProfile(let params, let image):
+                    if let img = image {
+                        return .requestWithMultipart(parameters: params, multipartParamters: .single(key: "Image", image: img))
+                    } else {
+                        return .requestWithMultipart(parameters: params, multipartParamters: .dictionary([:])) // No image
+                            
+                    }
         }
     }
+
 }

@@ -32,10 +32,10 @@ enum NurseEndPoints : APIEndpoint {
         }
     }
     
-    var parameters: [String : String]? {
+    var task: Parameters {
         switch self {
         case .GetAllNurses(let parameters):
-            return parameters
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         }
     }
 }

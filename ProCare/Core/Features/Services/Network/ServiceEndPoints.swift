@@ -8,45 +8,33 @@
 import Foundation
 
 enum ServiceEndPoints: APIEndpoint {
+    case services(parameters: [String: Any], subCategoryId: Int)
 
-    case Services(parameters: [String: String], id : Int)
-    
     var path: String {
         switch self {
-        case .Services( _ ,_):
+        case .services:
             return "/ServiceCatalog/GetMobileServices"
-     
-            
         }
     }
-    
+
     var method: HTTPMethod {
-        switch self {
-        case .Services:
-            return .post
-        }
+        return .post
     }
-    
+
     var headers: HTTPHeader? {
-        get {
-            return HTTPHeader.authHeader
-        }
+        return .authHeader
     }
-    
-    var queryItems: [URLQueryItem]? {
+
+    var task: Parameters {
         switch self {
-        case .Services(_ , let id):
-            return [ URLQueryItem(name: "subCategoryId", value: "\(id)")]
+        case .services(let parameters, let id):
+                   return .requestWithQueryAndBody(
+                       query: ["subCategoryId": id],
+                       body: parameters,
+                       encoding: .JSONEncoding(.default)
+                   )
         }
         
     }
-    
-    var parameters: [String : String]? {
-        switch self {
-        case .Services(let parameters, _):
-            return parameters
-        }
-    }
-    
 }
 
