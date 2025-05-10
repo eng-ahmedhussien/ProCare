@@ -13,31 +13,31 @@ enum CustomButtonKind {
     case plain
 }
 
-struct CustomButtonStyle: ViewModifier {
-    
+struct AppButton: ButtonStyle {
     let kind: CustomButtonKind
     let width: CGFloat?
-    let hight: CGFloat?
+    let height: CGFloat?
     let disabled: Bool
     
-    init(kind: CustomButtonKind = .solid, width: CGFloat? = nil,hight: CGFloat? = nil ,disabled: Bool = false) {
-        self.kind = kind
-        self.width = width
-        self.hight = hight
-        self.disabled = disabled
-    }
-    
-    func body(content: Content) -> some View {
-        content
-            .frame(width: width,height: hight)
-            .font(.body)
-            .foregroundColor(foregroundColor)
+    // Default initializer with default values
+       init(kind: CustomButtonKind = .solid, width: CGFloat? = nil, height: CGFloat? = nil, disabled: Bool = false) {
+           self.kind = kind
+           self.width = width
+           self.height = height
+           self.disabled = disabled
+       }
+
+    func makeBody(configuration: Configuration) -> some View {
+        let isPressed = configuration.isPressed
+        return configuration.label
+            .frame(width: width, height: height)
             .padding()
-            .background(backgroundView())
-            .cornerRadius(kind == .solid ? 10 : 0)
-            .disabled(disabled)
+            .foregroundColor(foregroundColor)
+            .background(background(isPressed: isPressed))
+            .cornerRadius(10)
+            .opacity(disabled ? 0.6 : 1.0)
     }
-    
+
     private var foregroundColor: Color {
         switch kind {
         case .solid:
@@ -48,45 +48,41 @@ struct CustomButtonStyle: ViewModifier {
             return disabled ? .gray.opacity(0.8) : .black
         }
     }
-    
-    @ViewBuilder private func backgroundView() -> some View {
+
+    @ViewBuilder
+    private func background(isPressed: Bool) -> some View {
         switch kind {
         case .solid:
-            Capsule()
-                .strokeBorder(disabled ? .gray : .clear, lineWidth: 1)
-                .background(disabled ? Color.gray : Color.appPrimary)
+            RoundedRectangle(cornerRadius: 10)
+                .fill(disabled ? Color.gray : (isPressed ? Color.appPrimary.opacity(0.7) : Color.appPrimary))
         case .border:
             RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(disabled ? .gray.opacity(0.8) : .appPrimary, lineWidth: 1)
+                .stroke(disabled ? .gray.opacity(0.8) : .appPrimary, lineWidth: 1)
         case .plain:
-            EmptyView()
+            Color.clear
         }
     }
 }
 
-extension View {
-    func buttonStyle(_ kind: CustomButtonKind, width: CGFloat? = nil,hight: CGFloat? = nil ,disabled: Bool = false) -> some View {
-        modifier(CustomButtonStyle(kind: kind, width: width, hight: hight,disabled: disabled))
-    }
-}
 
-#Preview{
-    VStack{
-        Section{
-            Text("Solid")
-                .buttonStyle(.solid, width: 120, disabled: false)
-            Text("Solid")
-                .buttonStyle(.solid,hight: 5, disabled: true)
-        }
-
-        Text("Border")
-            .buttonStyle(.border, width: 120, disabled: false)
-        Text("Border")
-            .buttonStyle(.border, width: 120, disabled: true)
-
-        Text("Plain")
-            .buttonStyle(.plain, disabled: true)
-        Text("Plain")
-            .buttonStyle(.plain, disabled: false)
-    }
-}
+//#Preview{
+//    VStack{
+//        Section{
+//            Text("Solid")
+//                .buttonStyle(CustomButton(kind: .solid, width: 300, height: 50, disabled: !isFormValid))
+//                .disabled(!isFormValid)
+//            Text("Solid")
+//                .buttonStyle(.solid,hight: 5, disabled: true)
+//        }
+//
+//        Text("Border")
+//            .buttonStyle(.border, width: 120, disabled: false)
+//        Text("Border")
+//            .buttonStyle(.border, width: 120, disabled: true)
+//
+//        Text("Plain")
+//            .buttonStyle(.plain, disabled: true)
+//        Text("Plain")
+//            .buttonStyle(.plain, disabled: false)
+//    }
+//}

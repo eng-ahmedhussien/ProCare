@@ -9,8 +9,12 @@ import Foundation
 
 struct City: Codable,DropdownOption {
     var id: Int
-    var name: String { nameEn ?? "" } // conforms to DropdownOption
-    let nameAr, nameEn: String?
+    let nameAr: String?
+    let nameEn: String?
     let governorateId: Int?
     let governorate: String?
+
+    var name: String { // required by DropdownItem
+        nameEn ?? nameAr ?? ""
+    }
 }

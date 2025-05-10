@@ -49,8 +49,8 @@ extension PhoneScreen {
                     .font(.title3)
             }
         }
-        .buttonStyle(.solid, width: 300, disabled: isFormValid == false)
-        .disabled(isFormValid == false)
+        .buttonStyle(AppButton(kind: .solid,width: 300,disabled: !isFormValid))
+        .disabled(!isFormValid)
         .padding()
     }
 }

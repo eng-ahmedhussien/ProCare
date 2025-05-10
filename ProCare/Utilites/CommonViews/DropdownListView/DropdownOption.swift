@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol DropdownOption: Identifiable {
+protocol DropdownOption: Identifiable, Hashable {
     var id: Int { get }
     var name: String { get }
 }

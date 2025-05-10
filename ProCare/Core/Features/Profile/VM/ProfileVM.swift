@@ -82,11 +82,11 @@ class ProfileVM: ObservableObject {
             let response = try await apiClient.updateProfile(parameters: parameters)
             if let profileData = response.data {
                 viewState = .loaded
-                Task {
-                    await  self.getProfile()
-                }
+//                Task {
+//                    await  self.getProfile()
+//                }
                 //getProfile
-               // putProfileData(profileData)
+                putProfileData(profileData)
             } else {
                 debugPrint("Response received but no user data")
             }

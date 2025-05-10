@@ -149,6 +149,7 @@ extension ProfilePage{
                 Text("User location")
                     .font(.headline)
                 Spacer()
+                
                 Button(action: {
                     appRouter.pushView(UpdateAddressView(vm: vm))
                 }) {
@@ -177,9 +178,13 @@ extension ProfilePage{
                 withAnimation {
                     isEditingUserInfo = false
                 }
+                Task{
+                    await vm.updateProfile()
+                }
             }
             .transition(.move(edge: .bottom).combined(with: .opacity))
-            .buttonStyle(.solid, width: 300, disabled: isFormValid == false)
+            .buttonStyle(AppButton(kind: .solid,width: 300,disabled: !isFormValid))
+            .disabled(!isFormValid)
             .padding()
         }else {
             VStack() {
@@ -189,12 +194,13 @@ extension ProfilePage{
 
                     }
                     .foregroundStyle(.appPrimary)
-                    .buttonStyle(.border,width: screenWidth / 2.7)
+                    .buttonStyle(AppButton(kind: .border,width: screenWidth / 2.7))
+                    
                     Button("Logout".localized()) {
                         appRouter.popToRoot()
                         authManager.logout()
                     }
-                    .buttonStyle(.solid, width: screenWidth / 2.7)
+                    .buttonStyle(AppButton(kind: .solid,width: screenWidth / 2.7))
                 }
                 
                 Button("Delete Account".localized()) {
@@ -205,8 +211,8 @@ extension ProfilePage{
                         }
                     }
                 }
+                .padding()
                 .foregroundStyle(.secondary)
-                .buttonStyle(.plain)
             }
             .padding()
         }

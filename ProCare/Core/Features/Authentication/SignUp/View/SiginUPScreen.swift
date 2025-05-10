@@ -79,7 +79,8 @@ extension SignUPScreen {
                 .font(.title3)
                 ///. font(.system(size: 24, weight: .bold, design: .default))
         }
-        .buttonStyle(.solid, width: 300, disabled: isFormValid == false)
+        .buttonStyle(AppButton(kind: .solid,width: 300,disabled: !isFormValid))
+        .disabled(!isFormValid)
     }
     
     var haveAccountButton: some View {
@@ -88,8 +89,10 @@ extension SignUPScreen {
         } label: {
             Text("have account?".localized())
                 .font(.title3)
+                .underline()
+                .foregroundStyle(.black)
         }
-        .buttonStyle(.plain)
+       
     }
 
 }

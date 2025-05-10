@@ -44,7 +44,7 @@ struct LoginScreen: View {
                         .font(.title3)
                         .underline()
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(AppButton(kind: .plain))
             }
             .autocapitalization(.none)
             .disableAutocorrection(true)
@@ -73,7 +73,8 @@ struct LoginScreen: View {
                             .font(.title3)
                     }
                 }
-                .buttonStyle(.solid, width: 300, disabled: isFormValid == false)
+                .buttonStyle(AppButton(kind: .solid,width: 300 ,disabled: !isFormValid))
+                .disabled(!isFormValid)
                 
                 Button {
                     appRouter.presentFullScreenCover(.signUp)
@@ -82,7 +83,7 @@ struct LoginScreen: View {
                         .font(.title3)
                         .underline()
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(AppButton(kind: .plain))
             }
         }
     }

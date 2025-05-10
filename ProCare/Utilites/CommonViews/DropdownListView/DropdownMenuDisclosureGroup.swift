@@ -19,20 +19,29 @@ struct DropdownListView<T: DropdownOption>: View {
     var body: some View {
         DisclosureGroup(selectedName, isExpanded: $isExpanded) {
             VStack(alignment: .leading) {
-                ForEach(options, id: \.id) { option in
+                ForEach(options, id: \.self) { option in
                     Button(action: {
-                        withAnimation {
-                            selectedId = option.id
-                            isExpanded = false
+                        if selectedId != option.id {
+                            withAnimation {
+                                selectedId = option.id
+                            }
                         }
+                        isExpanded = false
                     }) {
                         Text(option.name)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.vertical, 8)
+                            .padding(.horizontal, 12)
+                            .background(
+                                option.id == selectedId ?
+                                Color.secondary : Color.clear
+                            )
+                            .cornerRadius(6)
                     }
-                    .buttonStyle(PlainButtonStyle())
+                    //.buttonStyle(PlainButtonStyle())
                 }
             }
+            .padding(.vertical, 4)
         }
         .foregroundStyle(.black)
         .padding()
@@ -41,36 +50,3 @@ struct DropdownListView<T: DropdownOption>: View {
         .tint(.black)
     }
 }
-
-//struct DropdownListView_Previews: PreviewProvider {
-//    struct PreviewWrapper: View {
-//        @State private var selectedCityId: Int = nil
-//
-//        let sampleCities: [City] = [
-//            City(id: 1, nameAr: "القاهرة", nameEn: "Cairo", governorateId: 1, governorate: "Cairo Governorate"),
-//            City(id: 2, nameAr: "الإسكندرية", nameEn: "Alexandria", governorateId: 2, governorate: "Alexandria Governorate"),
-//            City(id: 3, nameAr: "الجيزة", nameEn: "Giza", governorateId: 3, governorate: "Giza Governorate")
-//        ]
-//
-//        var body: some View {
-//            VStack {
-//                DropdownListView(selectedId: $selectedCityId, options: sampleCities)
-//
-//                if let selectedId = selectedCityId,
-//                   let selectedCity = sampleCities.first(where: { $0.id == selectedId }) {
-//                    Text("Selected: \(selectedCity.name)")
-//                        .padding()
-//                } else {
-//                    Text("No city selected")
-//                        .padding()
-//                }
-//            }
-//            .padding()
-//        }
-//    }
-//
-//    static var previews: some View {
-//        PreviewWrapper()
-//    }
-//}
-//

@@ -12,6 +12,7 @@ struct UpdateAddressView: View {
     
     @ObservedObject var vm: ProfileVM
     @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var appRouter: AppRouter
     
     var body: some View {
         VStack(spacing: 16) {
@@ -42,9 +43,6 @@ struct UpdateAddressView: View {
                 await vm.fetchGovernorates()
             }
         }
-//        .onChange(of: vm.selectedGovernorate ?? 0) { oldValue, newValue in
-//            vm.fetchCityByGovernorateId(id: newValue)
-//        }
         .onChange(of: vm.selectedGovernorate ?? 0) { id in
             Task {
                 await vm.fetchCityByGovernorateId(id: id)
@@ -77,28 +75,21 @@ extension UpdateAddressView {
                 Text("get my location".localized())
             }
         }
-        .buttonStyle(.border, width: 300)
+        .buttonStyle(AppButton(kind: .border,width: 300))
     }
     
     var saveButton: some View {
         Button(action: {
             Task{
                 await vm.updateProfile()
+                appRouter.pop()
             }
         }) {
             Text("save".localized())
-        }.buttonStyle(.solid, width: 300)
+        }
+        .buttonStyle(AppButton(kind: .solid,width: 300))
     
     }
-    
-//    private func getGovernorates(for governorate: [Governorates]) -> [String] {
-//        return governorate.map { $0.name ?? "" }
-//    }
-//    
-//    private func getCites(for cites: [City]) -> [String] {
-//        return cites.map { $0.nameEn ?? "" }
-//    }
-    
 }
 
 
@@ -107,4 +98,3 @@ extension UpdateAddressView {
         UpdateAddressView(vm: ProfileVM())
     }
 }
-

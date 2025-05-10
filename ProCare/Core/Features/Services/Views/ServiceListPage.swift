@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ServiceListPage: View {
     
-    @StateObject var vm = ServiceVM()
+    @EnvironmentObject var vm: ServiceVM
     @EnvironmentObject var locationManger: LocationManager
     var id = 1
     
@@ -97,7 +97,7 @@ extension ServiceListPage{
                 Text("Continue".localized())
                     .font(.title3)
             }
-            .buttonStyle(.solid, width: 300, disabled: vm.selectedServices.isEmpty)
+            .buttonStyle(AppButton(kind: .solid,width: 300, disabled: vm.selectedServices.isEmpty))
         }
         .background(Color(.systemBackground))
         .shadow(color: Color.black.opacity(0.1), radius: 5, y: -1)
@@ -129,5 +129,5 @@ extension ServiceListPage{
     let mockVM = ServiceVM()
     mockVM.paginationViewState = .loaded
     mockVM.serviceItem = MockManger.shared.serviceListMockModel
-    return ServiceListPage()
+    return ServiceListPage().environmentObject(ServiceVM())
 }

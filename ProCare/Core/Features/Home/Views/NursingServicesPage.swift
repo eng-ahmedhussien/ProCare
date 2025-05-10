@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct NursingServicesPage: View {
+    @StateObject var serviceVM = ServiceVM()
     @EnvironmentObject var vm : HomeVM
     @EnvironmentObject var appRouter: AppRouter
     @State private var isLoading = true
@@ -52,7 +53,10 @@ struct NursingServicesPage: View {
                         }else {
                             switch nursingServices.id {
                             case 1 :
-                                appRouter.pushView(ServiceListPage(id: nursingServices.id ?? 0))
+                                appRouter.pushView(
+                                    ServiceListPage(id: nursingServices.id ?? 0)
+                                        .environmentObject(serviceVM)
+                                )
                             case 2 :
                                 debugPrint(nursingServices.name ?? "")
                             default:

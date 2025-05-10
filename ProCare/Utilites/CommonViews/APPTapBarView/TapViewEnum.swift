@@ -68,7 +68,7 @@ struct homeView : View {
                     .font(.title3)
                     .underline()
             }
-            .buttonStyle(.plain)
+            //.buttonStyle(.plain)
         }
     }
 }
@@ -86,7 +86,7 @@ struct homeView2 : View {
                     .font(.title3)
                     .underline()
             }
-            .buttonStyle(.plain)
+            //.buttonStyle(.plain)
         }
     }
 }
