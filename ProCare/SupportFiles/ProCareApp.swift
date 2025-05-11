@@ -13,7 +13,7 @@ struct ProCareApp: App {
     @StateObject var appRouter: AppRouter = AppRouter()
     @StateObject var appPopUpManger: AppPopUp = AppPopUp()
     @StateObject var locationManager = LocationManager()
-    
+    @StateObject var profileVM = ProfileVM()
     @State private var isLoading = true
 
     var body: some Scene {
@@ -28,6 +28,7 @@ struct ProCareApp: App {
                         .environmentObject(locationManager)
                         .implementPopupView(using: appPopUpManger)
                         .id(authManager.isLoggedIn)
+                        .environmentObject(profileVM)
                 }
             }
             .onAppear {

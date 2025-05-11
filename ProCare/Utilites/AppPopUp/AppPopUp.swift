@@ -7,42 +7,42 @@
 
 import SwiftUI
 
-//struct ViewWithPopUp: View {
-//    @StateObject var popUpControl: AppPopUpManger = AppPopUpManger()
-//    var body: some View {
-//        ZStack {
-//            Group {
-//                ZStack{
-//                    Color.blue
-//                    
-//                    Button("show pop up") {
-//                        popUpControl.show(
-//                            VStack(spacing: 20) {
-//                                Text("This is a custom popup!")
-//                                Button("Close") {
-//                                    popUpControl.dismiss()
-//                                }
-//                            }
-//                            .frame(maxWidth: 300)
-//                        )
-//                    }
-//                }
-//            }.environmentObject(popUpControl)
-//            
-//            if popUpControl.showPopUp {
-//                GenericPopUp(dismissOnBackgroundTap: popUpControl.tapOutsideToDismiss) {
-//                    popUpControl.popUpContent
-//                }
-//                .environmentObject(popUpControl)
-//            }
-//        }
-//    }
-//}
-//
-//
-//#Preview {
-//    ViewWithPopUp()
-//}
+struct ViewWithPopUp: View {
+    @StateObject var popUpControl: AppPopUp = AppPopUp()
+    var body: some View {
+        ZStack {
+            Group {
+                ZStack{
+                    Color.gray
+                    
+                    Button("show pop up") {
+                        popUpControl.show(
+                            VStack(spacing: 20) {
+                                Text("This is a custom popup!")
+                                Button("Close") {
+                                    popUpControl.dismiss()
+                                }
+                            }
+                            .frame(maxWidth: 300)
+                        )
+                    }
+                }
+            }.environmentObject(popUpControl)
+            
+            if popUpControl.showPopUp {
+                GenericPopUp(dismissOnBackgroundTap: popUpControl.tapOutsideToDismiss) {
+                    popUpControl.popUpContent
+                }
+                .environmentObject(popUpControl)
+            }
+        }
+    }
+}
+
+
+#Preview {
+    ViewWithPopUp()
+}
 
 class AppPopUp: ObservableObject {
     @Published var showPopUp: Bool = false

@@ -10,9 +10,13 @@ import SwiftUI
 
 struct UpdateAddressView: View {
     
-    @ObservedObject var vm: ProfileVM
+    @EnvironmentObject var vm: ProfileVM
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var appRouter: AppRouter
+    @EnvironmentObject var appPopUp: AppPopUp
+  
+    @Environment(\.openURL) var openURL
+    @State private var showLocationAlert = false
     
     var body: some View {
         VStack(spacing: 16) {
@@ -28,12 +32,11 @@ struct UpdateAddressView: View {
                 options:  vm.citys
             )
             
-            
             addressDetails
             
             Spacer()
             
-            LocationButton
+           // LocationButton
             saveButton
         }
         .padding(.vertical)
@@ -47,6 +50,16 @@ struct UpdateAddressView: View {
             Task {
                 await vm.fetchCityByGovernorateId(id: id)
             }
+        }
+        .alert("Location Required", isPresented: $showLocationAlert) {
+            Button("Open Settings") {
+                if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                    openURL(appSettings)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("To complete this request, we need access to your location. Please enable location permissions in Settings.")
         }
     }
 }
@@ -64,25 +77,32 @@ extension UpdateAddressView {
         .padding()
     }
     
-    var LocationButton: some View {
-        Button(action: {
-//            locationManager.shouldShowLocationDeniedPopup{
-//                
+//    var LocationButton: some View {
+//        Button(action: {
+//            if locationManager.isPermissionDenied {
+//                showLocationAlert.toggle()
 //            }
-        }) {
-            HStack {
-                Image(.location)
-                Text("get my location".localized())
-            }
-        }
-        .buttonStyle(AppButton(kind: .border,width: 300))
-    }
+//        }) {
+//            HStack {
+//                Image(.location)
+//                Text("get my location".localized())
+//            }
+//        }
+//        .buttonStyle(AppButton(kind: .border,width: 300))
+//    }
     
     var saveButton: some View {
         Button(action: {
-            Task{
-                await vm.updateProfile()
-                appRouter.pop()
+            if locationManager.isPermissionDenied {
+                showLocationAlert.toggle()
+            }else{
+                Task{
+                    guard let location = locationManager.location else { return }
+                    let lat = String(location.coordinate.latitude)
+                    let lon = String(location.coordinate.longitude)
+                    await vm.updateProfile(latitude: lat, longitude: lon)
+                    appRouter.pop()
+                }
             }
         }) {
             Text("save".localized())
@@ -95,6 +115,6 @@ extension UpdateAddressView {
 
 #Preview{
     NavigationStack{
-        UpdateAddressView(vm: ProfileVM())
+        UpdateAddressView().environmentObject(ProfileVM())
     }
 }

@@ -66,7 +66,7 @@ class ProfileVM: ObservableObject {
         }
     }
     
-    func updateProfile() async{
+    func updateProfile(latitude: String? = nil, longitude: String? = nil) async{
         viewState = .loading
         let parameters :[String : Any]  = [
             "FirstName": firstName,
@@ -75,17 +75,15 @@ class ProfileVM: ObservableObject {
             "GovernorateId": selectedGovernorate ?? 0,
             "CityId": selectedCity ?? 0,
             "AddressNotes": addressInDetails,
-            "Gender": gender?.rawValue ?? 0
+            "Gender": gender?.rawValue ?? 0,
+            "Latitude" : latitude ?? "",
+            "Longitude": longitude ?? ""
         ]
         
         do {
             let response = try await apiClient.updateProfile(parameters: parameters)
             if let profileData = response.data {
                 viewState = .loaded
-//                Task {
-//                    await  self.getProfile()
-//                }
-                //getProfile
                 putProfileData(profileData)
             } else {
                 debugPrint("Response received but no user data")

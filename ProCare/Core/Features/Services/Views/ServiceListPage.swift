@@ -11,6 +11,8 @@ struct ServiceListPage: View {
     
     @EnvironmentObject var vm: ServiceVM
     @EnvironmentObject var locationManger: LocationManager
+    @EnvironmentObject var appRouter : AppRouter
+    @State var showAddressAlert = false
     var id = 1
     
     var body: some View {
@@ -92,7 +94,11 @@ extension ServiceListPage{
             .padding()
 
             Button {
-                // Action here
+                if locationManger.isPermissionDenied {
+                    showAddressAlert.toggle()
+                }else{
+                    appRouter.pushView(NursesListPage())
+                }
             } label: {
                 Text("Continue".localized())
                     .font(.title3)
@@ -101,6 +107,14 @@ extension ServiceListPage{
         }
         .background(Color(.systemBackground))
         .shadow(color: Color.black.opacity(0.1), radius: 5, y: -1)
+        .alert("Location Required", isPresented: $showAddressAlert) {
+            Button("add address") {
+                appRouter.pushView(UpdateAddressView())
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("To complete this request, we need address")
+        }
     }
     private var emptyView: some View {
         VStack {

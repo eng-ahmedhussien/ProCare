@@ -6,10 +6,32 @@
 //
 
 import SwiftUI
-
+import CoreLocation
 
 struct NursesListPage: View {
     @StateObject var vm: NursesVM = NursesVM()
+    @EnvironmentObject var locationManger: LocationManager
+    private var sortedNurses: [Nurse] {
+        guard let userLocation = locationManger.location else {
+            return vm.nurseList
+        }
+
+        let sorted = vm.nurseList.sorted {
+            guard let loc1 = $0.coordinate else { return false }
+            guard let loc2 = $1.coordinate else { return true }
+            return loc1.distance(from: userLocation) < loc2.distance(from: userLocation)
+        }
+
+        // Print distances once
+//        for nurse in sorted {
+//            if let nurseLoc = nurse.coordinate {
+//                let distance = nurseLoc.distance(from: userLocation) / 1000
+//                print("Distance to \(nurse.fullName ?? "N/A"): \(distance) km")
+//            }
+//        }
+
+        return sorted
+    }
     
     var body: some View {
         ZStack {
@@ -20,6 +42,7 @@ struct NursesListPage: View {
             if vm.nurseList.isEmpty {
                 Task {
                     await vm.fetchNurses(loadType: .initial)
+                    
                 }
             }
         }
@@ -41,7 +64,7 @@ struct NursesListPage: View {
         case .pagingLoading, .refreshing, .loaded:
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(vm.nurseList, id: \.id) { nurse in
+                    ForEach(sortedNurses, id: \.id) { nurse in
                         NurseCellView(nurse: nurse)
                             .onAppear {
                                 if nurse.id == vm.nurseList.last?.id, vm.hasNextPage {
@@ -94,6 +117,38 @@ struct NursesListPage: View {
                 .foregroundColor(.gray)
         }
         .padding()
+    }
+    
+//    func sortNursesByDistance(nurses: [Nurse]) -> [Nurse] {
+//        guard let userLocation = locationManger.location else {
+//            return nurses // fallback: show unsorted list
+//        }
+//        
+//        return nurses.sorted {
+//            guard let loc1 = $0.coordinate else { return false }
+//            guard let loc2 = $1.coordinate else { return true }
+//            return loc1.distance(from: userLocation) < loc2.distance(from: userLocation)
+//        }
+//    }
+//    
+    func sortNursesByDistance(nurses: [Nurse]) -> [Nurse] {
+        guard let userLocation = locationManger.location else {
+            return nurses
+        }
+
+        return nurses.sorted {
+            guard let loc1 = $0.coordinate else { return false }
+            guard let loc2 = $1.coordinate else { return true }
+            
+            let dist1 = loc1.distance(from: userLocation)
+            let dist2 = loc2.distance(from: userLocation)
+
+            print("Distance to \($0.fullName ?? "Nurse 1"): \(dist1 / 1000) km")
+            print("Distance to \($1.fullName ?? "Nurse 2"): \(dist2 / 1000) km")
+
+            return dist1 < dist2
+        }
+        
     }
 }
 

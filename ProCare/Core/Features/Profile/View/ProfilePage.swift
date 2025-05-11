@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfilePage: View {
-    @StateObject var vm = ProfileVM()
+    @EnvironmentObject var vm: ProfileVM
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
     
@@ -151,7 +151,7 @@ extension ProfilePage{
                 Spacer()
                 
                 Button(action: {
-                    appRouter.pushView(UpdateAddressView(vm: vm))
+                    appRouter.pushView(UpdateAddressView())
                 }) {
                     Image(systemName: "pencil.and.ellipsis.rectangle")
                         .foregroundStyle(.appPrimary)

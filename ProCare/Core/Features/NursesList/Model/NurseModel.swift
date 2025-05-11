@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 // MARK: - DataClass
 struct NurseList: Codable {
@@ -23,4 +24,13 @@ struct Nurse: Codable {
     let image: String?
     let rating: String?
     let latitude, longitude: String?
+    
+    var coordinate: CLLocation? {
+           if let lat = latitude, let lon = longitude,
+              let latDouble = Double(lat), let lonDouble = Double(lon) {
+               return CLLocation(latitude: latDouble, longitude: lonDouble)
+           }
+           return nil
+       }
+
 }

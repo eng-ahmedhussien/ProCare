@@ -18,6 +18,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var address: String = ""
     @Published var isPermissionDenied = false
     @Published var isPermissionRestricted = false
+    @Published var location: CLLocation?
     
     private var lastGeocodedLocation: CLLocation? // Last location that was reverse geocoded
     private var lastGeocodeTime: Date?   // Timestamp of last reverse geocoding
@@ -67,7 +68,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     // Called when new location data is available
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let newLocation = locations.first else { return }
-
+        
+        self.location = newLocation  // ✅ capture for UI
+        
         if shouldGeocode(location: newLocation) {
             reverseGeocode(location: newLocation)
         }
