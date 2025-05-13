@@ -1,5 +1,5 @@
 //
-//  NursesListView.swift
+//  NursesListScreen.swift
 //  ProCare
 //
 //  Created by ahmed hussien on 24/04/2025.
@@ -8,9 +8,12 @@
 import SwiftUI
 import CoreLocation
 
-struct NursesListPage: View {
+struct NursesListScreen: View {
     @StateObject var vm: NursesVM = NursesVM()
     @EnvironmentObject var locationManger: LocationManager
+    @EnvironmentObject var appRouter: AppRouter
+    var servicesIds: [ServiceItem] = []
+    
     private var sortedNurses: [Nurse] {
         guard let userLocation = locationManger.location else {
             return vm.nurseList
@@ -72,6 +75,9 @@ struct NursesListPage: View {
                                         await vm.fetchNurses(loadType: .paging)
                                     }
                                 }
+                            }
+                            .onTapGesture {
+                                appRouter.pushView(NurseDetailsScreen(servicesIds: servicesIds, nurse: nurse))
                             }
                     }
                     .redacted(reason: vm.viewState == .pagingLoading ? .placeholder : [])
@@ -156,7 +162,7 @@ struct NursesListPage: View {
 #Preview {
     let mockVM = NursesVM()
     mockVM.nurseList = MockManger.shared.NursesListMockModel
-    return NursesListPage(vm: mockVM)
+    return NursesListScreen(vm: mockVM)
 }
 
 

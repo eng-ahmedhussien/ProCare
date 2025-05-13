@@ -17,7 +17,7 @@ class LoginVM: ObservableObject {
     @Published var goToOTP = false
     @Published var viewState: ViewState = .empty
     
-    let profileVM = ProfileVM()
+
     private let apiClient: LoginApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
     
@@ -45,9 +45,9 @@ class LoginVM: ObservableObject {
                             completion(.withToken)
                             
                             //get profile
-                            Task{
-                                await profileVM.getProfile()
-                            }
+//                            Task{
+//                                await profileVM.getProfile()
+//                            }
                         }
                     case .InValidCredintials:
                         debugPrint("InValidCredintials")

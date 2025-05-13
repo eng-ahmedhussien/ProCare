@@ -21,7 +21,7 @@ struct HomePage: View {
             header
             
             NavigationLink("NursesListView") {
-                NursesListPage()
+                NursesListScreen()
             }
             
             ScrollView {

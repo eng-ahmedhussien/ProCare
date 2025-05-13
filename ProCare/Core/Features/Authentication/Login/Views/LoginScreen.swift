@@ -11,6 +11,7 @@ struct LoginScreen: View {
     @StateObject var vm = LoginVM()
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var profileVM: ProfileVM
     private var isFormValid: Bool {
         ValidationRule.phone.validate(vm.phone) == nil &&
         ValidationRule.password.validate(vm.password) == nil
@@ -60,6 +61,9 @@ struct LoginScreen: View {
                                 appRouter.pushView(OTPScreen(phonNumber: vm.phone))
                             case .withToken:
                                 guard let data = vm.userDataLogin else { return }
+                                Task{
+                                    await profileVM.getProfile()
+                                }
                                 authManager.login(userDataLogin: data )
                             }
                         }

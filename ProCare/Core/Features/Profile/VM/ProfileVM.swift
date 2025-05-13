@@ -42,6 +42,7 @@ class ProfileVM: ObservableObject {
         do {
             let response = try await apiClient.getProfile()
             if let profileData = response.data {
+                AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
                 putProfileData(profileData)
             } else {
                 debugPrint("Response received but no user data")

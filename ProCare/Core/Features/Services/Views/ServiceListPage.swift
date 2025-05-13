@@ -97,7 +97,7 @@ extension ServiceListPage{
                 if locationManger.isPermissionDenied {
                     showAddressAlert.toggle()
                 }else{
-                    appRouter.pushView(NursesListPage())
+                    appRouter.pushView(NursesListScreen(servicesIds: vm.selectedServices))
                 }
             } label: {
                 Text("Continue".localized())
