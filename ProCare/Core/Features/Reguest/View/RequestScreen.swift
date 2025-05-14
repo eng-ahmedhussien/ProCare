@@ -73,7 +73,7 @@ extension RequestScreen{
                 
             Text("\(profile?.governorate ?? "")-\(profile?.city ?? "")-\(profile?.addressNotes ?? "" )")
                 .font(.title3)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.appGray)
                 .lineLimit(3)
           
         }

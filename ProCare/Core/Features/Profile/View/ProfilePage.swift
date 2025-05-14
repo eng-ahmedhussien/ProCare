@@ -30,7 +30,7 @@ struct ProfilePage: View {
                 userInfo
             }
             .padding()
-            .backgroundCard(cornerRadius: 10, shadowRadius: 4, shadowColor: .secondary, shadowX: 2, shadowY: 2)
+            .backgroundCard(cornerRadius: 10, shadowRadius: 4, shadowColor: .appGray, shadowX: 2, shadowY: 2)
             .padding()
             
             locationView
@@ -61,7 +61,7 @@ extension ProfilePage{
             }) {
                 Image(systemName: "person.crop.square.badge.camera.fill")
                     .font(.title2)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.appGray)
             }
         }
     }
@@ -85,7 +85,7 @@ extension ProfilePage{
                 Text("First Name:")
                 Spacer()
                 TextField("", text: $vm.firstName)
-                    .foregroundStyle(isEditingUserInfo ? .secondary : Color.black)
+                    .foregroundStyle(isEditingUserInfo ? .appGray : Color.black)
                     .multilineTextAlignment(.trailing)
                     .disabled(!isEditingUserInfo)
             }
@@ -94,7 +94,7 @@ extension ProfilePage{
                 Text("Last Name:")
                 Spacer()
                 TextField("", text: $vm.lastName)
-                    .foregroundStyle(isEditingUserInfo ? .secondary : Color.black)
+                    .foregroundStyle(isEditingUserInfo ? .appGray : Color.black)
                     .multilineTextAlignment(.trailing)
                     .disabled(!isEditingUserInfo)
             }
@@ -113,7 +113,7 @@ extension ProfilePage{
                         Text(gender.displayName)
                     } else {
                         Text("No selected")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.appGray)
                     }
                 }
                 
@@ -136,7 +136,7 @@ extension ProfilePage{
                         Text(dob.formatted(date: .abbreviated, time: .omitted))
                     } else {
                         Text("No selected")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.appGray)
                     }
                 }
             }
@@ -163,11 +163,11 @@ extension ProfilePage{
                     .font(.body)
             }else{
                 Text("No selected")
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.appGray)
             }
         }
         .padding()
-        .backgroundCard(cornerRadius: 10, shadowRadius: 3, shadowColor: .secondary, shadowX: 2, shadowY: 2)
+        .backgroundCard(cornerRadius: 10, shadowRadius: 3, shadowColor: .appGray, shadowX: 2, shadowY: 2)
         .padding()
     }
     
@@ -212,7 +212,7 @@ extension ProfilePage{
                     }
                 }
                 .padding()
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.appGray)
             }
             .padding()
         }

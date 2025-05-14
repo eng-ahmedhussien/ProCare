@@ -37,7 +37,7 @@ struct ServiceCellView: View {
                 Text(service.description ?? "")
                     .lineLimit(2)
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.appGray)
             }
             
             Spacer()

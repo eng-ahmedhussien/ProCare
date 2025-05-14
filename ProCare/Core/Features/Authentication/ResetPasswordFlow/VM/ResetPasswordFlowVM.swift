@@ -74,7 +74,7 @@ class ResetPasswordFlowVM: ObservableObject {
                 if let _ = response.data?.isValid {
                     viewState = .loaded
                     completion(response.data?.resetToken ?? "")
-                    debugPrint("Code valid: \(response.data?.resetToken)")
+                    debugPrint("Code valid: \(response.data?.resetToken ?? "")")
                 } else {
                     debugPrint("Code check returned nil")
                     completion("nil")

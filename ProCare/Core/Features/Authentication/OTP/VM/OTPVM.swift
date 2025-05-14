@@ -43,11 +43,11 @@ class OTPVM : ObservableObject{
     func resendCode(parameter: [String : String]) async {
         viewState = .loading
         do {
-             try await apiClient.resendCode(parameters: parameter)
+            let _ = try await apiClient.resendCode(parameters: parameter)
             viewState = .loaded
         } catch let APIError{
             await MainActor.run {
-                //self.errorMessage = APIError as? APIResponseError
+                self.errorMessage = APIError as? APIResponseError
             }
         }
     }

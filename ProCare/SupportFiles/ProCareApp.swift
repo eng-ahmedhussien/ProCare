@@ -14,6 +14,7 @@ struct ProCareApp: App {
     @StateObject var appPopUpManger: AppPopUp = AppPopUp()
     @StateObject var locationManager = LocationManager()
     @StateObject var profileVM = ProfileVM()
+    @StateObject var toastManager = ToastManager.shared
     @State private var isLoading = true
 
     var body: some Scene {
@@ -29,6 +30,7 @@ struct ProCareApp: App {
                         .implementPopupView(using: appPopUpManger)
                         .id(authManager.isLoggedIn)
                         .environmentObject(profileVM)
+                        .toastView(toast: $toastManager.toast)
                 }
             }
             .onAppear {
