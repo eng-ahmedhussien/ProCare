@@ -70,7 +70,7 @@ extension View {
 }
 
 
-
+// MARK: global function access from class or struct
 func showAppMessage(_ message: String, appearance: ToastStyle, position: ToastPosition = .top) {
     ToastManager.shared.show(
         Toast(style: appearance, message: message, duration: 3, position: position)

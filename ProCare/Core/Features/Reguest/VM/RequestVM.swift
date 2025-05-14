@@ -21,15 +21,21 @@ class RequestVM: ObservableObject {
     }
     
     // MARK: - API Methods
-    func submitRequest(Parameters: [String : Any]) async {
+    func submitRequest(Parameters: [String : Any],completion: @escaping () -> Void) async {
         do {
             let response = try await apiClient.submitRequest(Parameters: Parameters)
-            if let _ = response.data {
-                
-                
-            } else {
-                debugPrint("Response received but no user data")
+            switch response.status {
+            case .Success:
+                showAppMessage("request crated", appearance: .success, position: .top)
+                completion()
+            case .Error:
+                showAppMessage(response.message, appearance: .error, position: .top)
+            case .AuthFailure:
+                showAppMessage(response.message, appearance: .error, position: .top)
+            case .Conflict:
+                showAppMessage(response.message, appearance: .error, position: .top)
             }
+           
         } catch {
             debugPrint("Unexpected error: \(error.localizedDescription)")
         }

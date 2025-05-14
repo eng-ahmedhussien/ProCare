@@ -20,6 +20,7 @@ struct ToastView: View {
                 .font(.caption)
                 .foregroundColor(.white)
                 .lineLimit(nil)
+                .padding(.vertical)
 
             Spacer()
 

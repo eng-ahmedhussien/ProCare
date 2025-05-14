@@ -16,16 +16,19 @@ final class ToastManager: ObservableObject {
     private init() {}
 
     func show(_ toast: Toast) {
-        self.toast = toast
+        DispatchQueue.main.async { [weak self] in
+            self?.toast = toast
 
-        if toast.duration > 0 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + toast.duration) { [weak self] in
-                if self?.toast == toast {
-                    self?.dismiss()
+            if toast.duration > 0 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + toast.duration) {
+                    if self?.toast == toast {
+                        self?.dismiss()
+                    }
                 }
             }
         }
     }
+
 
     func dismiss() {
         withAnimation {

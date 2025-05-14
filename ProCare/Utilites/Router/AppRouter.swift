@@ -51,8 +51,11 @@ class AppRouter: RouterProtocol {
     }
     
     func popToRoot() {
-        path.removeLast(path.count)
+        DispatchQueue.main.async { [weak self] in
+            self?.path.removeLast(self?.path.count ?? 0)
+        }
     }
+   
     
     func dismissSheet() {
         self.sheetView = nil

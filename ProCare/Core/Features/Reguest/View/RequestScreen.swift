@@ -10,6 +10,7 @@ import SwiftUI
 struct RequestScreen: View {
     
     @StateObject var vm = RequestVM()
+    @EnvironmentObject var appRouter: AppRouter
     
     var nurse: Nurse?
     var serviceItems: [ServiceItem] = []
@@ -139,11 +140,13 @@ extension RequestScreen{
             "addressId": profile?.addressId ?? 0,
             "latitude": profile?.latitude ?? "",
             "longitude": profile?.longitude ?? "",
-            "services": serviceItems.map { $0.id }
+            "serviceIds": serviceItems.map { $0.id }
         ]
         return  Button {
             Task{
-                await vm.submitRequest(Parameters: parameters)
+                await vm.submitRequest(Parameters: parameters){
+                    appRouter.popToRoot()
+                }
             }
         } label: {
             Text("Confirm".localized())
