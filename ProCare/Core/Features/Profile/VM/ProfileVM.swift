@@ -7,6 +7,9 @@
 
 import Foundation
 import Combine
+import PhotosUI
+import UIKit
+import _PhotosUI_SwiftUI
 
 @MainActor
 class ProfileVM: ObservableObject {
@@ -18,6 +21,7 @@ class ProfileVM: ObservableObject {
     @Published var location: String?
     @Published var gender: Gender?
     @Published var viewState: ViewState = .empty
+    @Published var profileImage: String?
     
     // MARK: - Governorates
     @Published var governorates: [Governorates] = []
@@ -26,9 +30,29 @@ class ProfileVM: ObservableObject {
     @Published var selectedCity: Int?
     @Published var addressInDetails = ""
     
+    enum UpdateKind {
+        case location
+        case image
+        case info
+    }
+    
     var minimumDate: Date {
         Calendar.current.date(byAdding: .year, value: -18, to: Date())!
     }
+    
+    //image
+    @Published var uploadedImage: UIImage?
+    @Published var selectedImage: PhotosPickerItem? {
+        didSet{
+            if let selectedImage = selectedImage {
+                Task {
+                    await loadImage(selectedImage)
+                }
+            }
+        }
+    }
+    @Published  var showUploadImageAlert: Bool = false
+    
     // MARK: - Published Properties
     private let apiClient: ProfileApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
@@ -67,22 +91,32 @@ class ProfileVM: ObservableObject {
         }
     }
     
-    func updateProfile(latitude: String? = nil, longitude: String? = nil) async{
+    func updateProfile(updateKind: UpdateKind, latitude: String? = nil, longitude: String? = nil) async{
         viewState = .loading
-        let parameters :[String : Any]  = [
-            "FirstName": firstName,
-            "LastName": lastName,
-            "BirthDate": dateToString(dateOfBirth ?? .now),
-            "GovernorateId": selectedGovernorate ?? 0,
-            "CityId": selectedCity ?? 0,
-            "AddressNotes": addressInDetails,
-            "Gender": gender?.rawValue ?? 0,
-            "Latitude" : latitude ?? "",
-            "Longitude": longitude ?? ""
-        ]
+        var parameters :[String : Any]  = [:]
         
+        switch updateKind {
+        case .location:
+            parameters   = [
+                "Latitude" : latitude ?? "",
+                "Longitude": longitude ?? ""
+            ]
+        case .image:
+            parameters   = [:]
+        case .info:
+            parameters   = [
+                "FirstName": firstName,
+                "LastName": lastName,
+                "BirthDate": dateToString(dateOfBirth ?? .now),
+                "GovernorateId": selectedGovernorate ?? 0,
+                "CityId": selectedCity ?? 0,
+                "AddressNotes": addressInDetails,
+                "Gender": gender?.rawValue ?? 0
+            ]
+        }
+       
         do {
-            let response = try await apiClient.updateProfile(parameters: parameters)
+            let response = try await apiClient.updateProfile(parameters: parameters,image: uploadedImage)
             if let profileData = response.data {
                 viewState = .loaded
                 putProfileData(profileData)
@@ -133,11 +167,24 @@ extension ProfileVM {
         gender = Gender(rawValue: profileData.gender ?? 0) ?? .notSpecified
         dateOfBirth =  dateFromString(profileData.birthDate ?? "") ?? Date()
         location = "\(profileData.city ?? "") - \(profileData.governorate ?? "") - \(profileData.addressNotes ?? "")"
+        profileImage =   profileData.image ?? ""
         
         //MARK: location
         selectedGovernorate = profileData.governorateId ?? 1
         selectedCity = profileData.cityId ?? 1
         addressInDetails = profileData.addressNotes ?? ""
+    }
+    
+    @MainActor
+    private func loadImage(_ photosPickerItem: PhotosPickerItem?) async {
+        guard let data = try? await photosPickerItem?.loadTransferable(type: Data.self),
+              let uiImage = UIImage(data: data) else {
+            return
+        }
+        
+        self.showUploadImageAlert.toggle()
+        self.uploadedImage = uiImage
+        
     }
 }
 

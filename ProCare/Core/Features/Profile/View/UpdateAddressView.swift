@@ -77,20 +77,6 @@ extension UpdateAddressView {
         .padding()
     }
     
-//    var LocationButton: some View {
-//        Button(action: {
-//            if locationManager.isPermissionDenied {
-//                showLocationAlert.toggle()
-//            }
-//        }) {
-//            HStack {
-//                Image(.location)
-//                Text("get my location".localized())
-//            }
-//        }
-//        .buttonStyle(AppButton(kind: .border,width: 300))
-//    }
-    
     var saveButton: some View {
         Button(action: {
             if locationManager.isPermissionDenied {
@@ -100,7 +86,7 @@ extension UpdateAddressView {
                     guard let location = locationManager.location else { return }
                     let lat = String(location.coordinate.latitude)
                     let lon = String(location.coordinate.longitude)
-                    await vm.updateProfile(latitude: lat, longitude: lon)
+                    await vm.updateProfile(updateKind: .location, latitude: lat, longitude: lon)
                     appRouter.pop()
                 }
             }

@@ -6,15 +6,17 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct ProfilePage: View {
     @EnvironmentObject var vm: ProfileVM
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
+    @EnvironmentObject var locationManager: LocationManager
     
     @State private var isEditingUserInfo: Bool = false
     @State private var isEditingLocation: Bool = false
-    @State private var uploadImage: Bool = false
+    @State private var openPhotoLibrary: Bool = false
     
     private let screenHeight = UIScreen.main.bounds.height
     private let screenWidth = UIScreen.main.bounds.width
@@ -44,25 +46,32 @@ struct ProfilePage: View {
                await  vm.getProfile()
             }
         }
+        .photosPicker(isPresented: $openPhotoLibrary, selection: $vm.selectedImage, matching: .images)
+        .alert("Upload Image", isPresented: $vm.showUploadImageAlert) {
+            Button("Cancel", role: .destructive) { }
+            Button("Upload", role: .cancel) {
+                Task{
+                    await vm.updateProfile(updateKind: .image)
+                }
+            }
+        }
     }
 }
 
 
 extension ProfilePage{
     var profileImage: some View {
-        ZStack(alignment: .bottomTrailing) {
-            Image(systemName: "person.crop.circle")
-                .resizable()
-                .frame(width: 180, height: 180)
-                .foregroundColor(.appPrimary)
+        ZStack {
+            AppImage(urlString: vm.profileImage,height: 180, contentMode: .fit)
+                .clipShape(Circle())
             
             Button(action: {
-                // Handle image edit
+                    openPhotoLibrary.toggle()
             }) {
-                Image(systemName: "person.crop.square.badge.camera.fill")
+                Image(systemName: "square.and.pencil")
                     .font(.title2)
                     .foregroundColor(.appGray)
-            }
+            }.offset(x: 70, y: 80)
         }
     }
     
@@ -75,7 +84,7 @@ extension ProfilePage{
                 Button(action: {
                     isEditingUserInfo.toggle()
                 }) {
-                    Image(systemName: isEditingUserInfo ? "xmark" : "pencil.and.ellipsis.rectangle")
+                    Image(systemName: isEditingUserInfo ? "xmark" : "pencil")
                         .foregroundStyle(.appPrimary)
                 }
             }
@@ -153,7 +162,7 @@ extension ProfilePage{
                 Button(action: {
                     appRouter.pushView(UpdateAddressView())
                 }) {
-                    Image(systemName: "pencil.and.ellipsis.rectangle")
+                    Image(systemName: "pencil")
                         .foregroundStyle(.appPrimary)
                 }
             }.foregroundStyle(.appPrimary)
@@ -179,7 +188,7 @@ extension ProfilePage{
                     isEditingUserInfo = false
                 }
                 Task{
-                    await vm.updateProfile()
+                    await vm.updateProfile(updateKind: .info)
                 }
             }
             .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -223,6 +232,6 @@ extension ProfilePage{
 
 #Preview {
     NavigationView{
-        ProfilePage()
+        ProfilePage().environmentObject(ProfileVM())
     }
 }

@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import UIKit
 
 protocol ProfileApiClintProtocol {
     func getProfile() async throws -> APIResponse<Profile>
     func deleteProfile() async throws -> APIResponse<Bool>
-    func updateProfile(parameters: [String: Any]) async throws -> APIResponse<Profile>
+    func updateProfile(parameters: [String: Any], image: UIImage?) async throws -> APIResponse<Profile>
     
     //MARK: Governorates & city
     func getGovernorates() async throws -> APIResponse<[Governorates]>
@@ -27,8 +28,8 @@ class ProfileApiClint : ApiClient<ProfileEndPoints>, ProfileApiClintProtocol {
         return try await request(ProfileEndPoints.deleteProfile)
     }
     
-    func updateProfile(parameters: [String: Any]) async throws -> APIResponse<Profile> {
-        return try await request(ProfileEndPoints.updateProfile(params: parameters))
+    func updateProfile(parameters: [String: Any],image: UIImage?) async throws -> APIResponse<Profile> {
+        return try await request(ProfileEndPoints.updateProfile(params: parameters,image: image))
     }
     
     func getGovernorates() async throws -> APIResponse<[Governorates]> {
