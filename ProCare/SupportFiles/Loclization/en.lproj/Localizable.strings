@@ -5,3 +5,16 @@
   Created by ahmed hussien on 21/03/2025.
   
 */
+
+//MARK: - Auth
+"log in" = "log in";
+
+
+//MARK: - Requests
+"Orders" = "Orders";
+"PreviousRequests" = "PreviousRequests";
+"CurrentRequest" = "CurrentRequest";
+"Distance: %.1f km" = "Distance: %.1f km";
+"within_minutes" = "Within %d min";
+"No requests" = "No requests";
+"call the nurse" = "call the nurse";
