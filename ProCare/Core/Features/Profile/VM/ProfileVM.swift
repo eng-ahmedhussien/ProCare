@@ -98,6 +98,9 @@ class ProfileVM: ObservableObject {
         switch updateKind {
         case .location:
             parameters   = [
+                "GovernorateId": selectedGovernorate ?? 0,
+                "CityId": selectedCity ?? 0,
+                "AddressNotes": addressInDetails,
                 "Latitude" : latitude ?? "",
                 "Longitude": longitude ?? ""
             ]

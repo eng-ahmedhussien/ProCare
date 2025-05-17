@@ -62,9 +62,13 @@ struct ProfilePage: View {
 extension ProfilePage{
     var profileImage: some View {
         ZStack {
-            AppImage(urlString: vm.profileImage,height: 180, contentMode: .fit)
-                .clipShape(Circle())
-            
+            AppImage(
+                urlString: vm.profileImage,
+                width:180 ,
+                height: 180,
+                contentMode: .fill,
+                shape: Circle()
+            )
             Button(action: {
                     openPhotoLibrary.toggle()
             }) {
