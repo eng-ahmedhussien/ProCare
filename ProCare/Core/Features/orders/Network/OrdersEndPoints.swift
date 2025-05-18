@@ -11,6 +11,7 @@ enum OrdersEndPoints: APIEndpoint {
     
     case getCurrentRequest
     case getPreviousRequests(parameters: [String: Any])
+    case cancelRequest(id: String)
     
     var path: String {
         switch self {
@@ -18,6 +19,8 @@ enum OrdersEndPoints: APIEndpoint {
             return "/Request/GetCurrentRequest"
         case .getPreviousRequests:
             return "/Request/GetPreviousRequests"
+        case .cancelRequest(let id):
+            return "/Request/Cancel/\(id)"
         }
     }
     
@@ -27,9 +30,10 @@ enum OrdersEndPoints: APIEndpoint {
             return .get
         case .getPreviousRequests:
             return .post
+        case .cancelRequest:
+            return  .put
         }
     }
-    
     
     var headers: HTTPHeader? {
         return .authHeader
@@ -41,6 +45,7 @@ enum OrdersEndPoints: APIEndpoint {
             return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         default:
             return .requestNoParameters
+       
         }
     }
 }

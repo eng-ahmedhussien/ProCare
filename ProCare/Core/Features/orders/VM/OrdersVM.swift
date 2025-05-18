@@ -31,6 +31,7 @@ class OrdersVM: ObservableObject {
             if let data = response.data {
                 currentOrder = data
             } else {
+                currentOrder = nil
                 debugPrint("Response received but no user data")
             }
         } catch {
@@ -85,5 +86,20 @@ class OrdersVM: ObservableObject {
         pageNumber = 1
         hasNextPage = true
         ordersList = []
+    }
+    
+    func cancelRequest(id: String) async {
+        do {
+            let response = try await apiClient.cancelRequest(id: id)
+            if let data = response.data {
+                if data {
+                    Task{
+                        await fetchCurrentOrder()
+                    }
+                }
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
     }
 }

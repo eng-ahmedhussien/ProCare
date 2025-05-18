@@ -10,6 +10,7 @@ import Foundation
 protocol OrdersApiClintProtocol {
     func getCurrentRequest() async throws -> APIResponse<Order>
     func getPreviousRequests(parameters: [String: Any]) async throws -> APIResponse<OrdersPagination>
+    func cancelRequest(id: String) async throws -> APIResponse<Bool>
 }
 
 class OrdersApiClint : ApiClient<OrdersEndPoints>, OrdersApiClintProtocol {
@@ -20,5 +21,9 @@ class OrdersApiClint : ApiClient<OrdersEndPoints>, OrdersApiClintProtocol {
     
     func getPreviousRequests(parameters: [String: Any]) async throws -> APIResponse<OrdersPagination> {
         return try await request(.getPreviousRequests(parameters: parameters))
+    }
+    
+    func cancelRequest(id: String) async throws -> APIResponse<Bool> {
+        return try await request(.cancelRequest(id: id))
     }
 }

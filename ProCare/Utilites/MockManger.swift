@@ -49,5 +49,7 @@ class MockManger: ObservableObject{
     ]
     let serviceMockModel =
         ServiceItem(id: 1, name: "Wound Care", description: "Cleaning wounds and changing bandages professionally.", price: 250, subCategoryId: 1)
+    
+    let orderMockModel = Order(id: "1", nurseName: "ahmed", nursePicture: "20", phoneNumber: "012321r43", nurseId: "1", status: "Completed", speciality: "nurese", longitude: "", latitude: "", nurseLongitude: "", nurseLatitude: "", createdAt: "2025-05-01T17:49:14.4177125", totalPrice: 200)
         
 }

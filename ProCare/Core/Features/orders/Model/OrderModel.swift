@@ -45,12 +45,31 @@ extension Order {
         return userLocation.distance(from: nurseLocation) // in meters
     }
     
-    // time
+    // estimatedTimeMinutes
     var estimatedTimeMinutes: Int? {
         guard let meters = distance else { return nil }
         let averageSpeed = 40.0 // km/h
         let timeInHours = (meters / 1000) / averageSpeed
         return Int(timeInHours * 60)
+    }
+    
+    var createdDate: String? {
+        guard let dateStr = createdAt else { return nil }
+        let formatter = DateFormatter()
+           formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS"
+           formatter.locale = Locale(identifier: "en_US_POSIX")
+           formatter.timeZone = TimeZone(secondsFromGMT: 0) // Use UTC or backend's timezone
+
+           guard let date = formatter.date(from: dateStr) else {
+               return "Invalid date"
+           }
+
+           let displayFormatter = DateFormatter()
+           displayFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // Add 'a' for AM/PM
+           displayFormatter.locale = Locale.current               // Localized
+           displayFormatter.timeZone = TimeZone.current           // Device timezone
+
+           return displayFormatter.string(from: date)
     }
 }
 

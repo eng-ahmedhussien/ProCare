@@ -18,13 +18,15 @@ struct AppButton: ButtonStyle {
     let width: CGFloat?
     let height: CGFloat?
     let disabled: Bool
+    let backgroundColor: Color
     
     // Default initializer with default values
-       init(kind: CustomButtonKind = .solid, width: CGFloat? = nil, height: CGFloat? = nil, disabled: Bool = false) {
+       init(kind: CustomButtonKind = .solid, width: CGFloat? = nil, height: CGFloat? = nil, disabled: Bool = false,backgroundColor: Color = .appPrimary) {
            self.kind = kind
            self.width = width
            self.height = height
            self.disabled = disabled
+           self.backgroundColor = backgroundColor
        }
 
     func makeBody(configuration: Configuration) -> some View {
@@ -33,7 +35,7 @@ struct AppButton: ButtonStyle {
             .frame(width: width, height: height)
             .padding()
             .foregroundColor(foregroundColor)
-            .background(background(isPressed: isPressed))
+            .background(background(isPressed: isPressed, color: backgroundColor))
             .cornerRadius(10)
             .opacity(disabled ? 0.6 : 1.0)
     }
@@ -50,11 +52,11 @@ struct AppButton: ButtonStyle {
     }
 
     @ViewBuilder
-    private func background(isPressed: Bool) -> some View {
+    private func background(isPressed: Bool,color: Color) -> some View {
         switch kind {
         case .solid:
             RoundedRectangle(cornerRadius: 10)
-                .fill(disabled ? Color.gray : (isPressed ? Color.appPrimary.opacity(0.7) : Color.appPrimary))
+                .fill(disabled ? Color.gray : (isPressed ? color.opacity(0.7) : color))
         case .border:
             RoundedRectangle(cornerRadius: 10)
                 .stroke(disabled ? .gray.opacity(0.8) : .appPrimary, lineWidth: 1)
