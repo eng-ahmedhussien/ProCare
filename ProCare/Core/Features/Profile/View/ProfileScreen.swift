@@ -17,6 +17,7 @@ struct ProfileTapScreen: View {
     @State private var isEditingUserInfo: Bool = false
     @State private var isEditingLocation: Bool = false
     @State private var openPhotoLibrary: Bool = false
+    @State private var showAlertDeleteProfile = false
     
     private let screenHeight = UIScreen.main.bounds.height
     private let screenWidth = UIScreen.main.bounds.width
@@ -27,26 +28,26 @@ struct ProfileTapScreen: View {
     var body: some View {
         VStack{
             header
-        ScrollView(showsIndicators: false){
-            
-            VStack(alignment: .center, spacing: 20) {
-                profileImage
-                userInfo
+            ScrollView(showsIndicators: false){
+                
+                VStack(alignment: .center, spacing: 20) {
+                    profileImage
+                    userInfo
+                }
+                .padding()
+                .backgroundCard(cornerRadius: 10, shadowRadius: 4, shadowColor: .appGray, shadowX: 2, shadowY: 2)
+                .padding()
+                
+                locationView
+                
+                buttons
+                
             }
-            .padding()
-            .backgroundCard(cornerRadius: 10, shadowRadius: 4, shadowColor: .appGray, shadowX: 2, shadowY: 2)
-            .padding()
-            
-            locationView
-            
-            buttons
-            
         }
-    }
         .background(.gray.opacity(0.1))
         .onAppear {
             Task{
-               await  vm.getProfile()
+                await  vm.getProfile()
             }
         }
         .photosPicker(isPresented: $openPhotoLibrary, selection: $vm.selectedImage, matching: .images)
@@ -58,6 +59,20 @@ struct ProfileTapScreen: View {
                 }
             }
         }
+        .alert("Delete Profile",isPresented: $showAlertDeleteProfile) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
+                Task {
+                    await vm.deleteProfile(){
+                        appRouter.popToRoot()
+                        authManager.logout()
+                    }
+                }
+            }
+        } message: {
+            Text("Are you sure you want to delete your profile? This action cannot be undone.")
+        }
+
     }
 }
 
@@ -231,12 +246,7 @@ extension ProfileTapScreen{
                 }
                 
                 Button("Delete Account".localized()) {
-                    Task{
-                        await vm.deleteProfile(){
-                            appRouter.popToRoot()
-                            authManager.logout()
-                        }
-                    }
+                    self.showAlertDeleteProfile.toggle()
                 }
                 .padding()
                 .foregroundStyle(.appGray)

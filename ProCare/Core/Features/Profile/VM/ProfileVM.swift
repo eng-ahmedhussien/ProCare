@@ -69,6 +69,7 @@ class ProfileVM: ObservableObject {
                 AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
                 putProfileData(profileData)
             } else {
+              //  AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
                 debugPrint("Response received but no user data")
             }
         } catch {

@@ -26,10 +26,8 @@ enum LoginStatus : Int, Codable {
 }
 
 enum Roles : Int, Codable {
-    case Patient = 0
-    case Nurse = 1
-    case Admin = 2
-    case SuperAdmin = 3
+    case Patient = 1
+    case Nurse = 2
 }
 
 
