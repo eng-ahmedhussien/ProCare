@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 
-struct ProfilePage: View {
+struct ProfileTapScreen: View {
     @EnvironmentObject var vm: ProfileVM
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
@@ -25,8 +25,10 @@ struct ProfilePage: View {
         ValidationRule.isEmpty.validate(vm.lastName) == nil
     }
     var body: some View {
-        
+        VStack{
+            header
         ScrollView(showsIndicators: false){
+            
             VStack(alignment: .center, spacing: 20) {
                 profileImage
                 userInfo
@@ -38,8 +40,9 @@ struct ProfilePage: View {
             locationView
             
             buttons
-
+            
         }
+    }
         .background(.gray.opacity(0.1))
         .onAppear {
             Task{
@@ -59,7 +62,18 @@ struct ProfilePage: View {
 }
 
 
-extension ProfilePage{
+extension ProfileTapScreen{
+    var header: some View {
+        HStack {
+            Spacer()
+            Text("Profile")
+                .padding(5)
+                .font(.title)
+                .foregroundStyle(.white)
+            Spacer()
+        }
+        .background(.appPrimary)
+    }
     var profileImage: some View {
         ZStack {
             AppImage(
@@ -236,6 +250,6 @@ extension ProfilePage{
 
 #Preview {
     NavigationView{
-        ProfilePage().environmentObject(ProfileVM())
+        ProfileTapScreen().environmentObject(ProfileVM())
     }
 }

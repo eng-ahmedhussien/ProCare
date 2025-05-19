@@ -31,7 +31,7 @@ enum TapViewEnum : Identifiable, CaseIterable, View {
         case .orders:
             OrdersTapScreen(vm: OrdersVM())
         case .profile:
-            ProfilePage()
+            ProfileTapScreen()
         }
     }
 }

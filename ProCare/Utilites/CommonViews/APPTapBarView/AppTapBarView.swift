@@ -43,7 +43,7 @@ struct TapBarView: View {
             ]
         )
         let appearance = UITabBarAppearance()
-        appearance.configureWithTransparentBackground()
+        //appearance.configureWithTransparentBackground()
         appearance.shadowImage = image
         
         // 🛠 Customize title font here (UIKit level)
