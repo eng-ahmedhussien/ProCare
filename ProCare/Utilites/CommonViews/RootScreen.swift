@@ -10,12 +10,24 @@ import SwiftUI
 struct RootScreen: View {
     @EnvironmentObject var authManager : AuthManager
     var body: some View {
-        Group {
-            if authManager.isLoggedIn {
-                    TapBarView()
-            } else {
-                LoginScreen()
+        content
+    }
+}
+
+extension RootScreen{
+    @ViewBuilder
+    var content: some View {
+        if authManager.isLoggedIn {
+            switch authManager.userDataLogin?.role {
+            case .Patient:
+                TapBarView()
+            case .Nurse:
+                RequestsScreen()
+            default:
+                TapBarView()
             }
+        } else {
+            LoginScreen()
         }
     }
 }

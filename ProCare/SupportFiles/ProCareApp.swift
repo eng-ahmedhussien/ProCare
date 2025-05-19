@@ -33,10 +33,9 @@ struct ProCareApp: App {
                         .toastView(toast: $toastManager.toast)
                 }
             }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    isLoading = false
-                }
+            .task {
+                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                isLoading = false
             }
         }
     }
