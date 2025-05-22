@@ -45,7 +45,9 @@ struct RequestsScreen: View {
       
         .onAppear{
             Task{
-                await vm.fetchCurrentRequest()
+                await vm.fetchCurrentRequest(){
+                    authManager.logout()
+                }
             }
         }
         .refreshable {

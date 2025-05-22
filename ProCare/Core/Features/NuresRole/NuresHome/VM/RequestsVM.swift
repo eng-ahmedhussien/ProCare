@@ -27,7 +27,7 @@ class RequestsVM: ObservableObject {
     
     // MARK: - API Methods
     @MainActor
-    func fetchCurrentRequest() async {
+    func fetchCurrentRequest(onUnauthorized: @escaping () -> Void = {}) async {
         do {
             let response = try await apiClient.getCurrentRequest()
             if let data = response.data {
@@ -37,11 +37,16 @@ class RequestsVM: ObservableObject {
                 debugPrint("Response received but no user data")
             }
         } catch {
-            debugPrint("Unexpected error: \(error.localizedDescription)")
+            if let apiError = error as? APIResponseError, apiError.status == 401 {
+                debugPrint("HomeVM: Unauthorized error detected")
+                onUnauthorized()
+            } else {
+                debugPrint("HomeVM: Unexpected error: \(error.localizedDescription)")
+            }
         }
     }
     
-    func fetchRequests(loadType: LoadType) async {
+    func fetchRequests(loadType: LoadType,onUnauthorized: @escaping () -> Void = {}) async {
         switch loadType {
         case .initial:
             resetPaging()
@@ -80,7 +85,12 @@ class RequestsVM: ObservableObject {
             }
         } catch {
             viewState = .error(error.localizedDescription)
-            debugPrint("Unexpected error: \(error.localizedDescription)")
+            if let apiError = error as? APIResponseError, apiError.status == 401 {
+                debugPrint("HomeVM: Unauthorized error detected")
+                onUnauthorized()
+            } else {
+                debugPrint("HomeVM: Unexpected error: \(error.localizedDescription)")
+            }
         }
     }
     

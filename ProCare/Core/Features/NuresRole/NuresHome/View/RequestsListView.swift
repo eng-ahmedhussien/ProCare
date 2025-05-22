@@ -11,7 +11,9 @@ import SwiftUI
 import CoreLocation
 
 struct RequestsListView: View {
+    
     @ObservedObject var vm: RequestsVM
+    @EnvironmentObject var authManager: AuthManager
     
     var body: some View {
         ZStack {
@@ -20,7 +22,9 @@ struct RequestsListView: View {
         .onAppear {
             if vm.requestList.isEmpty {
                 Task {
-                    await vm.fetchRequests(loadType: .initial)
+                    await vm.fetchRequests(loadType: .initial){
+                        authManager.logout()
+                    }
                 }
             }
         }
