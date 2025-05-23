@@ -108,8 +108,13 @@ enum HTTPHeader {
             "accept": "*/*",
             "Authorization": "Bearer \(token)",
             "Content-Type": "application/json",
-            "Accept-Language": "*/*"
+            "Accept-Language": "\(currentLanguage)"
         ]
+    }
+    
+    private static var currentLanguage: String {
+        let lang = Locale.preferredLanguages.first ?? "ar-EG"
+        return lang.hasPrefix("ar") ? "ar-EG" : "en-US"
     }
 }
 

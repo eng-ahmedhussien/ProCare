@@ -14,20 +14,18 @@ struct HomePage: View {
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var locationManager: LocationManager
     
-    @State private var isLoading = true
+    
+    @State  var isLoading = true
 
     var body: some View {
         VStack(spacing: 0) {
             header
             
-            NavigationLink("NursesListView") {
-                NursesListScreen()
-            }
-            
             ScrollView {
                 services
             }
         }
+ 
         .redacted(reason: isLoading ? .placeholder : [])
         .onAppear{
             Task {
@@ -67,6 +65,20 @@ extension HomePage{
                     Text("hello \(authManager.userDataLogin?.firstName ?? "")")
                         .font(.title)
                         .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                            if UIApplication.shared.canOpenURL(appSettings) {
+                                UIApplication.shared.open(appSettings)
+                            }
+                        }
+                    }) {
+                        Image(systemName: "globe")
+                            .foregroundStyle(.white)
+                    }
+                    .buttonStyle(AppButton(kind: .plain))
                 }
                 
                 HStack {
@@ -78,6 +90,7 @@ extension HomePage{
                 .foregroundColor(.white.opacity(0.9))
             }
             Spacer()
+              
         }
         .padding()
         .background(.appPrimary)
@@ -119,7 +132,9 @@ extension HomePage{
 }
 
 #Preview {
-    HomePage(vm: HomeVM())
+    var vm = HomeVM()
+    vm.categories = Category.mockCategories
+    return HomePage(vm: vm, isLoading: false)
         .environmentObject(AuthManager())
         .environmentObject(AppRouter())
         .environmentObject(LocationManager())

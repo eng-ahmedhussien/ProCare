@@ -19,6 +19,24 @@ struct LoginScreen: View {
     
     var body: some View {
         VStack{
+            HStack {
+                
+                Button(action: {
+                    if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                          if UIApplication.shared.canOpenURL(appSettings) {
+                              UIApplication.shared.open(appSettings)
+                          }
+                      }
+                }) {
+                    Image(systemName: "globe")
+                        .foregroundStyle(.appPrimary)
+                }
+                .font(.callout)
+                .padding()
+                .buttonStyle(AppButton(kind: .plain))
+                
+                Spacer()
+            }
             Spacer()
             
             VStack(alignment: .leading){
