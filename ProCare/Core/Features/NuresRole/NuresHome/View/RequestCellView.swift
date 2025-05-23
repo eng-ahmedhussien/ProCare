@@ -32,10 +32,6 @@ struct RequestCellView: View {
                     .bold()
                     .foregroundStyle(.black)
                 
-//                Text(order.speciality ?? "")
-//                    .font(.callout)
-//                    .foregroundStyle(.black)
-                
                 Text(request.createdDate ?? "")
                     .font(.callout)
                     .foregroundStyle(.appGray)

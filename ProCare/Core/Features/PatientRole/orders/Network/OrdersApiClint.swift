@@ -8,22 +8,22 @@
 import Foundation
 
 protocol OrdersApiClintProtocol {
-    func getCurrentRequest() async throws -> APIResponse<Order>
-    func getPreviousRequests(parameters: [String: Any]) async throws -> APIResponse<OrdersPagination>
-    func cancelRequest(id: String) async throws -> APIResponse<Bool>
+    func getCurrentOrder() async throws -> APIResponse<Order>
+    func getPreviousOrders(parameters: [String: Any]) async throws -> APIResponse<OrdersPagination>
+    func cancelOrder(id: String) async throws -> APIResponse<Bool>
 }
 
 class OrdersApiClint : ApiClient<OrdersEndPoints>, OrdersApiClintProtocol {
     
-    func getCurrentRequest() async throws -> APIResponse<Order> {
-        return try await request(.getCurrentRequest)
+    func getCurrentOrder() async throws -> APIResponse<Order> {
+        return try await request(.getCurrentOrder)
     }
     
-    func getPreviousRequests(parameters: [String: Any]) async throws -> APIResponse<OrdersPagination> {
-        return try await request(.getPreviousRequests(parameters: parameters))
+    func getPreviousOrders(parameters: [String: Any]) async throws -> APIResponse<OrdersPagination> {
+        return try await request(.getPreviousOrders(parameters: parameters))
     }
     
-    func cancelRequest(id: String) async throws -> APIResponse<Bool> {
-        return try await request(.cancelRequest(id: id))
+    func cancelOrder(id: String) async throws -> APIResponse<Bool> {
+        return try await request(.cancelOrder(id: id))
     }
 }

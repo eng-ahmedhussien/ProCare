@@ -10,37 +10,53 @@ struct currentRequestCellView: View {
     
     @ObservedObject var vm: RequestsVM
     let buttonWidth = UIScreen.main.bounds.width * 0.33
-    @State var showCancelAlert: Bool = false
+    @State var showRejectAlert: Bool = false
+    @State var showApproveAlert: Bool = false
+    @State var isApproveRequest: Bool = false
     
     var body: some View {
         ScrollView {
             if let request = vm.currentRequest {
                 VStack {
+                    
                     patientInfoSection(for: request)
-                   // actionButtons
+                    
+                    actionButtons
+                    
                 }
                 .padding()
                 .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .appGray)
                 .padding()
             }
             else {
-                Text("No requests".localized())
+                AppEmptyView()
             }
         }
-//        .alert("Cancel current request", isPresented: $showCancelAlert) {
-//            Button("Cancel", role: .destructive) { }
-//            Button("Yes", role: .cancel) {
-//                Task{
-//                    await  vm.cancelRequest(id: vm.currentOrder?.id ?? "")
-//                }
-//            }
-//        } message: {
-//            Text("Are you sure you want to cancel this request?")
-//        }
+        .alert("Rejection request", isPresented: $showRejectAlert) {
+            Button("Cancel", role: .destructive) { }
+            Button("Reject", role: .cancel) {
+                Task{
+                    await vm.rejectRequest(id: vm.currentRequest?.id ?? "")
+                }
+            }
+        } message: {
+            Text("Are you sure you want to reject this request?")
+        }
+        .alert("Accept request", isPresented: $showApproveAlert) {
+            Button("Cancel", role: .destructive) { }
+            Button("Accept", role: .cancel) {
+                Task{
+                    isApproveRequest.toggle()
+                }
+            }
+        } message: {
+            Text("Are you sure you want to Accept this request?")
+        }
 
     }
 }
 
+//MARK: views
 extension currentRequestCellView{
     @ViewBuilder
     private func patientInfoSection(for request: Request) -> some View {
@@ -58,58 +74,66 @@ extension currentRequestCellView{
                     .font(.headline)
                     .bold()
                     .foregroundStyle(.black)
-
-//                Text(order.speciality ?? "")
-//                    .font(.callout)
-//                    .foregroundStyle(.black)
-
-//                if let minutes = order.estimatedTimeMinutes {
-//                    HStack {
-//                        Image(systemName: "clock")
-//                            .foregroundColor(.gray)
-//                        Text(String(format: "within_minutes".localized(), minutes))
-//                            .foregroundColor(.gray)
-//                            .font(.caption)
-//                    }
-//                }
+                
+                Text(request.createdDate ?? "")
+                    .font(.callout)
+                    .foregroundStyle(.appGray)
+                
+                Text((request.patientGovernorate ?? "") + " - " + (request.patientCity ?? ""))
+                    .font(.callout)
+                    .foregroundStyle(.appGray)
             }
 
             Spacer()
         }
     }
 
-//    var actionButtons: some View {
-//        HStack(spacing: 8) {
-//                   Button {
-//                       if let url = URL(string: "tel://\(vm.currentOrder?.phoneNumber ?? "")"),
-//                          UIApplication.shared.canOpenURL(url) {
-//                           UIApplication.shared.open(url)
-//                       }
-//                   } label: {
-//                       HStack {
-//                           Image(systemName: "phone.fill")
-//                           Text("call".localized())
-//                       }.frame(width: buttonWidth)
-//                   }
-//                   .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))
-//
-//                   Button {
-//                       showCancelAlert.toggle()
-//                   } label: {
-//                       HStack {
-//                           Image(systemName: "xmark")
-//                           Text("Cancel".localized())
-//                       }
-//                       .frame(width: buttonWidth)
-//                       //.frame(maxWidth: .infinity)
-//                   }
-//                   .buttonStyle(AppButton(kind: .solid,backgroundColor: .red))
-//               }
-//    }
+    var actionButtons: some View {
+        
+        if isApproveRequest{
+           
+            return VStack{
+                SwipeToFinishButton{
+                    
+                 }
+            }
+           
+        }else{
+           return HStack(spacing: 8) {
+                Button {
+                    showApproveAlert.toggle()
+                } label: {
+                    HStack {
+                        Text("accept".localized())
+                    }.frame(width: buttonWidth)
+                }
+                .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))
+                
+                Button {
+                    showRejectAlert.toggle()
+                } label: {
+                    HStack {
+                        Image(systemName: "xmark")
+                        Text("reject".localized())
+                    }
+                    .frame(width: buttonWidth)
+                    //.frame(maxWidth: .infinity)
+                }
+                .buttonStyle(AppButton(kind: .solid,backgroundColor: .red))
+            }
+        }
+        
+   
+    }
+    
 }
 
 #Preview {
     VStack{
-        currentRequestCellView(vm: RequestsVM())
+        var vm = RequestsVM()
+        vm.currentRequest = Request.mock
+        return currentRequestCellView(vm: vm)
     }
 }
+
+

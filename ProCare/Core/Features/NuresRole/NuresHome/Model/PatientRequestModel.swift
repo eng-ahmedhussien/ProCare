@@ -31,19 +31,43 @@ extension Request{
     var createdDate: String? {
         guard let dateStr = createdAt else { return nil }
         let formatter = DateFormatter()
-           formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS"
-           formatter.locale = Locale(identifier: "en_US_POSIX")
-           formatter.timeZone = TimeZone(secondsFromGMT: 0) // Use UTC or backend's timezone
-
-           guard let date = formatter.date(from: dateStr) else {
-               return "Invalid date"
-           }
-
-           let displayFormatter = DateFormatter()
-           displayFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // Add 'a' for AM/PM
-           displayFormatter.locale = Locale.current               // Localized
-           displayFormatter.timeZone = TimeZone.current           // Device timezone
-
-           return displayFormatter.string(from: date)
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Use UTC or backend's timezone
+        
+        guard let date = formatter.date(from: dateStr) else {
+            return "Invalid date"
+        }
+        
+        let displayFormatter = DateFormatter()
+        displayFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // Add 'a' for AM/PM
+        displayFormatter.locale = Locale.current               // Localized
+        displayFormatter.timeZone = TimeZone.current           // Device timezone
+        
+        return displayFormatter.string(from: date)
     }
+    
+    static let mock = Request(
+        id: "REQ12345",
+        patientName: "Jane Doe",
+        patientPicture: "https://example.com/patient.jpg",
+        phoneNumber: "+1234567890",
+        patientId: "PAT56789",
+        status: "pending",
+        birthDate: "1990-01-01",
+        bloodType: "A+",
+        medicalHistory: "Diabetes, Hypertension",
+        patientCity: "naser city",
+        addressNotes: "Near the main square",
+        patientGovernorate: "Cairo",
+        longitude: "31.2357",
+        latitude: "30.0444",
+        nurseLongitude: "31.2400",
+        nurseLatitude: "30.0500",
+        createdAt: "2025-05-14T17:27:16.0523865",
+        totalPrice: 1500,
+        gender: 1
+    )
 }
+
+

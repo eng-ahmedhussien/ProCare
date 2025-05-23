@@ -9,28 +9,28 @@ import Foundation
 
 enum OrdersEndPoints: APIEndpoint {
     
-    case getCurrentRequest
-    case getPreviousRequests(parameters: [String: Any])
-    case cancelRequest(id: String)
+    case getCurrentOrder
+    case getPreviousOrders(parameters: [String: Any])
+    case cancelOrder(id: String)
     
     var path: String {
         switch self {
-        case .getCurrentRequest:
+        case .getCurrentOrder:
             return "/Request/GetCurrentRequest"
-        case .getPreviousRequests:
+        case .getPreviousOrders:
             return "/Request/GetPreviousRequests"
-        case .cancelRequest(let id):
+        case .cancelOrder(let id):
             return "/Request/Cancel/\(id)"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .getCurrentRequest:
+        case .getCurrentOrder:
             return .get
-        case .getPreviousRequests:
+        case .getPreviousOrders:
             return .post
-        case .cancelRequest:
+        case .cancelOrder:
             return  .put
         }
     }
@@ -41,7 +41,7 @@ enum OrdersEndPoints: APIEndpoint {
     
     var task: Parameters {
         switch self {
-        case .getPreviousRequests(let parameters):
+        case .getPreviousOrders(let parameters):
             return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         default:
             return .requestNoParameters

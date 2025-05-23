@@ -27,7 +27,7 @@ class OrdersVM: ObservableObject {
     @MainActor
     func fetchCurrentOrder() async {
         do {
-            let response = try await apiClient.getCurrentRequest()
+            let response = try await apiClient.getCurrentOrder()
             if let data = response.data {
                 currentOrder = data
             } else {
@@ -60,7 +60,7 @@ class OrdersVM: ObservableObject {
         //try? await Task.sleep(nanoseconds: 600_000_000) // 0.3s
         
         do {
-            let response = try await apiClient.getPreviousRequests(parameters: parameters)
+            let response = try await apiClient.getPreviousOrders(parameters: parameters)
             if let data = response.data {
                 let newItems = data.items ?? []
                 
@@ -88,9 +88,9 @@ class OrdersVM: ObservableObject {
         ordersList = []
     }
     
-    func cancelRequest(id: String) async {
+    func cancelOrder(id: String) async {
         do {
-            let response = try await apiClient.cancelRequest(id: id)
+            let response = try await apiClient.cancelOrder(id: id)
             if let data = response.data {
                 if data {
                     Task{

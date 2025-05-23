@@ -12,6 +12,8 @@ enum PatientRequestEndPoints: APIEndpoint {
     
     case getCurrentRequest
     case getPreviousRequests(parameters: [String: Any])
+    case cancelRequest(id: String)
+    case approveRequest(id: String)
     
     var path: String {
         switch self {
@@ -19,6 +21,10 @@ enum PatientRequestEndPoints: APIEndpoint {
             return "/Request/GetCurrentRequest"
         case .getPreviousRequests:
             return "/Request/GetPreviousRequests"
+        case .cancelRequest(let id):
+            return "/Request/Cancel/\(id)"
+        case .approveRequest(let id):
+            return "/Request/Approve/\(id)"
         }
     }
     
@@ -28,6 +34,8 @@ enum PatientRequestEndPoints: APIEndpoint {
             return .get
         case .getPreviousRequests:
             return .post
+        case .cancelRequest, .approveRequest:
+            return  .put
         }
     }
     

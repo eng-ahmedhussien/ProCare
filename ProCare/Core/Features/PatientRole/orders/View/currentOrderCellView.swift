@@ -32,7 +32,7 @@ struct currentOrderCellView: View {
             Button("Cancel", role: .destructive) { }
             Button("Yes", role: .cancel) {
                 Task{
-                    await  vm.cancelRequest(id: vm.currentOrder?.id ?? "")
+                    await  vm.cancelOrder(id: vm.currentOrder?.id ?? "")
                 }
             }
         } message: {

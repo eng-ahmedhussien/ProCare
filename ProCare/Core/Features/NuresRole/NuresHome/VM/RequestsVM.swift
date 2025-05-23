@@ -10,7 +10,6 @@ import SwiftUI
 
 @MainActor
 class RequestsVM: ObservableObject {
-    
     // MARK: - Published Properties
     @Published var requestList: [Request] = []
     @Published var currentRequest: Request?
@@ -24,8 +23,10 @@ class RequestsVM: ObservableObject {
     init(apiClient: PatientRequestApiClintProtocol = PatientRequestApiClint()) {
         self.apiClient = apiClient
     }
-    
-    // MARK: - API Methods
+}
+// MARK: - API Methods
+extension RequestsVM{
+   
     @MainActor
     func fetchCurrentRequest(onUnauthorized: @escaping () -> Void = {}) async {
         do {
@@ -99,5 +100,34 @@ class RequestsVM: ObservableObject {
         hasNextPage = true
         requestList = []
     }
-
+    
+    func rejectRequest(id: String) async {
+        do {
+            let response = try await apiClient.cancelRequest(id: id)
+            if let data = response.data {
+                if data {
+                    Task{
+                        await fetchCurrentRequest()
+                    }
+                }
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+   func approveRequest(id: String) async {
+       do {
+           let response = try await apiClient.approveRequest(id: id)
+           if let data = response.data {
+               if data {
+                   Task{
+                     //  await fetchCurrentRequest()
+                   }
+               }
+           }
+       } catch {
+           debugPrint("Unexpected error: \(error.localizedDescription)")
+       }
+   }
 }
+

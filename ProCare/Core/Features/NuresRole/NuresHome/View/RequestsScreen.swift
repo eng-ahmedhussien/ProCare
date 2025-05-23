@@ -15,7 +15,6 @@ struct RequestsScreen: View {
     @EnvironmentObject var locationManger: LocationManager
     @EnvironmentObject var authManager: AuthManager
     @State var segmentationSelection : ProfileSection = .CurrentRequest
-//    @State private var etaMinutes: Int? = nil
  
     init(){
         configSegmentedControl()
@@ -110,11 +109,7 @@ extension RequestsScreen{
     }
 }
 
-//
-//#Preview {
-//    var vm = OrdersVM()
-//    vm.currentOrder = Order(id: "1", nurseName: "ahmed", nursePicture: "", phoneNumber: "012345678", nurseId: "1", status: "", speciality: "nures", longitude: "", latitude: "", nurseLongitude: "", nurseLatitude: "", createdAt: "1/2/2030", totalPrice: 20)
-//   return NavigationStack{
-//        OrdersTapScreen(vm: vm).environmentObject(LocationManager())
-//    }
-//}
+
+#Preview {
+    return RequestsScreen()
+}
