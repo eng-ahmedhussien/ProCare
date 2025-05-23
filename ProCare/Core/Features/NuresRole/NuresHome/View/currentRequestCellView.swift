@@ -25,7 +25,7 @@ struct currentRequestCellView: View {
                     
                 }
                 .padding()
-                .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .appGray)
+                .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .gray)
                 .padding()
             }
             else {
@@ -77,11 +77,11 @@ extension currentRequestCellView{
                 
                 Text(request.createdDate ?? "")
                     .font(.callout)
-                    .foregroundStyle(.appGray)
+                    .foregroundStyle(.gray)
                 
                 Text((request.patientGovernorate ?? "") + " - " + (request.patientCity ?? ""))
                     .font(.callout)
-                    .foregroundStyle(.appGray)
+                    .foregroundStyle(.gray)
             }
 
             Spacer()
@@ -94,7 +94,7 @@ extension currentRequestCellView{
            
             return VStack{
                 SwipeToFinishButton{
-                    
+                    //TO Do Finish Request
                  }
             }
            

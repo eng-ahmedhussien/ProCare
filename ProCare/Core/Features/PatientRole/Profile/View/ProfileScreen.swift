@@ -35,7 +35,7 @@ struct ProfileTapScreen: View {
                     userInfo
                 }
                 .padding()
-                .backgroundCard(cornerRadius: 10, shadowRadius: 4, shadowColor: .appGray, shadowX: 2, shadowY: 2)
+                .backgroundCard(cornerRadius: 10, shadowRadius: 4, shadowColor: .gray, shadowX: 2, shadowY: 2)
                 .padding()
                 
                 locationView
@@ -103,7 +103,7 @@ extension ProfileTapScreen{
             }) {
                 Image(systemName: "square.and.pencil")
                     .font(.title2)
-                    .foregroundColor(.appGray)
+                    .foregroundColor(.gray)
             }.offset(x: 70, y: 80)
         }
     }
@@ -125,18 +125,23 @@ extension ProfileTapScreen{
             
             HStack {
                 Text("First Name:")
+                    .font(.body)
+                    .foregroundStyle(.black)
+                   
                 Spacer()
                 TextField("", text: $vm.firstName)
-                    .foregroundStyle(isEditingUserInfo ? .appGray : Color.black)
+                    .foregroundStyle(isEditingUserInfo ? .gray : Color.black)
                     .multilineTextAlignment(.trailing)
                     .disabled(!isEditingUserInfo)
             }
            
             HStack {
                 Text("Last Name:")
+                    .font(.body)
+                    .foregroundStyle(.black)
                 Spacer()
                 TextField("", text: $vm.lastName)
-                    .foregroundStyle(isEditingUserInfo ? .appGray : Color.black)
+                    .foregroundStyle(isEditingUserInfo ? .gray : Color.black)
                     .multilineTextAlignment(.trailing)
                     .disabled(!isEditingUserInfo)
             }
@@ -153,9 +158,11 @@ extension ProfileTapScreen{
                 } else {
                     if let gender = vm.gender, gender != .notSpecified {
                         Text(gender.displayName)
+                            .font(.body)
+                            .foregroundStyle(.black)
                     } else {
                         Text("No selected")
-                            .foregroundColor(.appGray)
+                            .foregroundColor(.gray)
                     }
                 }
                 
@@ -176,9 +183,11 @@ extension ProfileTapScreen{
                 } else {
                     if let dob = vm.dateOfBirth {
                         Text(dob.formatted(date: .abbreviated, time: .omitted))
+                            .font(.body)
+                            .foregroundStyle(.black)
                     } else {
                         Text("No selected")
-                            .foregroundColor(.appGray)
+                            .foregroundColor(.gray)
                     }
                 }
             }
@@ -205,11 +214,11 @@ extension ProfileTapScreen{
                     .font(.body)
             }else{
                 Text("No selected")
-                    .foregroundColor(.appGray)
+                    .foregroundColor(.gray)
             }
         }
         .padding()
-        .backgroundCard(cornerRadius: 10, shadowRadius: 3, shadowColor: .appGray, shadowX: 2, shadowY: 2)
+        .backgroundCard(cornerRadius: 10, shadowRadius: 3, shadowColor: .gray, shadowX: 2, shadowY: 2)
         .padding()
     }
     
@@ -249,7 +258,7 @@ extension ProfileTapScreen{
                     self.showAlertDeleteProfile.toggle()
                 }
                 .padding()
-                .foregroundStyle(.appGray)
+                .foregroundStyle(.gray)
             }
             .padding()
         }

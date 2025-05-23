@@ -36,7 +36,7 @@ struct OrderCellView: View {
                 
                 Text(order.createdDate ?? "")
                     .font(.callout)
-                    .foregroundStyle(.appGray)
+                    .foregroundStyle(.gray)
                 
                 Text(order.status ?? "")
                     .font(.callout)
@@ -48,7 +48,7 @@ struct OrderCellView: View {
             Spacer()
         }
         .padding()
-        .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .appGray)
+        .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .gray)
         .padding()
     }
 }

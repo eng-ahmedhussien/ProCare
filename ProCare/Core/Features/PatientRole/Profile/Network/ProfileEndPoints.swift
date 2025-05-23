@@ -11,7 +11,6 @@ import UIKit
 enum ProfileEndPoints : APIEndpoint {
     case getProfile
     case deleteProfile
-    //case updateProfile(parameters: [String: Any])
     case updateProfile(params: [String: Any], image: UIImage? = nil )
     
     //MARK: location
@@ -29,7 +28,7 @@ enum ProfileEndPoints : APIEndpoint {
         case .getGovernorates:
             return "/Governorate/GetMobileGovernorates"
         case .getCityByGovernorateId(let id):
-            return "/City/GetCityByGovernorateId/\(id)"
+            return "/City/GetMobileCityByGovernorateId/\(id)"
         }
     }
     

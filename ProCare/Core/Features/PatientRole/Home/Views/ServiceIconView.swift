@@ -36,12 +36,12 @@ struct ServiceIconView: View {
             Text(title)
                 .lineLimit(1)
                 .font(.footnote)
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
                 .frame(maxWidth: 70) // Ensures text wraps if needed
         }
     }
 }
 
 #Preview {
-    ServiceIconView(title: "", icon: "")
+    ServiceIconView(title: "nursing", icon: "")
 }

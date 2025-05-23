@@ -14,6 +14,7 @@ struct RequestsScreen: View {
     @StateObject var vm = RequestsVM()
     @EnvironmentObject var locationManger: LocationManager
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var appRouter: AppRouter
     @State var segmentationSelection : ProfileSection = .CurrentRequest
  
     init(){
@@ -77,6 +78,9 @@ extension RequestsScreen{
                         .font(.title)
                         .foregroundColor(.white)
                 }
+                .onTapGesture {
+                    appRouter.pushView(logout())
+                }
                 
                 HStack {
                     Image(.location)
@@ -112,4 +116,15 @@ extension RequestsScreen{
 
 #Preview {
     return RequestsScreen()
+}
+
+
+struct logout: View {
+    @EnvironmentObject var authManager: AuthManager
+    var body: some View {
+        Text("Logout")
+            .onTapGesture {
+                authManager.logout()
+            }
+    }
 }

@@ -34,7 +34,7 @@ struct DropdownListView<T: DropdownOption>: View {
                             .padding(.horizontal, 12)
                             .background(
                                 option.id == selectedId ?
-                                Color.appGray : Color.clear
+                                Color.gray : Color.clear
                             )
                             .cornerRadius(6)
                     }

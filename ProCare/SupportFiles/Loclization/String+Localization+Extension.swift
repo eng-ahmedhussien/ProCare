@@ -38,8 +38,8 @@ extension String {
 
 enum Language: String {
     
-    case arabic = "ar"
-    case english = "en"
+    case arabic = "ar-EG"
+    case english = "en-US"
     
     var locale: Locale {
         switch self {

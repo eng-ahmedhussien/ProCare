@@ -21,7 +21,7 @@ struct currentOrderCellView: View {
                     actionButtons
                 }
                 .padding()
-                .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .appGray)
+                .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .gray)
                 .padding()
             }
             else {
