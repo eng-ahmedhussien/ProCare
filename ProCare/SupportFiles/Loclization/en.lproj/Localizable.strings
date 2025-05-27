@@ -18,3 +18,7 @@
 "within_minutes" = "Within %d min";
 "No requests" = "No requests";
 "call the nurse" = "call the nurse";
+
+//MARK: - Report
+"total_requests" = "you should take %d EG";
+

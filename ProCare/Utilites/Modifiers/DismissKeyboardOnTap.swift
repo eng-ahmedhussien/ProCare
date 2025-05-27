@@ -1,4 +1,12 @@
+//
+//  DismissKeyboardOnTap.swift
+//  ProCare
+//
+//  Created by ahmed hussien on 26/05/2025.
+//
 
+
+import SwiftUI
 import UIKit
 
 extension UIApplication {

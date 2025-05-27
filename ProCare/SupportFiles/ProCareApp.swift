@@ -33,7 +33,7 @@ struct ProCareApp: App {
                         .environmentObject(profileVM)
                         .toastView(toast: $toastManager.toast)
                 }
-            }
+            }           
             .background(colorScheme == .dark ? Color(.secondarySystemBackground) : Color.clear)
             .task {
                 try? await Task.sleep(nanoseconds: 2_000_000_000)

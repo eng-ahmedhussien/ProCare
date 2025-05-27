@@ -21,10 +21,17 @@ struct PagedResult: Codable {
     let hasNextPage, hasPreviousPage: Bool?
 }
 
-struct ServiceItem: Codable {
-    let id: Int?
+struct ServiceItem: Codable, Identifiable,Equatable{
+    let id: Int
     let name, description: String?
     let price, subCategoryId: Int?
 
 }
 
+extension ServiceItem {
+    static let mockServices: [ServiceItem] = [
+        ServiceItem(id: 1, name: "Home Nursing", description: "Professional nursing care at home.", price: 500, subCategoryId: 10),
+        ServiceItem(id: 2, name: "Physiotherapy", description: "Expert physiotherapy sessions.", price: 300, subCategoryId: 11),
+        ServiceItem(id: 3, name: "Lab Test", description: "Blood and urine sample collection at home.", price: 200, subCategoryId: 12)
+    ]
+}

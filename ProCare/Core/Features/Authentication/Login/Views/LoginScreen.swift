@@ -19,24 +19,8 @@ struct LoginScreen: View {
     
     var body: some View {
         VStack{
-            HStack {
-                
-                Button(action: {
-                    if let appSettings = URL(string: UIApplication.openSettingsURLString) {
-                          if UIApplication.shared.canOpenURL(appSettings) {
-                              UIApplication.shared.open(appSettings)
-                          }
-                      }
-                }) {
-                    Image(systemName: "globe")
-                        .foregroundStyle(.appPrimary)
-                }
-                .font(.callout)
-                .padding()
-                .buttonStyle(AppButton(kind: .plain))
-                
-                Spacer()
-            }
+            heater
+
             Spacer()
             
             VStack(alignment: .leading){
@@ -47,26 +31,8 @@ struct LoginScreen: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             
-            VStack(alignment: .leading,spacing: 0){
-                Group {
-                    AppTextField(text: $vm.phone, placeholder: "phone number".localized(), validationRules: [.phone])
-                    AppTextField(text: $vm.password, placeholder: "password".localized(), validationRules: [.password], isSecure: true)
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 12)
-                
-                Button {
-                    appRouter.push(.PhoneScreen)
-                } label: {
-                    Text("forget password ?".localized())
-                        .foregroundStyle(.appPrimary)
-                        .font(.title3)
-                        .underline()
-                }
-                .buttonStyle(AppButton(kind: .plain))
-            }
-            .autocapitalization(.none)
-            .disableAutocorrection(true)
+            loginTextFields
+            
             
             Spacer()
             
@@ -108,6 +74,57 @@ struct LoginScreen: View {
                 .buttonStyle(AppButton(kind: .plain))
             }
         }
+        .disabled(vm.viewState == .loading)
+        .dismissKeyboardOnTap()
+    }
+}
+
+extension LoginScreen {
+    var heater: some View {
+        HStack {
+            
+            Button(action: {
+                if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                    if UIApplication.shared.canOpenURL(appSettings) {
+                        UIApplication.shared.open(appSettings)
+                    }
+                }
+            }) {
+                Image(systemName: "globe")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 25, height: 25)
+                    .foregroundStyle(.appPrimary)
+            }
+            .font(.callout)
+            .padding()
+            .buttonStyle(AppButton(kind: .plain))
+            
+            Spacer()
+        }
+    }
+    
+    var loginTextFields: some View {
+        VStack(alignment: .leading,spacing: 0){
+            Group {
+                AppTextField(text: $vm.phone, placeholder: "phone number".localized(), validationRules: [.phone])
+                AppTextField(text: $vm.password, placeholder: "password".localized(), validationRules: [.password], isSecure: true)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 12)
+            
+            Button {
+                appRouter.push(.PhoneScreen)
+            } label: {
+                Text("forget password ?".localized())
+                    .foregroundStyle(.appPrimary)
+                    .font(.title3)
+                    .underline()
+            }
+            .buttonStyle(AppButton(kind: .plain))
+        }
+        .autocapitalization(.none)
+        .disableAutocorrection(true)
     }
 }
 

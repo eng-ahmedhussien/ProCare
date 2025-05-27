@@ -82,9 +82,15 @@ extension HomePage{
                 }
                 
                 HStack {
-                    Image(.location)
-                    Text("\(locationManager.address)")
-                        .lineLimit(2)
+                    if  let location: Profile = AppUserDefaults.shared.getCodable(Profile.self, forKey: .profileData) {
+                        Image(.location)
+                        Text("\(location.governorate ?? ""), \(location.city ?? "")")
+                            .lineLimit(2)
+                    } else {
+                        Image(.location)
+                        Text("unknown location")
+                            .lineLimit(2)
+                    }
                 }
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.9))
@@ -132,7 +138,7 @@ extension HomePage{
 }
 
 #Preview {
-    var vm = HomeVM()
+    let vm = HomeVM()
     vm.categories = Category.mockCategories
     return HomePage(vm: vm, isLoading: false)
         .environmentObject(AuthManager())

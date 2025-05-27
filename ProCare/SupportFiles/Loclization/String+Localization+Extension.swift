@@ -13,7 +13,7 @@ extension String {
     /// - Returns: Localized String
     func localized() -> String {
        // let language = LocalizationManager.shared.currentLanguage
-        let deviceLocale = NSLocale.current.languageCode ?? "ar"
+        let deviceLocale = NSLocale.current.language.languageCode?.identifier ?? "ar"
         let language  = Language(rawValue: deviceLocale) ?? .arabic
         return localized(language)
     }

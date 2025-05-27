@@ -17,3 +17,6 @@
 "within_minutes" = "خلال %d دقيقة";
 "No requests" = "لا يوجد طلبات";
 "call the nurse" = "اتصل بالممرض";
+
+//MARK: - Report
+"total_requests" = "يجب أن تدفع %d EG";
