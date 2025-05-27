@@ -1,11 +1,17 @@
+//
+//  DiseaseMultiSelectSheet.swift
+//  ProCare
+//
+//  Created by ahmed hussien on 24/05/2025.
+//
+import SwiftUI
+
 struct DiseaseMultiSelectSheet: View {
     let allDiseases: [Disease]
     @Binding var selectedDiseases: [Disease]
-    @Environment(\.dismiss) var dismiss
 
     var body: some View {
         NavigationView {
-
             List(allDiseases) { disease in
                 Button {
                     if selectedDiseases.contains(disease) {
@@ -15,23 +21,22 @@ struct DiseaseMultiSelectSheet: View {
                     }
                 } label: {
                     HStack {
-                        Text(disease.name)
-                            .foregroundStyle(.black)
+                        Text(disease.name ?? "")
+                            .font(.body)
                         Spacer()
                         if selectedDiseases.contains(disease) {
                             Image(systemName: "checkmark")
-                                .foregroundColor(.accentColor)
+                                .foregroundColor(.appPrimary)
                         }
                     }
                 }
             }
             .listStyle(.plain)
             .navigationTitle("Select Diseases")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
-                }
-            }
         }
     }
+}
+
+#Preview {
+    DiseaseMultiSelectSheet(allDiseases: Disease.mockDiseases, selectedDiseases: .constant([]))
 }

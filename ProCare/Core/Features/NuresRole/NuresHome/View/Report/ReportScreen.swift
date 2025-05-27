@@ -11,138 +11,180 @@ import SwiftUI
 struct ReportScreen: View {
     
     @ObservedObject var vm: RequestsVM
-    
-    @State private var requestId: String = ""
-    @State private var drugs: String = ""
-    @State private var notes: String = ""
-    @State private var diseasesIdsText: String = ""
-    @State private var serviceIdsText: String = ""
+    @EnvironmentObject var appRouter: AppRouter
     
     @State private var showDiseaseSheet = false
-    @State private var selectedDiseases: [Disease] = []
- 
-    
-    var onSubmit: ((Report) -> Void)?
-  
-    
+    @State private var showServiceSheet = false
+    @State private var showTotal = false
+    @FocusState private var isDrugsFocused: Bool
+
+
     var body: some View {
         ScrollView{
-            AppTextField(text: $drugs, placeholder: "Drugs", validationRules: [.isEmpty])
-                .padding(.horizontal)
-                .padding(.vertical, 12)
-          
-            
-            
-            Button {
-                showDiseaseSheet = true
-            } label: {
-                HStack {
-                    Text(selectedDiseases.isEmpty ? "Select Diseases" : selectedDiseases.map { $0.name }.joined(separator: ", "))
-                        .foregroundColor(selectedDiseases.isEmpty ? .gray : .primary)
-                    Spacer()
-                    Image(systemName: "chevron.down")
-                }
-                .padding()
+            drugsView
+            notesView
+            diseaseButton
+            servicesButton
+            submit
+        }
+        .task {
+            await vm.fetchReportByPatientId(id: vm.currentRequest?.patientId ?? "")
+            await vm.fetchDiseases()
+            await vm.fetchServices()
+        }
+        .onTapGesture {
+            isDrugsFocused = false
+        }
+        .alert("Total", isPresented: $showTotal) {
+            Button("Cancel", role: .cancel) {
+                appRouter.popToRoot()
             }
-            .sheet(isPresented: $showDiseaseSheet) {
-                DiseaseMultiSelectSheet(
-                    allDiseases:  Disease.mockDiseases,
-                    selectedDiseases: $selectedDiseases
-                ).presentationDetents([.medium, .fraction(0.7), .large])
-            }
-
-            
-            AppTextField(text: $serviceIdsText, placeholder: "Service IDs (comma separated)", validationRules: [.isEmpty])
-                .padding(.horizontal)
-                .padding(.vertical, 12)
-                .keyboardType(.numbersAndPunctuation)
-            
-            AppTextField(text: $notes, placeholder: "Notes", validationRules: [.isEmpty])
-                .padding(.horizontal)
-                .padding(.vertical, 12)
-            
-            Button("Submit") {
-                let diseasesIds = diseasesIdsText
-                    .split(separator: ",")
-                    .map { $0.trimmingCharacters(in: .whitespaces) }
-                    .filter { !$0.isEmpty }
-                let serviceIds = serviceIdsText
-                    .split(separator: ",")
-                    .compactMap { Int($0.trimmingCharacters(in: .whitespaces)) }
-                
-                let report = Report(
-                    requestId: requestId.isEmpty ? nil : requestId,
-                    drugs: drugs.isEmpty ? nil : drugs,
-                    notes: notes.isEmpty ? nil : notes,
-                    diseasesIds: diseasesIds.isEmpty ? nil : diseasesIds,
-                    serviceIds: serviceIds.isEmpty ? nil : serviceIds
-                )
-                onSubmit?(report)
-            }
-            .buttonStyle(AppButton(kind: .solid, width: 300))
-            .padding()
-        
+        } message: {
+            Text(String(format: "total_requests".localized(), vm.totalRequest))
         }
         .appNavigationBar(title: "Add Report")
     }
 }
 
-extension {
-    var addressDetails: some View {
+extension ReportScreen{
+    var drugsView: some View {
         VStack(alignment: .leading, spacing : 10){
-            Text("Detailed address")
+            Text("Drugs")
                 .font(.body)
-            TextEditor(text: $vm.addressInDetails)
-                .frame(height: 120)
+            
+            TextEditor(text: $vm.drugs)
+                .focused($isDrugsFocused)
+                .frame(height: 100)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
         }
         .padding()
     }
-}
-
-
-
-struct DiseaseMultiSelectSheet: View {
-    let allDiseases: [Disease]
-    @Binding var selectedDiseases: [Disease]
-    @Environment(\.dismiss) var dismiss
-
-    var body: some View {
-        NavigationView {
-
-            List(allDiseases) { disease in
-                Button {
-                    if selectedDiseases.contains(disease) {
-                        selectedDiseases.removeAll { $0.id == disease.id }
+    
+    var diseaseButton: some View {
+            Button {
+                showDiseaseSheet = true
+            } label: {
+                VStack(alignment: .leading, spacing: 8) {
+                    if vm.selectedDiseases.isEmpty {
+                        Text("Select Diseases")
                     } else {
-                        selectedDiseases.append(disease)
-                    }
-                } label: {
-                    HStack {
-                        Text(disease.name)
-                            .foregroundStyle(.black)
-                        Spacer()
-                        if selectedDiseases.contains(disease) {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.accentColor)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(vm.selectedDiseases) { disease in
+                                    HStack(spacing: 4) {
+                                        Text(disease.name ?? "")
+                                            .font(.caption)
+                                            .foregroundColor(.white)
+                                        Image(systemName: "xmark.circle.fill")
+                                            .font(.caption2)
+                                            .foregroundColor(.white.opacity(0.8))
+                                            .onTapGesture {
+                                                vm.selectedDiseases.removeAll { $0.id == disease.id }
+                                            }
+                                    }
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(Capsule().fill(Color.appPrimary))
+                                }
+                            }
                         }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .listStyle(.plain)
-            .navigationTitle("Select Diseases")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+            .buttonStyle(AppButton(kind: .border))
+        .padding()
+        .sheet(isPresented: $showDiseaseSheet) {
+            DiseaseMultiSelectSheet(
+                allDiseases: vm.allDiseases,
+                selectedDiseases: $vm.selectedDiseases
+            )
+            .presentationDetents([.medium, .fraction(0.7), .large])
+        }
+    }
+    
+    var servicesButton: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Button {
+                showServiceSheet = true
+            } label: {
+                VStack(alignment: .leading, spacing: 8) {
+                    if vm.selectedServices.isEmpty {
+                        Text("Select Services")
+                    } else {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(vm.selectedServices, id: \.id) { service in
+                                    HStack(spacing: 4) {
+                                        Text(service.name ?? "")
+                                            .font(.caption)
+                                            .foregroundColor(.white)
+                                        Image(systemName: "xmark.circle.fill")
+                                            .font(.caption2)
+                                            .foregroundColor(.white.opacity(0.8))
+                                            .onTapGesture {
+                                                vm.selectedServices.removeAll { $0.id == service.id }
+                                            }
+                                    }
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 5)
+                                    .background(Capsule().fill(Color.appPrimary))
+                                }
+                            }
+                        }
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .buttonStyle(AppButton(kind: .border))
+            .padding()
+            .sheet(isPresented: $showServiceSheet) {
+                ServiceMultiSelectSheet(
+                    allServices: vm.allServices,
+                    selectedServices: $vm.selectedServices
+                )
+                .presentationDetents([.medium, .fraction(0.7), .large])
             }
         }
     }
+
+    var notesView: some View {
+        VStack(alignment: .leading, spacing : 10){
+            Text("Notes")
+                .font(.body)
+        
+            TextEditor(text: $vm.notes)
+                .focused($isDrugsFocused)
+                .frame(height: 100)
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
+        }
+        .padding()
+    }
+    
+    var submit: some View {
+        Button("Submit") {
+            Task{
+                await  vm.addOrUpdateReport{ data in
+                    if data {
+                        showTotal.toggle()
+                        showAppMessage("Report Added successfully", appearance: .success)
+                    }
+                }
+            }
+        }
+        .buttonStyle(AppButton(kind: .solid, width: 300))
+        .padding()
+    }
+    
 }
+
+
+
+
 
 #Preview {
     NavigationView {
-        var vm = RequestsVM()
+        let vm = RequestsVM()
         vm.allDiseases = Disease.mockDiseases
         return ReportScreen(vm: vm)
     }

@@ -9,10 +9,11 @@ import SwiftUI
 struct currentRequestCellView: View {
     
     @ObservedObject var vm: RequestsVM
+    @EnvironmentObject var appRouter: AppRouter
     let buttonWidth = UIScreen.main.bounds.width * 0.33
     @State var showRejectAlert: Bool = false
     @State var showApproveAlert: Bool = false
-    @State var isApproveRequest: Bool = false
+    @State var showFinishAlert: Bool = false
     
     var body: some View {
         ScrollView {
@@ -42,15 +43,23 @@ struct currentRequestCellView: View {
         } message: {
             Text("Are you sure you want to reject this request?")
         }
-        .alert("Accept request", isPresented: $showApproveAlert) {
+        .alert("approve request", isPresented: $showApproveAlert) {
             Button("Cancel", role: .destructive) { }
-            Button("Accept", role: .cancel) {
+            Button("approve", role: .cancel) {
                 Task{
-                    isApproveRequest.toggle()
+                    await vm.approveRequest(id: vm.currentRequest?.id ?? "")
                 }
             }
         } message: {
-            Text("Are you sure you want to Accept this request?")
+            Text("Are you sure you want to approve this request?")
+        }
+        .alert("Finish request", isPresented: $showFinishAlert) {
+            Button("Cancel", role: .destructive) { }
+            Button("Finish", role: .cancel) {
+                appRouter.pushView(ReportScreen(vm: vm))
+            }
+        } message: {
+            Text("Are you sure you want to Finish this request?")
         }
 
     }
@@ -90,12 +99,16 @@ extension currentRequestCellView{
 
     var actionButtons: some View {
         
-        if isApproveRequest{
-           
+        if vm.currentRequest?.statusId == .Approved {
             return VStack{
-                SwipeToFinishButton{
-                    //TO Do Finish Request
-                 }
+                Button {
+                    showFinishAlert.toggle()
+                } label: {
+                    HStack {
+                        Text("Finish Request".localized())
+                    }.frame(maxWidth: .infinity)
+                }
+                .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))
             }
            
         }else{
@@ -130,10 +143,8 @@ extension currentRequestCellView{
 
 #Preview {
     VStack{
-        var vm = RequestsVM()
+        let vm = RequestsVM()
         vm.currentRequest = Request.mock
         return currentRequestCellView(vm: vm)
     }
 }
-
-

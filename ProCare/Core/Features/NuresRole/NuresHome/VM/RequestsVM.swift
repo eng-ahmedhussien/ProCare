@@ -10,24 +10,34 @@ import SwiftUI
 
 @MainActor
 class RequestsVM: ObservableObject {
-    // MARK: - Published Properties
+    // MARK: -  Request Properties
     @Published var requestList: [Request] = []
     @Published var currentRequest: Request?
     @Published var viewState: PaginationViewState = .initialLoading
-    
+    @Published var isApprovedRequest: Bool = false
+    //MARK: - Report Properties
+    @Published var report: Report?
+    @Published var allDiseases: [Disease] = [] // Fill from API
+    @Published var allServices: [ServiceItem] = [] // Fill from API
+    @Published var drugs: String = ""
+    @Published var notes: String = ""
+    @Published var selectedDiseases: [Disease] = []
+    @Published var selectedServices: [ServiceItem] = []
+    @Published var totalRequest: Int = 0
+
+    // MARK: - Pagination
     var hasNextPage = true
     private var pageNumber = 1
     private let pageSize = 10
+    
     private let apiClient: PatientRequestApiClintProtocol
-
+    
     init(apiClient: PatientRequestApiClintProtocol = PatientRequestApiClint()) {
         self.apiClient = apiClient
     }
 }
-// MARK: - API Methods
+// MARK: - Request API Methods
 extension RequestsVM{
-   
-    @MainActor
     func fetchCurrentRequest(onUnauthorized: @escaping () -> Void = {}) async {
         do {
             let response = try await apiClient.getCurrentRequest()
@@ -46,7 +56,7 @@ extension RequestsVM{
             }
         }
     }
-    
+  
     func fetchRequests(loadType: LoadType,onUnauthorized: @escaping () -> Void = {}) async {
         switch loadType {
         case .initial:
@@ -115,14 +125,13 @@ extension RequestsVM{
             debugPrint("Unexpected error: \(error.localizedDescription)")
         }
     }
-   func approveRequest(id: String) async {
+    
+    func approveRequest(id: String) async {
        do {
            let response = try await apiClient.approveRequest(id: id)
            if let data = response.data {
                if data {
-                   Task{
-                     //  await fetchCurrentRequest()
-                   }
+                   await fetchCurrentRequest()
                }
            }
        } catch {
@@ -130,4 +139,99 @@ extension RequestsVM{
        }
    }
 }
+// MARK: - Report API Methods
+extension RequestsVM {
+    func fetchReportByPatientId(id: String) async {
+        do {
+            let response = try await apiClient.getReportByPatientId(id: id)
+            if let data = response.data {
+                report = data
+                fillReportData(report: data)    
+            } else {
+                debugPrint("Response received but no report data")
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+    func addOrUpdateReport(completion: @escaping (Bool) -> Void) async {
+        let parameters: [String : Any] = [
+            "requestId": currentRequest?.id ?? "",
+            "drugs": drugs,
+            "notes": notes,
+            "diseasesIds": selectedDiseases.map { $0.id },
+            "serviceIds": selectedServices.map { $0.id }
+        ]
 
+        do {
+            let response = try await apiClient.addOrUpdateReport(parameters: parameters)
+            if let data = response.data {
+                totalRequest = data
+                completion(true)
+            } else {
+                debugPrint("Response received but no report data")
+                completion(false)
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+            completion(false)
+        }
+    }
+    
+    func fetchDiseases() async {
+        let parameters: [String: Any] = [
+            "pageNumber": "0",
+            "pageSize": "0" //
+        ]
+        do {
+            let response = try await apiClient.getDeceases(parameters: parameters)
+            if let data = response.data {
+                allDiseases = data.items ?? []
+            } else {
+                debugPrint("Response received but no diseases data")
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+
+    func fetchServices() async {
+        let parameters: [String: Any] = [
+            "pageNumber": "0",
+            "pageSize": "0"
+        ]
+        do {
+            let response = try await apiClient.getServices(parameters: parameters)
+            if let data = response.data {
+                allServices = data.pagedResult?.items ?? []
+            } else {
+                debugPrint("Response received but no services data")
+            }
+        } catch {
+            if let apiError = error as? APIResponseError, apiError.status == 404 {
+                // No report found, this is not a critical error
+                debugPrint("No report found for this patient/request.")
+                report = nil
+            } else {
+                debugPrint("Unexpected error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
+}
+   
+   //MARK: - Helpers
+extension RequestsVM {
+    func fillReportData(report: Report) {
+        drugs = report.drugs ?? ""
+        notes = report.notes ?? ""
+        selectedDiseases = report.diseases?.compactMap { disease in
+            allDiseases.first(where: { $0.id == disease.id })
+        } ?? []
+        
+        selectedServices = report.serviceIds?.compactMap { id in
+            allServices.first(where: { $0.id == id })
+        } ?? []
+    }
+}

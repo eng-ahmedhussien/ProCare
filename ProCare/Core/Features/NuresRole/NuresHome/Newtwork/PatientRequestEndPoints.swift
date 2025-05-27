@@ -14,6 +14,11 @@ enum PatientRequestEndPoints: APIEndpoint {
     case getPreviousRequests(parameters: [String: Any])
     case cancelRequest(id: String)
     case approveRequest(id: String)
+    //MARK: - Reports
+    case getReportByPatientId(id: String)
+    case addOrUpdateReport(parameters: [String: Any])
+    case getDeceases(parameters: [String: Any])
+    case getServices(parameters: [String: Any])
     
     var path: String {
         switch self {
@@ -25,14 +30,23 @@ enum PatientRequestEndPoints: APIEndpoint {
             return "/Request/Cancel/\(id)"
         case .approveRequest(let id):
             return "/Request/Approve/\(id)"
+            //MARK: - Reports
+        case .getReportByPatientId(let id):
+            return "/Report/GetReportByPatientId/\(id)"
+        case .addOrUpdateReport:
+            return "/Report/AddOrUpdateReport"
+        case .getDeceases:
+            return "Disease/GetAllMobileDiseases"
+        case .getServices:
+            return "ServiceCatalog/GetMobileServices"
         }
     }
-    
+
     var method: HTTPMethod {
         switch self {
-        case .getCurrentRequest:
+        case .getCurrentRequest, .getReportByPatientId:
             return .get
-        case .getPreviousRequests:
+        case .getPreviousRequests, .addOrUpdateReport, .getDeceases, .getServices:
             return .post
         case .cancelRequest, .approveRequest:
             return  .put
@@ -47,6 +61,16 @@ enum PatientRequestEndPoints: APIEndpoint {
         switch self {
         case .getPreviousRequests(let parameters):
             return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
+        case .addOrUpdateReport(let parameters):
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
+        case .getDeceases(let parameters):
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
+       case .getServices(let parameters):
+            return .requestWithQueryAndBody(
+                query: ["subCategoryId": -1],
+                body: parameters,
+                encoding: .JSONEncoding(.default)
+            )
         default:
             return .requestNoParameters
        

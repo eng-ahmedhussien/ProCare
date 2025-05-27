@@ -12,6 +12,6 @@ struct Report: Codable {
     var requestId: String?
     var drugs: String?
     var notes: String?
-    var diseasesIds: [String]?
+    var diseases: [Disease]?
     var serviceIds: [Int]?
 }

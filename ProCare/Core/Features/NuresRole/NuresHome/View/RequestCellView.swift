@@ -38,7 +38,7 @@ struct RequestCellView: View {
                 
                 Text(request.status ?? "")
                     .font(.callout)
-                    .foregroundStyle(request.status == "Completed" ? .green : .red)
+                    .foregroundStyle(request.statusId == .Completed ? .green : .red)
                     .bold()
                 
             }

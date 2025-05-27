@@ -1,16 +1,21 @@
+//
+//  ServiceMultiSelectSheet.swift
+//  ProCare
+//
+//  Created by ahmed hussien on 24/05/2025.
+//
 import SwiftUI
 
 struct ServiceMultiSelectSheet: View {
     let allServices: [ServiceItem]
     @Binding var selectedServices: [ServiceItem]
-    @Environment(\.dismiss) var dismiss
 
     var body: some View {
         NavigationView {
-            List(allServices, id: \.id) { service in
+            List(allServices) { service in
                 Button {
-                    if let idx = selectedServices.firstIndex(where: { $0.id == service.id }) {
-                        selectedServices.remove(at: idx)
+                    if selectedServices.contains(service) {
+                        selectedServices.removeAll { $0.id == service.id }
                     } else {
                         selectedServices.append(service)
                     }
@@ -24,22 +29,24 @@ struct ServiceMultiSelectSheet: View {
                                 .foregroundColor(.gray)
                         }
                         Spacer()
-                        if selectedServices.contains(where: { $0.id == service.id }) {
-                            Image(systemName: "checkmark.square.fill")
-                                .foregroundColor(.accentColor)
-                        } else {
-                            Image(systemName: "square")
-                                .foregroundColor(.gray)
+                        
+                        Text("\(service.price ?? 0)")
+                            .font(.body)
+                            .foregroundStyle(.appPrimary)
+                        
+                        if selectedServices.contains(service) {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.appPrimary)
                         }
                     }
                 }
             }
+            .listStyle(.plain)
             .navigationTitle("Select Services")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
-                }
-            }
         }
     }
+}
+
+#Preview {
+    ServiceMultiSelectSheet(allServices: ServiceItem.mockServices, selectedServices: .constant([]))
 }

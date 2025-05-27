@@ -25,9 +25,18 @@ struct Request: Codable {
     let createdAt: String?
     let totalPrice: Int?
     let gender: Int?
+    let statusId: RequestStatuses?
 }
 
 extension Request{
+    enum RequestStatuses : Int, Codable {
+        case New = 1
+        case Approved = 2
+        case Cancelled = 3
+        case Rejected = 4
+        case Completed = 5
+    }
+    
     var createdDate: String? {
         guard let dateStr = createdAt else { return nil }
         let formatter = DateFormatter()
@@ -66,7 +75,7 @@ extension Request{
         nurseLatitude: "30.0500",
         createdAt: "2025-05-14T17:27:16.0523865",
         totalPrice: 1500,
-        gender: 1
+        gender: 1, statusId: .New
     )
 }
 
