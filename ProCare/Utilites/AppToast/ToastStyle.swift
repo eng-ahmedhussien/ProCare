@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-enum ToastStyle {
+enum ToastStyle: CaseIterable {
     case success, error, warning, info
 
     var themeColor: Color {

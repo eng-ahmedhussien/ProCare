@@ -5,7 +5,6 @@
 //  Created by ahmed hussien on 14/05/2025.
 //
 
-
 import SwiftUI
 
 struct ToastModifier: ViewModifier {
@@ -14,54 +13,44 @@ struct ToastModifier: ViewModifier {
     func body(content: Content) -> some View {
         ZStack {
             content
+            toastContent()
+        }
+    }
 
-            if let toast = toast {
-                VStack {
-                    if toast.position == .top {
-                        toastView
-                        Spacer()
-                    } else if toast.position == .center {
-                        Spacer()
-                        toastView
-                        Spacer()
-                    } else if toast.position == .bottom {
-                        Spacer()
-                        toastView
-                            .padding(.bottom, 30)
-                    }
-                }
-                .transition(.move(edge: .top).combined(with: .opacity))
-                .animation(.spring(), value: toast)
-                .onAppear {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    if toast.duration > 0 {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + toast.duration) {
-                            if self.toast == toast {
-                                withAnimation {
-                                    self.toast = nil
-                                }
-                            }
-                        }
-                    }
+    @ViewBuilder
+    private func toastContent() -> some View {
+        if let toast = toast {
+            VStack {
+                ToastView(
+                    style: toast.style,
+                    message: toast.message,
+                    width: toast.width,
+                    onCancelTapped: dismissToast
+                )
+            }
+            .transition(.move(edge: .top).combined(with: .opacity))
+            .animation(.spring(), value: toast)
+            .onAppear { handleToastAppear(toast) }
+        }
+    }
+
+    private func handleToastAppear(_ toast: Toast) {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        if toast.duration > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + toast.duration) {
+                if self.toast == toast {
+                    dismissToast()
                 }
             }
         }
     }
 
-    private var toastView: some View {
-        ToastView(
-            style: toast?.style ?? .info,
-            message: toast?.message ?? "",
-            width: toast?.width ?? .infinity,
-            onCancelTapped: {
-                withAnimation {
-                    self.toast = nil
-                }
-            }
-        )
+    private func dismissToast() {
+        withAnimation {
+            self.toast = nil
+        }
     }
 }
-
 
 extension View {
     func toastView(toast: Binding<Toast?>) -> some View {
@@ -69,10 +58,39 @@ extension View {
     }
 }
 
-
-// MARK: global function access from class or struct
+// MARK: - Global function for showing a toast
 func showAppMessage(_ message: String, appearance: ToastStyle, position: ToastPosition = .top) {
     ToastManager.shared.show(
         Toast(style: appearance, message: message, duration: 3, position: position)
     )
 }
+
+struct ToastModifier_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            ForEach(ToastStyle.allCases, id: \.self) { style in
+                ForEach([ToastPosition.top, .center, .bottom], id: \.self) { position in
+                    PreviewToastView(
+                        toast: Toast(
+                            style: style,
+                            message: "\(style) toast at \(position)",
+                            duration: 3,
+                            position: position
+                        )
+                    )
+                    .previewDisplayName("\(style) - \(position)")
+                }
+            }
+        }
+    }
+
+    struct PreviewToastView: View {
+        @State var toast: Toast?
+        var body: some View {
+            Color(.systemBackground)
+                .ignoresSafeArea()
+                .toastView(toast: $toast)
+        }
+    }
+}
+

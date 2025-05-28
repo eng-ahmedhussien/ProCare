@@ -5,7 +5,6 @@
 //  Created by ahmed hussien on 14/05/2025.
 //
 
-
 import SwiftUI
 
 struct ToastView: View {
@@ -14,25 +13,55 @@ struct ToastView: View {
     var width: CGFloat = .infinity
     var onCancelTapped: () -> Void
 
+    @GestureState private var dragOffset = CGSize.zero
+
+    var body: some View {
+        VStack {
+            ToastContent(
+                style: style,
+                message: message,
+                width: width,
+                dragOffset: dragOffset, // Use wrapped value here
+                onCancelTapped: onCancelTapped
+            )
+            Spacer()
+        }
+    }
+}
+
+private struct ToastContent: View {
+    var style: ToastStyle
+    var message: String
+    var width: CGFloat
+    var dragOffset: CGSize // Use plain CGSize here
+    var onCancelTapped: () -> Void
+
     var body: some View {
         HStack {
+            Spacer()
             Text(message)
-                .font(.caption)
+                .font(.body)
                 .foregroundColor(.white)
                 .lineLimit(nil)
                 .padding(.vertical)
-
             Spacer()
-
-            Button(action: onCancelTapped) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundColor(.white.opacity(0.8))
-            }
         }
-        .padding()
-        .frame(minWidth: 0, maxWidth: width)
+        .frame(maxWidth: width)
         .background(style.themeColor)
-        .cornerRadius(8)
-        .padding(.horizontal, 16)
+        .gesture(
+            DragGesture(minimumDistance: 20, coordinateSpace: .local)
+                .onChanged { value in
+                    // Optionally handle drag offset here if needed
+                }
+                .onEnded { value in
+                    if value.translation.height < -30 {
+                        onCancelTapped()
+                    }
+                }
+        )
     }
+}
+
+#Preview {
+    ToastView(style: .success, message: "message test", onCancelTapped: {})
 }
