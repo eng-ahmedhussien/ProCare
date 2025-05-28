@@ -5,7 +5,6 @@
 //  Created by ahmed hussien on 17/05/2025.
 //
 
-
 import SwiftUI
 import CoreLocation
 
@@ -70,11 +69,11 @@ struct OrdersListView: View {
                     .font(.largeTitle)
                     .foregroundColor(.orange)
                 
-                Text("Error: \(message)")
+                Text("error".localized() + ": \(message)")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.gray)
                 
-                Button("Retry") {
+                Button("retry".localized()) {
                     Task {
                         await vm.fetchOrders(loadType: .initial)
                     }
@@ -90,7 +89,7 @@ struct OrdersListView: View {
             Image(systemName: "person.crop.circle.badge.exclam")
                 .font(.largeTitle)
                 .foregroundColor(.gray)
-            Text("لا توجد ممرضات حالياً")
+            Text("no_orders_available".localized())
                 .foregroundColor(.gray)
         }
         .padding()
@@ -134,6 +133,6 @@ struct OrdersListView: View {
     ]
 
     return NavigationStack {
-        OrdersListView(vm: vm) // ✅ use the actual instance you configured
+        OrdersListView(vm: vm)
     }
 }

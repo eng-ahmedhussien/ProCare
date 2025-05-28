@@ -40,7 +40,7 @@ struct NursesListScreen: View {
         ZStack {
             content
         }
-        .appNavigationBar(title: "")
+        .appNavigationBar(title: "nurses_list".localized())
         .onAppear {
             if vm.nurseList.isEmpty {
                 Task {
@@ -99,11 +99,11 @@ struct NursesListScreen: View {
                     .font(.largeTitle)
                     .foregroundColor(.orange)
                 
-                Text("Error: \(message)")
+                Text("error".localized() + ": \(message)")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.gray)
                 
-                Button("Retry") {
+                Button("retry".localized()) {
                     Task {
                         await vm.fetchNurses(loadType: .initial)
                     }
@@ -119,7 +119,7 @@ struct NursesListScreen: View {
             Image(systemName: "person.crop.circle.badge.exclam")
                 .font(.largeTitle)
                 .foregroundColor(.gray)
-            Text("لا توجد ممرضات حالياً")
+            Text("no_nurses_available")
                 .foregroundColor(.gray)
         }
         .padding()

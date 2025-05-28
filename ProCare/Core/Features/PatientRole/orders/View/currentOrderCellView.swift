@@ -25,20 +25,19 @@ struct currentOrderCellView: View {
                 .padding()
             }
             else {
-                Text("No requests".localized())
+                Text("no_requests".localized())
             }
         }
-        .alert("Cancel current request", isPresented: $showCancelAlert) {
-            Button("Cancel", role: .destructive) { }
-            Button("Yes", role: .cancel) {
+        .alert("cancel_current_request".localized(), isPresented: $showCancelAlert) {
+            Button("cancel".localized(), role: .destructive) { }
+            Button("yes".localized(), role: .cancel) {
                 Task{
                     await  vm.cancelOrder(id: vm.currentOrder?.id ?? "")
                 }
             }
         } message: {
-            Text("Are you sure you want to cancel this request?")
+            Text("cancel_request_confirmation".localized())
         }
-
     }
 }
 
@@ -81,31 +80,30 @@ extension currentOrderCellView{
 
     var actionButtons: some View {
         HStack(spacing: 8) {
-                   Button {
-                       if let url = URL(string: "tel://\(vm.currentOrder?.phoneNumber ?? "")"),
-                          UIApplication.shared.canOpenURL(url) {
-                           UIApplication.shared.open(url)
-                       }
-                   } label: {
-                       HStack {
-                           Image(systemName: "phone.fill")
-                           Text("call".localized())
-                       }.frame(width: buttonWidth)
-                   }
-                   .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))
+            Button {
+                if let url = URL(string: "tel://\(vm.currentOrder?.phoneNumber ?? "")"),
+                   UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url)
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "phone.fill")
+                    Text("call".localized())
+                }.frame(width: buttonWidth)
+            }
+            .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))
 
-                   Button {
-                       showCancelAlert.toggle()
-                   } label: {
-                       HStack {
-                           Image(systemName: "xmark")
-                           Text("Cancel".localized())
-                       }
-                       .frame(width: buttonWidth)
-                       //.frame(maxWidth: .infinity)
-                   }
-                   .buttonStyle(AppButton(kind: .solid,backgroundColor: .red))
-               }
+            Button {
+                showCancelAlert.toggle()
+            } label: {
+                HStack {
+                    Image(systemName: "xmark")
+                    Text("cancel".localized())
+                }
+                .frame(width: buttonWidth)
+            }
+            .buttonStyle(AppButton(kind: .solid,backgroundColor: .red))
+        }
     }
 }
 

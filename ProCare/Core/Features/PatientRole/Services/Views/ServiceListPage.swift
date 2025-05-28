@@ -19,7 +19,7 @@ struct ServiceListPage: View {
         ZStack {
             content
         }
-        .appNavigationBar(title: "Service")
+        .appNavigationBar(title: "service".localized())
         .onAppear {
             if vm.serviceItem.isEmpty {
                 Task {
@@ -84,10 +84,10 @@ extension ServiceListPage{
     private var totalView: some View {
         VStack {
             HStack {
-                Text("Total")
+                Text("total")
                     .font(.title2)
                 Spacer()
-                Text("\(vm.totalPrice) eg")
+                Text("\(vm.totalPrice) EGP")
                     .font(.title3)
                     .foregroundStyle(.appPrimary)
             }
@@ -100,35 +100,35 @@ extension ServiceListPage{
                     appRouter.pushView(NursesListScreen(servicesIds: vm.selectedServices))
                 }
             } label: {
-                Text("Continue".localized())
+                Text("continue")
                     .font(.title3)
             }
             .buttonStyle(AppButton(kind: .solid,width: 300, disabled: vm.selectedServices.isEmpty))
         }
         .background(Color(.systemBackground))
         .shadow(color: Color.black.opacity(0.1), radius: 5, y: -1)
-        .alert("Location Required", isPresented: $showAddressAlert) {
-            Button("add address") {
+        .alert("location_required".localized(), isPresented: $showAddressAlert) {
+            Button("add_address".localized()) {
                 appRouter.pushView(UpdateAddressView())
             }
-            Button("Cancel", role: .cancel) {}
+            Button("cancel".localized(), role: .cancel) {}
         } message: {
-            Text("To complete this request, we need address")
+            Text("address_permission_message")
         }
     }
     private var emptyView: some View {
         VStack {
-            Text("No Services Available")
+            Text("no_services_available")
                 .foregroundColor(.gray)
                 .padding()
         }
     }
     private func createErrorView(_ message: String) -> some View {
         VStack(spacing: 12) {
-            Text("Error: \(message)")
+            Text("error" + "\(message)")
                 .multilineTextAlignment(.center)
                 
-            Button("Retry") {
+            Button("retry".localized()) {
                 Task {
                     await vm.fetchServices(id: id, loadType: .initial)
                 }

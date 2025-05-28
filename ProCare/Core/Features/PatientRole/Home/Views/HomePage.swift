@@ -62,23 +62,11 @@ extension HomePage{
                         .padding(.trailing)
                         .foregroundColor(.white.opacity(0.9))
                     
-                    Text("hello \(authManager.userDataLogin?.firstName ?? "")")
+                    Text("hello".localized() + "\(authManager.userDataLogin?.firstName ?? "")")
                         .font(.title)
                         .foregroundColor(.white)
                     
                     Spacer()
-                    
-                    Button(action: {
-                        if let appSettings = URL(string: UIApplication.openSettingsURLString) {
-                            if UIApplication.shared.canOpenURL(appSettings) {
-                                UIApplication.shared.open(appSettings)
-                            }
-                        }
-                    }) {
-                        Image(systemName: "globe")
-                            .foregroundStyle(.white)
-                    }
-                    .buttonStyle(AppButton(kind: .plain))
                 }
                 
                 HStack {
@@ -88,7 +76,7 @@ extension HomePage{
                             .lineLimit(2)
                     } else {
                         Image(.location)
-                        Text("unknown location")
+                        Text("unknown_location")
                             .lineLimit(2)
                     }
                 }
@@ -104,7 +92,7 @@ extension HomePage{
     
     var services: some View {
         VStack(alignment: .leading, spacing: 20){
-            Text("services")
+            Text("services".localized())
                 .font(.title2)
                 .fontWeight(.medium)
                 .padding(.horizontal)

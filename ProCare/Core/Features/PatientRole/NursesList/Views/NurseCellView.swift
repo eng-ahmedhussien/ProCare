@@ -28,11 +28,11 @@ struct NurseCellView: View {
                 }
                 
                 VStack(alignment: .leading){
-                    Text(nurse.fullName ?? "No Title")
+                    Text(nurse.fullName ?? "no_title".localized())
                         .font(.headline)
                         .bold()
                     
-                    Text(nurse.specialization ?? "No Description Available")
+                    Text(nurse.specialization ?? "no_description".localized())
                         .font(.subheadline)
                         .bold()
                 }

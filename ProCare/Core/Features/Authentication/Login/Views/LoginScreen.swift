@@ -24,15 +24,14 @@ struct LoginScreen: View {
             Spacer()
             
             VStack(alignment: .leading){
-                Text("hello!".localized())
-                Text("log in to start".localized())
+                Text("hello".localized())
+                Text("log_in_to_start".localized())
             }
             .font(.title.bold())
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             
             loginTextFields
-            
             
             Spacer()
             
@@ -57,7 +56,7 @@ struct LoginScreen: View {
                         ProgressView()
                             .appProgressStyle()
                     } else {
-                        Text("log in".localized())
+                        Text("log_in".localized())
                             .font(.title3)
                     }
                 }
@@ -67,7 +66,7 @@ struct LoginScreen: View {
                 Button {
                     appRouter.presentFullScreenCover(.signUp)
                 } label: {
-                    Text("create account".localized())
+                    Text("create_account".localized())
                         .font(.title3)
                         .underline()
                 }
@@ -82,7 +81,6 @@ struct LoginScreen: View {
 extension LoginScreen {
     var heater: some View {
         HStack {
-            
             Button(action: {
                 if let appSettings = URL(string: UIApplication.openSettingsURLString) {
                     if UIApplication.shared.canOpenURL(appSettings) {
@@ -107,7 +105,7 @@ extension LoginScreen {
     var loginTextFields: some View {
         VStack(alignment: .leading,spacing: 0){
             Group {
-                AppTextField(text: $vm.phone, placeholder: "phone number".localized(), validationRules: [.phone])
+                AppTextField(text: $vm.phone, placeholder: "phone_number".localized(), validationRules: [.phone])
                 AppTextField(text: $vm.password, placeholder: "password".localized(), validationRules: [.password], isSecure: true)
             }
             .padding(.horizontal)
@@ -116,7 +114,7 @@ extension LoginScreen {
             Button {
                 appRouter.push(.PhoneScreen)
             } label: {
-                Text("forget password ?".localized())
+                Text("forget_password".localized())
                     .foregroundStyle(.appPrimary)
                     .font(.title3)
                     .underline()

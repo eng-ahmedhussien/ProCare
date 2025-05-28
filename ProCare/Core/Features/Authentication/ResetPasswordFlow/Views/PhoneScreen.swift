@@ -27,7 +27,7 @@ struct PhoneScreen: View {
             sendButton
         }
         .disabled(vm.viewState == .loading)
-        .appNavigationBar(title:"forget password".localized())
+        .appNavigationBar(title: "forget_password".localized())
     }
 }
 //MARK: - extension

@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct SignUPScreen: View {
     @StateObject var vm = SignUpVM()
     @EnvironmentObject var appRouter: AppRouter
@@ -17,31 +16,25 @@ struct SignUPScreen: View {
         ValidationRule.phone.validate(vm.phone) == nil &&
         ValidationRule.password.validate(vm.password) == nil &&
         ValidationRule.confirmPassword($vm.password).validate(vm.confirmPassword) == nil
-
     }
     //MARK: - Body
     var body: some View {
         VStack{
             header
-            
             signUpForm
-            
             Spacer()
-            
             SignUpButton
-            
             haveAccountButton
-            
         }
-        .appNavigationBar(title: "signUp".localized())
+        .appNavigationBar(title: "sign_up".localized())
     }
 }
 
 extension SignUPScreen {
     var header: some View {
         VStack(alignment: .leading){
-            Text("hello!".localized())
-            Text("create account".localized())
+            Text("hello".localized())
+            Text("create_account".localized())
         }
         .font(.title.bold())
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -52,12 +45,11 @@ extension SignUPScreen {
         VStack(spacing: 30){
             HStack(spacing: 30){
                 AppTextField(text: $vm.name, placeholder: "name".localized(), validationRules: [.isEmpty])
-                AppTextField(text: $vm.secondName, placeholder: "second name".localized(), validationRules: [.isEmpty])
+                AppTextField(text: $vm.secondName, placeholder: "second_name".localized(), validationRules: [.isEmpty])
             }
-            
             AppTextField(text: $vm.phone, placeholder: "phone".localized(), validationRules: [.phone])
             AppTextField(text: $vm.password, placeholder: "password".localized(), validationRules: [.password])
-            AppTextField(text:  $vm.confirmPassword, placeholder: "confirm password".localized(), validationRules: [.confirmPassword($vm.password)])
+            AppTextField(text:  $vm.confirmPassword, placeholder: "confirm_password".localized(), validationRules: [.confirmPassword($vm.password)])
         }
         .padding()
         .autocapitalization(.none)
@@ -71,13 +63,11 @@ extension SignUPScreen {
                     debugPrint(otp ?? "nil")
                     appRouter.dismissFullScreenOver()
                     appRouter.pushView(OTPScreen(phonNumber: vm.phone))
-                
                 }
             }
         } label: {
-            Text("Sign Up".localized())
+            Text("sign_up".localized())
                 .font(.title3)
-                ///. font(.system(size: 24, weight: .bold, design: .default))
         }
         .buttonStyle(AppButton(kind: .solid,width: 300,disabled: !isFormValid))
         .disabled(!isFormValid)
@@ -87,19 +77,14 @@ extension SignUPScreen {
         Button {
             appRouter.dismissFullScreenOver()
         } label: {
-            Text("have account?".localized())
+            Text("have_account".localized())
                 .font(.title3)
                 .underline()
                 .foregroundStyle(.black)
         }
-       
     }
-
 }
 
 #Preview {
     SignUPScreen()
 }
-
-
-

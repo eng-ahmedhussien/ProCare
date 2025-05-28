@@ -21,10 +21,9 @@ struct NewPasswordScreen: View {
     
     var body: some View {
         VStack {
-            
             Group{
-                AppTextField(text: $vm.password, placeholder: "new password".localized(), validationRules: [.password], isSecure: true)
-                AppTextField(text: $vm.confirmPassword, placeholder: "confirm new password".localized(), validationRules: [.confirmPassword($vm.password)], isSecure: true)
+                AppTextField(text: $vm.password, placeholder: "new_password".localized(), validationRules: [.password], isSecure: true)
+                AppTextField(text: $vm.confirmPassword, placeholder: "confirm_new_password".localized(), validationRules: [.confirmPassword($vm.password)], isSecure: true)
             }
             .padding(.top,30)
             .padding(.horizontal)
@@ -43,14 +42,11 @@ struct NewPasswordScreen: View {
             }
             .buttonStyle(AppButton(kind: .solid,width: 300,disabled: !isFormValid))
             .disabled(!isFormValid)
-
         }
-        .appNavigationBar(title: "Reset password".localized())
+        .appNavigationBar(title: "reset_password".localized())
     }
 }
 
 #Preview {
     NewPasswordScreen()
 }
-
-

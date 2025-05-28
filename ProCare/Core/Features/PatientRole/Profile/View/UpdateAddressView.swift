@@ -40,7 +40,7 @@ struct UpdateAddressView: View {
             saveButton
         }
         .padding(.vertical)
-        .appNavigationBar(title: "update location".localized())
+        .appNavigationBar(title: "update_location".localized())
         .onFirstAppear {
             Task {
                 await vm.fetchGovernorates()
@@ -51,15 +51,15 @@ struct UpdateAddressView: View {
                 await vm.fetchCityByGovernorateId(id: id)
             }
         }
-        .alert("Location Required", isPresented: $showLocationAlert) {
-            Button("Open Settings") {
+        .alert("location_required".localized(), isPresented: $showLocationAlert) {
+            Button("open_settings".localized()) {
                 if let appSettings = URL(string: UIApplication.openSettingsURLString) {
                     openURL(appSettings)
                 }
             }
-            Button("Cancel", role: .cancel) {}
+            Button("cancel".localized(), role: .cancel) {}
         } message: {
-            Text("To complete this request, we need access to your location. Please enable location permissions in Settings.")
+            Text("location_permission_message".localized())
         }
     }
 }
@@ -68,7 +68,7 @@ extension UpdateAddressView {
     
     var addressDetails: some View {
         VStack(alignment: .leading, spacing : 10){
-            Text("Detailed address")
+            Text("detailed_address")
                 .font(.body)
             TextEditor(text: $vm.addressInDetails)
                 .frame(height: 120)

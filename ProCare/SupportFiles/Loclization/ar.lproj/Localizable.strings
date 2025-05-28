@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   ProCare
 
@@ -7,7 +7,31 @@
 */
 
 //MARK: - Auth
-"log in" = "تسجيل الدخول";
+"hello" = "مرحبًا!";
+"log_in_to_start" = "سجّل الدخول للبدء";
+"log_in" = "تسجيل الدخول";
+"create_account" = "إنشاء حساب";
+"phone_number" = "رقم الهاتف";
+"password" = "كلمة المرور";
+"forget_password" = "هل نسيت كلمة المرور؟";
+
+"sign_up" = "إنشاء حساب";
+"hello" = "مرحبًا!";
+"create_account" = "إنشاء حساب";
+"name" = "الاسم";
+"second_name" = "اسم العائلة";
+"phone" = "رقم الهاتف";
+"password" = "كلمة المرور";
+"confirm_password" = "تأكيد كلمة المرور";
+"have_account" = "لديك حساب؟";
+//NewPasswordScreen
+"new_password" = "كلمة المرور الجديدة";
+"confirm_new_password" = "تأكيد كلمة المرور الجديدة";
+"save" = "حفظ";
+"reset_password" = "إعادة تعيين كلمة المرور";
+"phone" = "رقم الهاتف";
+"forget_password" = "هل نسيت كلمة المرور؟";
+"send" = "إرسال";
 
 //MARK: - Requests
 "Orders" = "الطلبات";
@@ -20,3 +44,90 @@
 
 //MARK: - Report
 "total_requests" = "يجب أن تدفع %d EG";
+
+//MARK: - profile
+"profile" = "الملف الشخصي";
+"user_info" = "معلومات المستخدم";
+"first_name" = "الاسم الأول";
+"last_name" = "اسم العائلة";
+"gender" = "النوع";
+"user_location" = "موقع المستخدم";
+"no_selected" = "غير محدد";
+"update_profile" = "تحديث الملف الشخصي";
+"change_password" = "تغيير كلمة المرور";
+"logout" = "تسجيل الخروج";
+"delete_account" = "حذف الحساب";
+"upload_image" = "رفع الصورة";
+"delete_profile" = "حذف الملف الشخصي";
+"are_you_sure_delete_profile" = "هل أنت متأكد أنك تريد حذف ملفك الشخصي؟ لا يمكن التراجع عن هذا الإجراء.";
+"cancel" = "إلغاء";
+"delete" = "حذف";
+"upload" = "رفع";
+
+//MARK:  - UpdateAddressView
+"update_location" = "تحديث الموقع";
+"location_required" = "الموقع مطلوب";
+"open_settings" = "افتح الإعدادات";
+"cancel" = "إلغاء";
+"location_permission_message" = "لإكمال هذا الطلب، نحتاج إلى الوصول إلى موقعك. يرجى تمكين أذونات الموقع في الإعدادات.";
+"detailed_address" = "العنوان التفصيلي";
+"save" = "حفظ";
+
+//MARK: - HomeScreen
+"hello" = "مرحبًا";
+"home" = "الرئيسية";
+"services" = "الخدمات";
+"unknown_location" = "موقع غير معروف";
+
+//MARK: - NursingServicesPage
+"nursing_services" = "خدمات التمريض";
+"no_title" = "بدون عنوان";
+"no_description" = "لا يوجد وصف متاح";
+
+//MARK: - Services
+"service" = "الخدمة";
+"total" = "الإجمالي";
+"continue" = "متابعة";
+"location_required" = "الموقع مطلوب";
+"add_address" = "أضف العنوان";
+"cancel" = "إلغاء";
+"address_permission_message" = "لإكمال هذا الطلب، نحتاج إلى عنوانك.";
+"no_services_available" = "لا توجد خدمات متاحة";
+"error" = "خطأ";
+"retry" = "إعادة المحاولة";
+
+//MARK: - NursesList
+"nurses_list" = "قائمة الممرضات";
+"no_nurses_available" = "لا توجد ممرضات حالياً";
+"error" = "خطأ";
+"retry" = "إعادة المحاولة";
+"no_title" = "بدون عنوان";
+"no_description" = "لا يوجد وصف متاح";
+"unknown_nurse" = "ممرضة غير معروفة";
+"general_care" = "رعاية عامة";
+"reviews" = "المراجعات";
+"create_request" = "إنشاء طلب";
+
+//MARK: - Review RequestScreen
+"review_request" = "مراجعة الطلب";
+"no_title" = "بدون عنوان";
+"no_description" = "لا يوجد وصف متاح";
+"address" = "العنوان";
+"services" = "الخدمات";
+"total" = "الإجمالي";
+"confirm" = "تأكيد";
+
+//MARK: - Orders
+"orders" = "الطلبات";
+"previous_requests" = "الطلبات السابقة";
+"current_request" = "الطلب الحالي";
+"error" = "خطأ";
+"retry" = "إعادة المحاولة";
+"no_orders_available" = "لا توجد طلبات حالياً";
+"no_requests" = "لا توجد طلبات";
+"cancel_current_request" = "إلغاء الطلب الحالي";
+"cancel" = "إلغاء";
+"yes" = "نعم";
+"cancel_request_confirmation" = "هل أنت متأكد أنك تريد إلغاء هذا الطلب؟";
+"within_minutes" = "خلال %d دقيقة";
+"call" = "اتصال";

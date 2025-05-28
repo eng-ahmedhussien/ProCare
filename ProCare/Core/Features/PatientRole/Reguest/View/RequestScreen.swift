@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct RequestScreen: View {
-    
     @StateObject var vm = RequestVM()
     @EnvironmentObject var appRouter: AppRouter
-    
+
     var nurse: Nurse?
     var serviceItems: [ServiceItem] = []
     let profile = AppUserDefaults.shared.getCodable(Profile.self, forKey: .profileData)
-    
+
     var body: some View {
         VStack{
             NurseCell
@@ -23,7 +22,8 @@ struct RequestScreen: View {
             totalRequestView
             Spacer()
             ConfirmButton
-        }.appNavigationBar(title: "Review Request")
+        }
+        .appNavigationBar(title: "review_request".localized())
     }
 }
 
@@ -43,97 +43,87 @@ extension RequestScreen{
                     .frame(width: 70, height: 70)
                     .foregroundColor(.white.opacity(0.6))
             }
-            
+
             VStack(alignment: .leading){
-                Text(nurse?.fullName ?? "No Title")
+                Text(nurse?.fullName ?? "no_title".localized())
                     .font(.headline)
                     .bold()
-                
-                Text(nurse?.specialization ?? "No Description Available")
+
+                Text(nurse?.specialization ?? "no_description".localized())
                     .font(.subheadline)
                     .bold()
-                
+
                 HStack{
                     Text(nurse?.rating ?? "0")
                     Image(systemName: "star.fill")
                         .foregroundColor(.yellow)
                 }
             }
-            
-            Spacer()
 
+            Spacer()
         }.padding()
     }
-    
+
     var addressCell: some View{
-        
         VStack(alignment: .leading){
-            Text("Address")
+            Text("address".localized())
                 .bold()
                 .font(.title2)
-                
+
             Text("\(profile?.governorate ?? "")-\(profile?.city ?? "")-\(profile?.addressNotes ?? "" )")
                 .font(.title3)
                 .foregroundStyle(.gray)
                 .lineLimit(3)
-          
         }
         .alignHorizontally(.leading)
         .padding()
         .backgroundCard(color: .white, cornerRadius: 5, shadowRadius: 0.5, shadowColor: .gray)
         .padding()
-        
     }
-    
+
     var totalRequestView: some View{
-        
-      return  VStack{
-          
-          VStack{
-              Text("Services")
-                  .font(.title2)
-                  .bold()
-                  .alignHorizontally(.leading)
-              
-              ForEach(serviceItems, id: \.id) { result in
-                  HStack{
-                      Text(result.name ?? "" )
-                          .font(.title3)
-                      
-                      Spacer()
-                      
-                      Text("\(result.price ?? 0)")
-                          .font(.title3)
-                          .foregroundStyle(.appPrimary)
-                  }
-              }
-          }
-         
+        VStack{
+            VStack{
+                Text("services".localized())
+                    .font(.title2)
+                    .bold()
+                    .alignHorizontally(.leading)
+
+                ForEach(serviceItems, id: \.id) { result in
+                    HStack{
+                        Text(result.name ?? "" )
+                            .font(.title3)
+
+                        Spacer()
+
+                        Text("\(result.price ?? 0)")
+                            .font(.title3)
+                            .foregroundStyle(.appPrimary)
+                    }
+                }
+            }
+
             Divider()
-              .padding(.horizontal)
-            
+                .padding(.horizontal)
+
             HStack{
-                Text("Total")
+                Text("total".localized())
                     .bold()
                     .font(.title2)
-                   
-                
+
                 Spacer()
-                
+
                 Text("\(serviceItems.reduce(0, { $0 + ($1.price ?? 0) })) EG")
                     .bold()
                     .font(.title2)
-                
             }
-            
         }
-      .padding()
-      .backgroundCard(color: .white, cornerRadius: 5, shadowRadius: 0.5, shadowColor: .gray)
-      .padding()
+        .padding()
+        .backgroundCard(color: .white, cornerRadius: 5, shadowRadius: 0.5, shadowColor: .gray)
+        .padding()
     }
-    
+
     var ConfirmButton: some View {
-        
         let parameters :[String : Any]  = [
             "nurseId": "24998975-118d-4f79-089a-08dd8377516a",
             "patientId": profile?.id ?? 0,
@@ -149,7 +139,7 @@ extension RequestScreen{
                 }
             }
         } label: {
-            Text("Confirm".localized())
+            Text("confirm".localized())
                 .font(.title3)
         }
         .buttonStyle(AppButton(kind: .solid,width: 300 ))

@@ -35,11 +35,11 @@ struct NursingServicesPage: View {
                         }
                         
                         VStack(alignment: .leading){
-                            Text(nursingServices.name ?? "No Title")
+                            Text(nursingServices.name ?? "no_title".localized())
                                 .font(.headline)
                                 .bold()
                             
-                            Text(nursingServices.description ?? "No Description Available")
+                            Text(nursingServices.description ?? "no_description".localized())
                                 .font(.subheadline)
                                 .bold()
                         }
@@ -82,7 +82,7 @@ struct NursingServicesPage: View {
             }
         }
         
-       .appNavigationBar(title: "Nursing")
+       .appNavigationBar(title: "nursing_services")
     }
     
     

@@ -5,7 +5,6 @@
 //  Created by ahmed hussien on 15/05/2025.
 //
 
-
 import SwiftUI
 import CoreLocation
 
@@ -27,7 +26,7 @@ struct OrdersTapScreen: View {
             
             Picker("", selection: $segmentationSelection) {
                 ForEach(ProfileSection.allCases, id: \.self) { option in
-                    Text(option.rawValue)
+                    Text(option.localized)
                 }
             }
             .pickerStyle(SegmentedPickerStyle())
@@ -42,7 +41,6 @@ struct OrdersTapScreen: View {
             }
             Spacer()
         }
-      
         .onAppear{
             Task{
                 await vm.fetchCurrentOrder()
@@ -53,12 +51,15 @@ struct OrdersTapScreen: View {
                 await vm.fetchCurrentOrder()
             }
         }
-        //.background(Color(.systemGray6))
     }
     
     enum ProfileSection : String, CaseIterable {
-        case PreviousRequests = "PreviousRequests"
-        case CurrentRequest = "CurrentRequest"
+        case PreviousRequests = "previous_requests"
+        case CurrentRequest = "current_request"
+        
+        var localized: String {
+            self.rawValue.localized()
+        }
     }
 }
 
@@ -67,7 +68,7 @@ extension OrdersTapScreen{
     var header: some View {
         HStack {
             Spacer()
-            Text("Orders")
+            Text("orders".localized())
                 .font(.title)
                 .foregroundStyle(.white)
             Spacer()
@@ -87,17 +88,16 @@ extension OrdersTapScreen{
               .foregroundColor: UIColor.gray
           ]
           
-        UISegmentedControl.appearance().selectedSegmentTintColor = .appPrimary // Background of selected segment
-          UISegmentedControl.appearance().setTitleTextAttributes(normalAttributes, for: .normal)
-          UISegmentedControl.appearance().setTitleTextAttributes(selectedAttributes, for: .selected)
+        UISegmentedControl.appearance().selectedSegmentTintColor = .appPrimary
+        UISegmentedControl.appearance().setTitleTextAttributes(normalAttributes, for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes(selectedAttributes, for: .selected)
     }
 }
-
 
 #Preview {
     let vm = OrdersVM()
     vm.currentOrder = Order(id: "1", nurseName: "ahmed", nursePicture: "", phoneNumber: "012345678", nurseId: "1", status: "", speciality: "nures", longitude: "", latitude: "", nurseLongitude: "", nurseLatitude: "", createdAt: "1/2/2030", totalPrice: 20)
-   return NavigationStack{
+    return NavigationStack{
         OrdersTapScreen(vm: vm).environmentObject(LocationManager())
     }
 }

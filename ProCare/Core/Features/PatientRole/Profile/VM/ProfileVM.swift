@@ -111,7 +111,7 @@ class ProfileVM: ObservableObject {
             parameters   = [
                 "FirstName": firstName,
                 "LastName": lastName,
-                "BirthDate": dateToString(dateOfBirth ?? .now),
+                "BirthDate": dateOfBirth?.toAPIDateString() ?? "",
                 "GovernorateId": selectedGovernorate ?? 0,
                 "CityId": selectedCity ?? 0,
                 "AddressNotes": addressInDetails,
@@ -205,4 +205,13 @@ func dateToString(_ date: Date, format: String = "yyyy-MM-dd") -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = format
     return formatter.string(from: date)
+}
+
+extension Date {
+    func toAPIDateString() -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: self)
+    }
 }

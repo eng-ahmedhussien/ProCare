@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   ProCare
 
@@ -7,8 +7,32 @@
 */
 
 //MARK: - Auth
-"log in" = "log in";
-
+//log_in
+"hello" = "Hello!";
+"log_in_to_start" = "Log in to start";
+"log_in" = "Log in";
+"create_account" = "Create account";
+"phone_number" = "Phone number";
+"password" = "Password";
+"forget_password" = "Forget password?";
+//sign_up
+"sign_up" = "Sign Up";
+"hello" = "Hello!";
+"create_account" = "Create account";
+"name" = "Name";
+"second_name" = "Second name";
+"phone" = "Phone";
+"password" = "Password";
+"confirm_password" = "Confirm password";
+"have_account" = "Have an account?";
+//NewPasswordScreen
+"new_password" = "New password";
+"confirm_new_password" = "Confirm new password";
+"save" = "Save";
+"reset_password" = "Reset password";
+"phone" = "Phone";
+"forget_password" = "Forget password?";
+"send" = "Send";
 
 //MARK: - Requests
 "Orders" = "Orders";
@@ -18,7 +42,84 @@
 "within_minutes" = "Within %d min";
 "No requests" = "No requests";
 "call the nurse" = "call the nurse";
-
 //MARK: - Report
 "total_requests" = "you should take %d EG";
-
+//MARK: - profile
+"profile" = "Profile";
+"user_info" = "User Info";
+"first_name" = "First Name";
+"last_name" = "Last Name";
+"gender" = "Gender";
+"user_location" = "User location";
+"no_selected" = "No selected";
+"update_profile" = "Update Profile";
+"change_password" = "Change Password";
+"logout" = "Logout";
+"delete_account" = "Delete Account";
+"upload_image" = "Upload Image";
+"delete_profile" = "Delete Profile";
+"are_you_sure_delete_profile" = "Are you sure you want to delete your profile? This action cannot be undone.";
+"cancel" = "Cancel";
+"delete" = "Delete";
+"upload" = "Upload";
+//MARK:  - UpdateAddressView
+"update_location" = "Update Location";
+"location_required" = "Location Required";
+"open_settings" = "Open Settings";
+"cancel" = "Cancel";
+"location_permission_message" = "To complete this request, we need access to your location. Please enable location permissions in Settings.";
+"detailed_address" = "Detailed address";
+"save" = "Save";
+//MARK: - HomeScreen
+"hello" = "Hello";
+"home" = "Home";
+"services" = "Services";
+"unknown_location" = "Unknown location";
+//MARK: - NursingServicesPage
+"nursing_services" = "Nursing Services";
+"no_title" = "No Title";
+"no_description" = "No Description Available";
+//MARK: - Services
+"service" = "Service";
+"total" = "Total";
+"continue" = "Continue";
+"location_required" = "Location Required";
+"add_address" = "Add Address";
+"cancel" = "Cancel";
+"address_permission_message" = "To complete this request, we need your address.";
+"no_services_available" = "No Services Available";
+"error" = "Error";
+"retry" = "Retry";
+//MARK: - NursesList
+"nurses_list" = "Nurses List";
+"no_nurses_available" = "No nurses available at the moment";
+"error" = "Error";
+"retry" = "Retry";
+"no_title" = "No Title";
+"no_description" = "No Description Available";
+"unknown_nurse" = "Unknown Nurse";
+"general_care" = "General Care";
+"reviews" = "Reviews";
+"create_request" = "Create request";
+//MARK: - Review RequestScreen
+"review_request" = "Review Request";
+"no_title" = "No Title";
+"no_description" = "No Description Available";
+"address" = "Address";
+"services" = "Services";
+"total" = "Total";
+"confirm" = "Confirm";
+//MARK: - Orders
+"orders" = "Orders";
+"previous_requests" = "Previous Requests";
+"current_request" = "Current Request";
+"error" = "Error";
+"retry" = "Retry";
+"no_orders_available" = "No orders available at the moment";
+"no_requests" = "No requests";
+"cancel_current_request" = "Cancel current request";
+"cancel" = "Cancel";
+"yes" = "Yes";
+"cancel_request_confirmation" = "Are you sure you want to cancel this request?";
+"within_minutes" = "Within %d minutes";
+"call" = "Call";

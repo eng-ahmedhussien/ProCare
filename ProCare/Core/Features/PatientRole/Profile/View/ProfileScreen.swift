@@ -37,6 +37,7 @@ struct ProfileTapScreen: View {
                 .padding()
                 .backgroundCard(cornerRadius: 10, shadowRadius: 4, shadowColor: .gray, shadowX: 2, shadowY: 2)
                 .padding()
+                .dismissKeyboardOnTap()
                 
                 locationView
                 
@@ -51,17 +52,17 @@ struct ProfileTapScreen: View {
             }
         }
         .photosPicker(isPresented: $openPhotoLibrary, selection: $vm.selectedImage, matching: .images)
-        .alert("Upload Image", isPresented: $vm.showUploadImageAlert) {
-            Button("Cancel", role: .destructive) { }
-            Button("Upload", role: .cancel) {
+        .alert("upload_image".localized(), isPresented: $vm.showUploadImageAlert) {
+            Button("cancel".localized(), role: .destructive) { }
+            Button("upload".localized(), role: .cancel) {
                 Task{
                     await vm.updateProfile(updateKind: .image)
                 }
             }
         }
-        .alert("Delete Profile",isPresented: $showAlertDeleteProfile) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete", role: .destructive) {
+        .alert("delete_profile".localized().localized(),isPresented: $showAlertDeleteProfile) {
+            Button("cancel".localized(), role: .cancel) { }
+            Button("delete".localized(), role: .destructive) {
                 Task {
                     await vm.deleteProfile(){
                         appRouter.popToRoot()
@@ -70,7 +71,7 @@ struct ProfileTapScreen: View {
                 }
             }
         } message: {
-            Text("Are you sure you want to delete your profile? This action cannot be undone.")
+            Text("are_you_sure_delete_profile".localized())
         }
 
     }
@@ -81,11 +82,22 @@ extension ProfileTapScreen{
     var header: some View {
         HStack {
             Spacer()
-            Text("Profile")
+            Text("profile")
                 .padding(5)
                 .font(.title)
                 .foregroundStyle(.white)
             Spacer()
+            Button(action: {
+                if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                    if UIApplication.shared.canOpenURL(appSettings) {
+                        UIApplication.shared.open(appSettings)
+                    }
+                }
+            }) {
+                Image(systemName: "globe")
+                    .foregroundStyle(.white)
+            }
+            .buttonStyle(AppButton(kind: .plain))
         }
         .background(.appPrimary)
     }
@@ -111,7 +123,7 @@ extension ProfileTapScreen{
     var userInfo: some View {
         VStack(spacing: 15){
             HStack {
-                Text("User Info")
+                Text("user_info")
                     .font(.headline)
                 Spacer()
                 Button(action: {
@@ -124,7 +136,7 @@ extension ProfileTapScreen{
             .foregroundStyle(.appPrimary)
             
             HStack {
-                Text("First Name:")
+                Text("first_name".localized() + ":")
                     .font(.body)
                     .foregroundStyle(.black)
                    
@@ -136,7 +148,7 @@ extension ProfileTapScreen{
             }
            
             HStack {
-                Text("Last Name:")
+                Text("last_name".localized() + ":")
                     .font(.body)
                     .foregroundStyle(.black)
                 Spacer()
@@ -148,7 +160,7 @@ extension ProfileTapScreen{
             
             HStack {
                 if isEditingUserInfo {
-                    Picker("Gender", selection: $vm.gender) {
+                    Picker("gender".localized(), selection: $vm.gender) {
                         ForEach(Gender.allCases) { gender in
                             Text(gender.displayName).tag(gender)
                         }
@@ -180,6 +192,8 @@ extension ProfileTapScreen{
                         displayedComponents: .date
                     )
                     .labelsHidden()
+                    .environment(\.locale, Locale(identifier: "en"))
+
                 } else {
                     if let dob = vm.dateOfBirth {
                         Text(dob.formatted(date: .abbreviated, time: .omitted))
@@ -197,7 +211,7 @@ extension ProfileTapScreen{
     var locationView: some View {
         VStack(spacing: 15){
             HStack {
-                Text("User location")
+                Text("user_location")
                     .font(.headline)
                 Spacer()
                 
@@ -225,7 +239,7 @@ extension ProfileTapScreen{
     @ViewBuilder
     var buttons: some View {
         if isEditingUserInfo {
-            Button("Update Profile") {
+            Button("update_profile".localized()) {
                 withAnimation {
                     isEditingUserInfo = false
                 }
@@ -241,20 +255,20 @@ extension ProfileTapScreen{
             VStack() {
                 
                 HStack{
-                    Button("change Password".localized()) {
+                    Button("change_password".localized()) {
 
                     }
                     .foregroundStyle(.appPrimary)
                     .buttonStyle(AppButton(kind: .border,width: screenWidth / 2.7))
                     
-                    Button("Logout".localized()) {
+                    Button("logout".localized()) {
                         appRouter.popToRoot()
                         authManager.logout()
                     }
                     .buttonStyle(AppButton(kind: .solid,width: screenWidth / 2.7))
                 }
                 
-                Button("Delete Account".localized()) {
+                Button("delete_account".localized()) {
                     self.showAlertDeleteProfile.toggle()
                 }
                 .padding()
