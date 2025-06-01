@@ -259,13 +259,13 @@ extension ProfileTapScreen{
 
                     }
                     .foregroundStyle(.appPrimary)
-                    .buttonStyle(AppButton(kind: .border,width: screenWidth / 2.7))
+                    .buttonStyle(AppButton(kind: .border))
                     
                     Button("logout".localized()) {
                         appRouter.popToRoot()
                         authManager.logout()
                     }
-                    .buttonStyle(AppButton(kind: .solid,width: screenWidth / 2.7))
+                    .buttonStyle(AppButton(kind: .solid))
                 }
                 
                 Button("delete_account".localized()) {

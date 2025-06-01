@@ -53,9 +53,9 @@ struct OrderCellView: View {
     }
 }
 
-#Preview {
-    VStack{
-        OrderCellView(order: MockManger.shared.orderMockModel)
-    }
-}
+//#Preview {
+//    VStack{
+//        OrderCellView(order: MockManger.shared.orderMockModel)
+//    }
+//}
 

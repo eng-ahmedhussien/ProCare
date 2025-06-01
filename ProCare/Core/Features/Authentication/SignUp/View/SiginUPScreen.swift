@@ -69,8 +69,9 @@ extension SignUPScreen {
             Text("sign_up".localized())
                 .font(.title3)
         }
-        .buttonStyle(AppButton(kind: .solid,width: 300,disabled: !isFormValid))
+        .buttonStyle(AppButton(kind: .solid,disabled: !isFormValid))
         .disabled(!isFormValid)
+        .padding(.horizontal)
     }
     
     var haveAccountButton: some View {

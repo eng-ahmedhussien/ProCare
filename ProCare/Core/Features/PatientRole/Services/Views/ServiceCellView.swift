@@ -68,6 +68,6 @@ struct ServiceCellView: View {
     }
 }
 
-#Preview {
-    ServiceCellView(service: MockManger.shared.serviceMockModel, selectedServices: .constant([]))
-}
+//#Preview {
+//    ServiceCellView(service: MockManger.shared.serviceMockModel, selectedServices: .constant([]))
+//}

@@ -52,7 +52,7 @@ struct NurseCellView: View {
     }
 }
 
-#Preview {
-    NurseCellView(nurse: MockManger.shared.nurseMockModel)
-}
+//#Preview {
+//    NurseCellView(nurse: MockManger.shared.nurseMockModel)
+//}
 

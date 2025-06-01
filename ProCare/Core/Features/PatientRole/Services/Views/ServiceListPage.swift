@@ -103,7 +103,8 @@ extension ServiceListPage{
                 Text("continue")
                     .font(.title3)
             }
-            .buttonStyle(AppButton(kind: .solid,width: 300, disabled: vm.selectedServices.isEmpty))
+            .buttonStyle(AppButton(kind: .solid, disabled: vm.selectedServices.isEmpty))
+            .padding(.horizontal)
         }
         .background(Color(.systemBackground))
         .shadow(color: Color.black.opacity(0.1), radius: 5, y: -1)
@@ -142,6 +143,6 @@ extension ServiceListPage{
 #Preview {
     let mockVM = ServiceVM()
     mockVM.paginationViewState = .loaded
-    mockVM.serviceItem = MockManger.shared.serviceListMockModel
-    return ServiceListPage().environmentObject(ServiceVM())
+    mockVM.serviceItem = ServiceItem.mockServices
+    return ServiceListPage().environmentObject(mockVM)
 }

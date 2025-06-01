@@ -62,6 +62,7 @@ struct LoginScreen: View {
                 }
                 .buttonStyle(AppButton(kind: .solid,width: 300 ,disabled: !isFormValid))
                 .disabled(!isFormValid)
+                .padding(.horizontal)
                 
                 Button {
                     appRouter.presentFullScreenCover(.signUp)

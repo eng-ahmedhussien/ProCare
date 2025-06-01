@@ -62,7 +62,8 @@ struct NuresProfileScreen: View {
                     Text("update my location")
                         .bold()
                 }
-            }.buttonStyle(AppButton(kind: .border,width: width))
+            }
+            .buttonStyle(AppButton(kind: .border))
 
             // Logout Button
             Button(action: {
@@ -74,7 +75,8 @@ struct NuresProfileScreen: View {
                     Text("logout")
                         .bold()
                 }
-            }.buttonStyle(AppButton(kind: .solid,width: width))
+            }
+            .buttonStyle(AppButton(kind: .solid))
 
             Spacer()
         }

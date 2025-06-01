@@ -32,11 +32,13 @@ struct AppButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         let isPressed = configuration.isPressed
         return configuration.label
-            .frame(width: width, height: height)
             .padding()
+            .frame(height: height)
+            .frame(maxWidth: .infinity)
             .foregroundColor(foregroundColor)
             .background(background(isPressed: isPressed, color: backgroundColor))
             .cornerRadius(10)
+            .padding(.horizontal,5)
             .opacity(disabled ? 0.6 : 1.0)
     }
 

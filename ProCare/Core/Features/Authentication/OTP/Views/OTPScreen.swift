@@ -149,8 +149,9 @@ extension OTPScreen {
                     .foregroundColor(.white)
             }
         }
-        .buttonStyle(AppButton(kind: .solid,width: 300,disabled: pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty))
+        .buttonStyle(AppButton(kind: .solid,disabled: pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty))
         .disabled(pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty)
+        .padding(.horizontal)
     }
 }
 

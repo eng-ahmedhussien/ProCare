@@ -159,10 +159,10 @@ struct NursesListScreen: View {
 }
 
 
-#Preview {
-    let mockVM = NursesVM()
-    mockVM.nurseList = MockManger.shared.NursesListMockModel
-    return NursesListScreen(vm: mockVM)
-}
+//#Preview {
+//    let mockVM = NursesVM()
+//    mockVM.nurseList = MockManger.shared.NursesListMockModel
+//    return NursesListScreen(vm: mockVM)
+//}
 
 

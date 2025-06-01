@@ -143,6 +143,7 @@ extension RequestScreen{
                 .font(.title3)
         }
         .buttonStyle(AppButton(kind: .solid,width: 300 ))
+        .padding(.horizontal)
     }
 }
 

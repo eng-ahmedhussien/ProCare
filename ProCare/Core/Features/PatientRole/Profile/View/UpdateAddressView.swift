@@ -78,7 +78,7 @@ extension UpdateAddressView {
     }
     
     var saveButton: some View {
-        Button(action: {
+        Button("save") {
             if locationManager.isPermissionDenied {
                 showLocationAlert.toggle()
             }else{
@@ -90,11 +90,9 @@ extension UpdateAddressView {
                     appRouter.pop()
                 }
             }
-        }) {
-            Text("save".localized())
         }
-        .buttonStyle(AppButton(kind: .solid,width: 300))
-    
+        .buttonStyle(AppButton(kind: .solid))
+        .padding(.horizontal)
     }
 }
 

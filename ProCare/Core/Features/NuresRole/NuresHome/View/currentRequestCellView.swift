@@ -106,7 +106,7 @@ extension currentRequestCellView{
                 } label: {
                     HStack {
                         Text("Finish Request".localized())
-                    }.frame(maxWidth: .infinity)
+                    }//.frame(maxWidth: .infinity)
                 }
                 .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))
             }
@@ -118,7 +118,7 @@ extension currentRequestCellView{
                 } label: {
                     HStack {
                         Text("accept".localized())
-                    }.frame(width: buttonWidth)
+                    }//.frame(width: buttonWidth)
                 }
                 .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))
                 
@@ -129,7 +129,7 @@ extension currentRequestCellView{
                         Image(systemName: "xmark")
                         Text("reject".localized())
                     }
-                    .frame(width: buttonWidth)
+                   // .frame(width: buttonWidth)
                     //.frame(maxWidth: .infinity)
                 }
                 .buttonStyle(AppButton(kind: .solid,backgroundColor: .red))
