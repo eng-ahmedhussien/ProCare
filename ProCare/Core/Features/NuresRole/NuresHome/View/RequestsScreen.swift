@@ -78,10 +78,6 @@ extension RequestsScreen{
                         .font(.title)
                         .foregroundColor(.white)
                 }
-                .onTapGesture {
-                    appRouter.pushView(logout())
-                }
-                
                 HStack {
                     Image(.location)
                     Text("\(locationManger.address)")
@@ -94,6 +90,9 @@ extension RequestsScreen{
         }
         .padding()
         .background(.appPrimary)
+        .onTapGesture{
+            appRouter.pushView(NuresProfileScreen())
+        }
     }
 }
 
@@ -116,15 +115,4 @@ extension RequestsScreen{
 
 #Preview {
     return RequestsScreen()
-}
-
-
-struct logout: View {
-    @EnvironmentObject var authManager: AuthManager
-    var body: some View {
-        Text("Logout")
-            .onTapGesture {
-                authManager.logout()
-            }
-    }
 }

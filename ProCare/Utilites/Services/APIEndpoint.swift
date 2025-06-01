@@ -27,49 +27,45 @@ extension APIEndpoint {
         return url
     }
     
+    var headers: HTTPHeader? { .default }
+    
     var task: Parameters { .requestNoParameters }
     
-    var headers: HTTPHeader? { HTTPHeader.default }
+   
     
     func asURLRequest() throws -> URLRequest {
-        var baseRequestURL = baseURL
-        baseRequestURL.appendPathComponent(path)
-
-        guard var urlComponents = URLComponents(url: baseRequestURL, resolvingAgainstBaseURL: false) else {
-            throw APIResponseError(type: nil, title: "Invalid URL", status: 10, errors: ["URL": ["Cannot create components"]], traceId: nil)
-        }
-
-        var request = URLRequest(url: baseRequestURL)
+        var url = baseURL.appendingPathComponent(path)
+        var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
-
+        
         // Set headers
         headers?.values.forEach { key, value in
             request.addValue(value, forHTTPHeaderField: key)
         }
-
-        // Handle task
+        
+        // Handle parameters
         switch task {
         case .requestNoParameters:
             break
-
         case .requestParameters(let parameters, let encoding):
             try encodeRequest(&request, parameters: parameters, encoding: encoding)
 
         case .requestWithMultipart(let parameters, let multipartType):
             try encodeMultipartRequest(&request, parameters: parameters, multipart: multipartType)
-
         case .requestWithQueryAndBody(let query, let body, let encoding):
-            // Append query items to URL
-            urlComponents.queryItems = query.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
-            if let updatedURL = urlComponents.url {
-                request.url = updatedURL
-            }
-
-            // Encode body
-            try encodeRequest(&request, parameters: body, encoding: encoding)
+                   request.url = appendQueryItems(to: url, query: query)
+                   try encodeRequest(&request, parameters: body, encoding: encoding)
         }
-
         return request
+    }
+    
+    private func appendQueryItems(to url: URL, query: [String: Any]) -> URL {
+        guard !query.isEmpty,
+              var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return url
+        }
+        components.queryItems = query.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
+        return components.url ?? url
     }
 
 }

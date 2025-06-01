@@ -23,7 +23,6 @@ struct OrdersTapScreen: View {
     var body: some View {
         VStack{
             header
-            
             Picker("", selection: $segmentationSelection) {
                 ForEach(ProfileSection.allCases, id: \.self) { option in
                     Text(option.localized)

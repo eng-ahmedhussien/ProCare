@@ -35,7 +35,7 @@ struct currentRequestCellView: View {
         }
         .alert("Rejection request", isPresented: $showRejectAlert) {
             Button("Cancel", role: .destructive) { }
-            Button("Reject", role: .cancel) {
+            Button("Yes", role: .cancel) {
                 Task{
                     await vm.rejectRequest(id: vm.currentRequest?.id ?? "")
                 }
