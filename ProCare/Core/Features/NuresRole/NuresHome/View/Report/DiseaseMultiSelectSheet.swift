@@ -9,6 +9,7 @@ import SwiftUI
 struct DiseaseMultiSelectSheet: View {
     let allDiseases: [Disease]
     @Binding var selectedDiseases: [Disease]
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationView {
@@ -33,6 +34,13 @@ struct DiseaseMultiSelectSheet: View {
             }
             .listStyle(.plain)
             .navigationTitle("Select Diseases")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        dismiss()
+                    }.foregroundStyle(.appPrimary)
+                }
+            }
         }
     }
 }

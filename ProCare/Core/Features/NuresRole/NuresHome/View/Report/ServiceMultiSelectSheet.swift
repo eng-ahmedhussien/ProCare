@@ -9,6 +9,7 @@ import SwiftUI
 struct ServiceMultiSelectSheet: View {
     let allServices: [ServiceItem]
     @Binding var selectedServices: [ServiceItem]
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationView {
@@ -43,10 +44,16 @@ struct ServiceMultiSelectSheet: View {
             }
             .listStyle(.plain)
             .navigationTitle("Select Services")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        dismiss()
+                    }.foregroundStyle(.appPrimary)
+                }
+            }
         }
     }
 }
-
 #Preview {
     ServiceMultiSelectSheet(allServices: ServiceItem.mockServices, selectedServices: .constant([]))
 }

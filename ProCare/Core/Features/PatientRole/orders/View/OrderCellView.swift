@@ -38,6 +38,10 @@ struct OrderCellView: View {
                     .font(.callout)
                     .foregroundStyle(.gray)
                 
+                Text("\(order.totalPrice ?? 0) EGP")
+                    .font(.callout)
+                    .foregroundStyle(.gray)
+                
                 Text(order.status ?? "")
                     .font(.callout)
                     .foregroundStyle(order.status == "Completed" ? .green : .red)
@@ -53,9 +57,9 @@ struct OrderCellView: View {
     }
 }
 
-//#Preview {
-//    VStack{
-//        OrderCellView(order: MockManger.shared.orderMockModel)
-//    }
-//}
+#Preview {
+    VStack{
+        OrderCellView(order:Order.mock)
+    }
+}
 

@@ -10,6 +10,7 @@ import SwiftUI
 struct NursingServicesPage: View {
     @StateObject var serviceVM = ServiceVM()
     @EnvironmentObject var vm : HomeVM
+    @EnvironmentObject var ordersVM: OrdersVM
     @EnvironmentObject var appRouter: AppRouter
     @State private var isLoading = true
     var id  = 0
@@ -53,10 +54,14 @@ struct NursingServicesPage: View {
                         }else {
                             switch nursingServices.id {
                             case 1 :
-                                appRouter.pushView(
-                                    ServiceListPage(id: nursingServices.id ?? 0)
-                                        .environmentObject(serviceVM)
-                                )
+                                if let order =  ordersVM.currentOrder{
+                                    showAppMessage("you have currently request with id \(order.id ?? "")", appearance: .error)
+                                }else{
+                                    appRouter.pushView(
+                                        ServiceListPage(id: nursingServices.id ?? 0)
+                                            .environmentObject(serviceVM)
+                                    )
+                                }
                             case 2 :
                                 debugPrint(nursingServices.name ?? "")
                             default:
@@ -74,6 +79,7 @@ struct NursingServicesPage: View {
         .onAppear {
                 Task {
                     await loadData()
+                    await ordersVM.fetchCurrentOrder()
                 }
         }
         .refreshable {

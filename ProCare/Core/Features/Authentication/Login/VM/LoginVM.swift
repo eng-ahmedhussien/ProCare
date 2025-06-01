@@ -29,7 +29,8 @@ class LoginVM: ObservableObject {
         viewState = .loading
         let parameter = [
             "phoneNumber": phone,
-            "password": password
+            "password": password,
+            "DeviceToken": "DeviceToken"
         ]
         
         do {

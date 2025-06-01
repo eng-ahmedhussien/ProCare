@@ -96,8 +96,7 @@ extension LoginScreen {
                     .foregroundStyle(.appPrimary)
             }
             .font(.callout)
-            .padding()
-            .buttonStyle(AppButton(kind: .plain))
+            .padding(.horizontal)
             
             Spacer()
         }

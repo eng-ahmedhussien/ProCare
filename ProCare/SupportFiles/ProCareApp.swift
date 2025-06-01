@@ -14,6 +14,7 @@ struct ProCareApp: App {
     @StateObject var appPopUpManger: AppPopUp = AppPopUp()
     @StateObject var locationManager = LocationManager()
     @StateObject var profileVM = ProfileVM()
+    @StateObject var ordersVM =  OrdersVM()
     @StateObject var toastManager = ToastManager.shared
     @State private var isLoading = true
     @Environment(\.colorScheme) var colorScheme
@@ -31,6 +32,7 @@ struct ProCareApp: App {
                         .implementPopupView(using: appPopUpManger)
                         .id(authManager.isLoggedIn)
                         .environmentObject(profileVM)
+                        .environmentObject(ordersVM)
                         .toastView(toast: $toastManager.toast)
                 }
             }           

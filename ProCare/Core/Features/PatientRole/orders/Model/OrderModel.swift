@@ -65,11 +65,29 @@ extension Order {
            }
 
            let displayFormatter = DateFormatter()
-           displayFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // Add 'a' for AM/PM
+          // displayFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // Add 'a' for AM/PM
            displayFormatter.locale = Locale.current               // Localized
            displayFormatter.timeZone = TimeZone.current           // Device timezone
+           displayFormatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd hmma")
 
            return displayFormatter.string(from: date)
     }
 }
 
+extension Order {
+    static let mock: Order = Order(
+        id: "1",
+        nurseName: "Jane Doe",
+        nursePicture: "https://example.com/nurse.jpg",
+        phoneNumber: "1234567890",
+        nurseId: "nurse_001",
+        status: "active",
+        speciality: "Pediatrics",
+        longitude: "31.2357",
+        latitude: "30.0444",
+        nurseLongitude: "31.2400",
+        nurseLatitude: "30.0500",
+        createdAt: "2024-06-01T12:34:56.1234567",
+        totalPrice: 200
+    )
+}

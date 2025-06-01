@@ -72,7 +72,13 @@ extension currentOrderCellView{
                             .font(.caption)
                     }
                 }
+                
+                Text("\(order.totalPrice ?? 0) EGP")
+                    .font(.callout)
+                    .foregroundStyle(.gray)
             }
+            
+             
 
             Spacer()
         }
@@ -108,7 +114,7 @@ extension currentOrderCellView{
 }
 
 #Preview {
-    VStack{
-        currentOrderCellView(vm: OrdersVM())
-    }
+        var vm = OrdersVM()
+        vm.currentOrder = Order.mock
+        return currentOrderCellView(vm: vm)
 }
