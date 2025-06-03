@@ -13,7 +13,6 @@ struct UpdateAddressView: View {
     @EnvironmentObject var vm: ProfileVM
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var appRouter: AppRouter
-    @EnvironmentObject var appPopUp: AppPopUp
   
     @Environment(\.openURL) var openURL
     @State private var showLocationAlert = false
@@ -87,6 +86,17 @@ extension UpdateAddressView {
                     let lat = String(location.coordinate.latitude)
                     let lon = String(location.coordinate.longitude)
                     await vm.updateProfile(updateKind: .location, latitude: lat, longitude: lon)
+                   // showToast("update location successfuly", appearance: .success)
+                    showToast("update location successfuly", appearance: .success,position: .center)
+//                    showPopup {
+//                        VStack{
+//                            Image(systemName: "checkmark")
+//                                .resizable()
+//                                .frame(width: 50, height: 50, alignment: .center)
+//                            
+//                            Text("update location successfuly")
+//                        }
+//                    }
                     appRouter.pop()
                 }
             }

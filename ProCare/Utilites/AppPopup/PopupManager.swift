@@ -4,7 +4,7 @@
 //
 //  Created by ahmed hussien on 01/06/2025.
 //
-
+import SwiftUI
 
 final class PopupManager: ObservableObject {
     static let shared = PopupManager()
@@ -19,8 +19,8 @@ final class PopupManager: ObservableObject {
         alert = AlertData(title: title, message: message, button: button, action: action)
     }
 
-    func showToast(message: String, style: ToastStyle, duration: TimeInterval = 3.0) {
-        toast = ToastData(style: style, message: message, duration: duration)
+    func showToast(message: String, style: ToastStyle, duration: TimeInterval = 3.0,position: ToastPosition) {
+        toast = ToastData(style: style, message: message, duration: duration,position: position)
     }
 
     func showCustomPopup<Content: View>(@ViewBuilder content: () -> Content) {

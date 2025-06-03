@@ -1,3 +1,11 @@
+//
+//  PopupHostModifier.swift
+//  ProCare
+//
+//  Created by ahmed hussien on 01/06/2025.
+//
+
+
 import SwiftUI
 
 struct PopupHostModifier: ViewModifier {
@@ -8,17 +16,6 @@ struct PopupHostModifier: ViewModifier {
         ZStack {
             content
 
-//            if let toast = popupManager.toast, showToast {
-//                PopToastView(toast: toast)
-//                    .onAppear {
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + toast.duration) {
-//                            withAnimation {
-//                                showToast = false
-//                                popupManager.toast = nil
-//                            }
-//                        }
-//                    }
-//            }
             if let toast = popupManager.toast, showToast {
                 PopToastView(toast: toast) {
                     withAnimation {
@@ -70,4 +67,15 @@ extension View {
     }
 }
 
+
+// MARK: - Global function for showing a toast
+func showToast(_ message: String, appearance: ToastStyle, position: ToastPosition = .top) {
+    PopupManager.shared.showToast(message: message, style: appearance, position: position)
+}
+
+func showPopup<Content: View>(@ViewBuilder content: () -> Content) {
+    PopupManager.shared.showCustomPopup {
+            AnyView(content())
+    }
+}
 

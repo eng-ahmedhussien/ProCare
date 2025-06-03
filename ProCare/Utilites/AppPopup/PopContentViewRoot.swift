@@ -1,3 +1,11 @@
+//
+//  PopContentViewRoot.swift
+//  ProCare
+//
+//  Created by ahmed hussien on 01/06/2025.
+//
+
+
 import SwiftUI
 
 struct PopContentViewRoot: View {
@@ -22,7 +30,7 @@ struct PopContentView: View {
                 PopupManager.shared.showAlert(title: "Global Alert", message: "This alert can be triggered from anywhere!")
             }
             Button("Show Global Toast") {
-                PopupManager.shared.showToast(message: "This is a toast!", style: .success, duration: 3.0)
+                PopupManager.shared.showToast(message: "This is a toast!", style: .success, duration: 3.0, position: .center)
             }
             Button("Show Custom Popup") {
                 PopupManager.shared.showCustomPopup {

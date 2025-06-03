@@ -30,13 +30,13 @@ class NuresProfileVM: ObservableObject {
         do {
             let response = try await apiClient.updateLocation(parameters: parameters)
             if let _ = response.data {
-                showAppMessage("Location updated successfully!", appearance: .success)
+                showToast("Location updated successfully!", appearance: .success)
 
             } else {
                 debugPrint("Response received but no user data")
             }
         } catch {
-            showAppMessage("Unexpected error: \(error.localizedDescription)", appearance: .error)
+            showToast("Unexpected error: \(error.localizedDescription)", appearance: .error)
         }
     }
     
@@ -49,7 +49,7 @@ class NuresProfileVM: ObservableObject {
                 debugPrint("Response received but no user data")
             }
         } catch {
-            showAppMessage("Unexpected error: \(error.localizedDescription)", appearance: .error)
+            showToast("Unexpected error: \(error.localizedDescription)", appearance: .error)
         }
     }
 }

@@ -1,3 +1,11 @@
+//
+//  PopToastView.swift
+//  ProCare
+//
+//  Created by ahmed hussien on 01/06/2025.
+//
+
+
 
 import SwiftUI
 
@@ -12,10 +20,11 @@ struct PopToastView: View {
             if toast.position == .top {
                 toastBody
             }
-            Spacer()
-            if toast.position == .bottom {
-                toastBody
+           // Spacer()
+            if toast.position == .center {
+                toastCenterBody
             }
+            Spacer()
         }
     }
 
@@ -58,6 +67,28 @@ struct PopToastView: View {
         .transition(.move(edge: .top).combined(with: .opacity))
         .zIndex(100)
     }
+    
+    private var toastCenterBody: some View {
+        VStack {
+            
+            Image(systemName: "checkmark")
+                .resizable()
+                .frame(width: 50, height: 50, alignment: .center)
+            
+            Text(toast.message)
+                .font(.title2)
+                .foregroundColor(.black)
+        }
+        .frame(maxWidth: 200)
+        .padding()
+        .background(.ultraThinMaterial)
+        .cornerRadius(20)
+        
+       // .frame(maxWidth: toast.width)
+      //  .background(toast.style.themeColor)
+        .transition(.move(edge: .bottom).combined(with: .opacity))
+        //.zIndex(100)
+    }
 }
 
 
@@ -77,12 +108,12 @@ enum ToastStyle {
 }
 
 enum ToastPosition {
-    case top, bottom
+    case top, center
 }
 
 
 #Preview {
     VStack{
-        PopToastView(toast: ToastData(style: .success, message: "sccuess", duration: 3, width: .infinity, position: .top))
+        PopToastView(toast: ToastData(style: .success, message: "sccuess", duration: 3, width: .infinity, position: .center))
     }
 }

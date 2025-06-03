@@ -96,7 +96,7 @@ extension ProfileTapScreen{
             }) {
                 Image(systemName: "globe")
                     .foregroundStyle(.white)
-            }
+            }.padding(.horizontal)
             
         }
         .background(.appPrimary)

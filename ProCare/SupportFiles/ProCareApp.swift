@@ -11,11 +11,9 @@ import SwiftUI
 struct ProCareApp: App {
     @StateObject var authManager = AuthManager()
     @StateObject var appRouter: AppRouter = AppRouter()
-    @StateObject var appPopUpManger: AppPopUp = AppPopUp()
     @StateObject var locationManager = LocationManager()
     @StateObject var profileVM = ProfileVM()
     @StateObject var ordersVM =  OrdersVM()
-    @StateObject var toastManager = ToastManager.shared
     @State private var isLoading = true
     @Environment(\.colorScheme) var colorScheme
 
@@ -29,11 +27,11 @@ struct ProCareApp: App {
                         .environmentObject(authManager)
                         .environmentObject(appRouter)
                         .environmentObject(locationManager)
-                        .implementPopupView(using: appPopUpManger)
                         .id(authManager.isLoggedIn)
                         .environmentObject(profileVM)
                         .environmentObject(ordersVM)
-                        .toastView(toast: $toastManager.toast)
+                        .popupHost()
+      
                 }
             }           
             .background(colorScheme == .dark ? Color(.secondarySystemBackground) : Color.clear)

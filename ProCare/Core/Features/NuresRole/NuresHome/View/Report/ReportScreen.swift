@@ -167,7 +167,7 @@ extension ReportScreen{
                 await  vm.addOrUpdateReport{ data in
                     if data {
                         showTotal.toggle()
-                        showAppMessage("Report Added successfully", appearance: .success)
+                        showToast("Report Added successfully", appearance: .success)
                     }
                 }
             }

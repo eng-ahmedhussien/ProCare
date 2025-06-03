@@ -52,27 +52,27 @@ class LoginVM: ObservableObject {
                         }
                     case .InValidCredintials:
                         debugPrint("InValidCredintials")
-                        showAppMessage("InValidCredintials", appearance: .error, position: .top)
+                        showToast("InValidCredintials", appearance: .error, position: .top)
                     case .UserLockedOut:
                         debugPrint("UserLockedOut")
                     case .UserNotConfirmed:
                         completion(.userNotConfirmed)
                     case .Error:
                         debugPrint("Error")
-                        showAppMessage("Error", appearance: .error, position: .top)
+                        showToast("Error", appearance: .error, position: .top)
                     case .none:
                         debugPrint("none")
-                        showAppMessage("none", appearance: .error, position: .top)
+                        showToast("none", appearance: .error, position: .top)
                     }
                     
                 } else {
-                    showAppMessage("Response received but no user data", appearance: .error, position: .top)
+                    showToast("Response received but no user data", appearance: .error, position: .top)
                     debugPrint("Response received but no user data")
                 }
             }
         } catch let APIError{
             await MainActor.run {
-                showAppMessage("Unexpected error: \(APIError.localizedDescription)", appearance: .error, position: .top)
+                showToast("Unexpected error: \(APIError.localizedDescription)", appearance: .error, position: .top)
                 debugPrint("Unexpected error: \(APIError.localizedDescription)")
             }
         }

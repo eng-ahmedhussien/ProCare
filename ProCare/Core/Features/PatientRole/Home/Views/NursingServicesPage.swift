@@ -55,7 +55,7 @@ struct NursingServicesPage: View {
                             switch nursingServices.id {
                             case 1 :
                                 if let order =  ordersVM.currentOrder{
-                                    showAppMessage("you have currently request with id \(order.id ?? "")", appearance: .error)
+                                    showToast("you have currently request with id \(order.id ?? "")", appearance: .error)
                                 }else{
                                     appRouter.pushView(
                                         ServiceListPage(id: nursingServices.id ?? 0)

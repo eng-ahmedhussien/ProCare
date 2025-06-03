@@ -26,14 +26,14 @@ class RequestVM: ObservableObject {
             let response = try await apiClient.submitRequest(Parameters: Parameters)
             switch response.status {
             case .Success:
-                showAppMessage("request crated", appearance: .success, position: .top)
+                showToast("request crated", appearance: .success, position: .top)
                 completion()
             case .Error:
-                showAppMessage(response.message, appearance: .error, position: .top)
+                showToast(response.message, appearance: .error, position: .top)
             case .AuthFailure:
-                showAppMessage(response.message, appearance: .error, position: .top)
+                showToast(response.message, appearance: .error, position: .top)
             case .Conflict:
-                showAppMessage(response.message, appearance: .error, position: .top)
+                showToast(response.message, appearance: .error, position: .top)
             }
            
         } catch {
