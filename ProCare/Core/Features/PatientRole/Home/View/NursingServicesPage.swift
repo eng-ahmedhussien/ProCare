@@ -93,7 +93,7 @@ struct NursingServicesPage: View {
     
     
     private func loadData() async {
-        await vm.getSubCategories(id: id)
+        vm.fetchSubCategories(for: id)
         isLoading = false
     }
 }
