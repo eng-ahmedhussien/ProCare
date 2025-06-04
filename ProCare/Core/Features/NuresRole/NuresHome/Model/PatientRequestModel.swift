@@ -49,9 +49,10 @@ extension Request{
         }
         
         let displayFormatter = DateFormatter()
-        displayFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // Add 'a' for AM/PM
+//        displayFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // Add 'a' for AM/PM
         displayFormatter.locale = Locale.current               // Localized
         displayFormatter.timeZone = TimeZone.current           // Device timezone
+        displayFormatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd hmma")
         
         return displayFormatter.string(from: date)
     }

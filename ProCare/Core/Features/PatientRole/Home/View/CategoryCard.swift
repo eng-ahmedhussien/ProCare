@@ -1,3 +1,11 @@
+//
+//  CategoryCard.swift
+//  ProCare
+//
+//  Created by ahmed hussien on 04/06/2025.
+//
+import SwiftUI
+
 struct CategoryCard: View {
     let category: Category
     let onTap: () -> Void
@@ -6,27 +14,40 @@ struct CategoryCard: View {
         Button(action: {
             onTap()
         }) {
-            HStack(spacing: 8) {
+            HStack(alignment: .top,spacing: 10) {
                 AppImage(
                     urlString: category.imageUrl ?? "",
-                    width: 50,
-                    height: 50
-                 
+                    width: 100,
+                    height: 100,
+                    backgroundColor: .clear
                 )
-                .foregroundStyle(.appPrimary)
                 
-                Text(category.name ?? "Unknown Category")
-                    .font(.headline)
-                    .foregroundStyle(.appPrimary)
+                VStack(alignment: .leading, spacing: 5){
+                    Text(category.name ?? "Unknown Category")
+                        .font(.headline)
+                        .foregroundStyle(.appPrimary)
+                    
+                    Text(category.description ?? "No description available")
+                        .font(.headline)
+                        .foregroundStyle(.appSecode)
+                }
+               
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(.service)
-                    .shadow(radius: 2)
+            .backgroundCard(
+                color: .service,
+                cornerRadius: 12,
+                shadowRadius: 2
             )
+           
         }
         .buttonStyle(.plain)
     }
 }
+
+#if DEBUG
+#Preview {
+    CategoryCard(category: Category.mockCategorie, onTap: {})
+}
+#endif

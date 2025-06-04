@@ -33,33 +33,33 @@ struct currentRequestCellView: View {
                 AppEmptyView()
             }
         }
-        .alert("Rejection request", isPresented: $showRejectAlert) {
-            Button("Cancel", role: .destructive) { }
-            Button("Yes", role: .cancel) {
+        .alert("rejection_request".localized(), isPresented: $showRejectAlert) {
+            Button("cancel".localized(), role: .destructive) { }
+            Button("yes".localized(), role: .cancel) {
                 Task{
                     await vm.rejectRequest(id: vm.currentRequest?.id ?? "")
                 }
             }
         } message: {
-            Text("Are you sure you want to reject this request?")
+            Text("are_you_sure_reject".localized())
         }
-        .alert("approve request", isPresented: $showApproveAlert) {
-            Button("Cancel", role: .destructive) { }
-            Button("approve", role: .cancel) {
+        .alert("approve_request".localized(), isPresented: $showApproveAlert) {
+            Button("cancel".localized(), role: .destructive) { }
+            Button("approve".localized(), role: .cancel) {
                 Task{
                     await vm.approveRequest(id: vm.currentRequest?.id ?? "")
                 }
             }
         } message: {
-            Text("Are you sure you want to approve this request?")
+            Text("are_you_sure_approve".localized())
         }
-        .alert("Finish request", isPresented: $showFinishAlert) {
-            Button("Cancel", role: .destructive) { }
-            Button("Finish", role: .cancel) {
+        .alert("finish_request".localized(), isPresented: $showFinishAlert) {
+            Button("cancel".localized(), role: .destructive) { }
+            Button("finish".localized(), role: .cancel) {
                 appRouter.pushView(ReportScreen(vm: vm))
             }
         } message: {
-            Text("Are you sure you want to Finish this request?")
+            Text("are_you_sure_finish".localized())
         }
 
     }
@@ -105,7 +105,7 @@ extension currentRequestCellView{
                     showFinishAlert.toggle()
                 } label: {
                     HStack {
-                        Text("Finish Request".localized())
+                        Text("finish_request".localized())
                     }//.frame(maxWidth: .infinity)
                 }
                 .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))

@@ -131,3 +131,18 @@
 "cancel_request_confirmation" = "هل أنت متأكد أنك تريد إلغاء هذا الطلب؟";
 "within_minutes" = "خلال %d دقيقة";
 "call" = "اتصال";
+//MARK: - request
+"rejection_request" = "رفض الطلب";
+"cancel" = "إلغاء";
+"yes" = "نعم";
+"are_you_sure_reject" = "هل أنت متأكد أنك تريد رفض هذا الطلب؟";
+"approve_request" = "الموافقة على الطلب";
+"approve" = "موافقة";
+"are_you_sure_approve" = "هل أنت متأكد أنك تريد الموافقة على هذا الطلب؟";
+"finish_request" = "إنهاء الطلب";
+"finish" = "إنهاء";
+"are_you_sure_finish" = "هل أنت متأكد أنك تريد إنهاء هذا الطلب؟";
+"finish_request_button" = "إنهاء الطلب";
+"accept" = "قبول";
+"reject" = "رفض";
+"km_away" = "يبعد %.1f كم";

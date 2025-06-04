@@ -27,3 +27,18 @@ extension UIImage {
         return image!
     }
 }
+
+extension Int {
+    func asEGPCurrency() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "EGP"
+        formatter.locale = Locale.current
+        formatter.maximumFractionDigits = 0
+        formatter.minimumFractionDigits = 0
+        if let formatted = formatter.string(from: NSNumber(value: self)) {
+            return formatted
+        }
+        return "\(self) ج.م"
+    }
+}

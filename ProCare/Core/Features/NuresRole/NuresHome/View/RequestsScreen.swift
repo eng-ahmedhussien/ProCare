@@ -27,7 +27,7 @@ struct RequestsScreen: View {
             
             Picker("", selection: $segmentationSelection) {
                 ForEach(ProfileSection.allCases, id: \.self) { option in
-                    Text(option.rawValue)
+                    Text(option.localized)
                 }
             }
             .pickerStyle(SegmentedPickerStyle())
@@ -59,8 +59,12 @@ struct RequestsScreen: View {
     }
     
     enum ProfileSection : String, CaseIterable {
-        case PreviousRequests = "PreviousRequests"
-        case CurrentRequest = "CurrentRequest"
+        case PreviousRequests = "previous_requests"
+        case CurrentRequest = "current_request"
+        
+        var localized: String {
+            self.rawValue.localized()
+        }
     }
 }
 
@@ -74,7 +78,7 @@ extension RequestsScreen{
                         .padding(.trailing)
                         .foregroundColor(.white.opacity(0.9))
                     
-                    Text("hello \(authManager.userDataLogin?.firstName ?? "")")
+                    Text("hello".localized() + " \(authManager.userDataLogin?.firstName ?? "")")
                         .font(.title)
                         .foregroundColor(.white)
                 }

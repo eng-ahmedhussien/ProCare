@@ -28,9 +28,7 @@ struct ReportScreen: View {
             submit
         }
         .task {
-            await vm.fetchReportByPatientId(id: vm.currentRequest?.patientId ?? "")
-            await vm.fetchDiseases()
-            await vm.fetchServices()
+            await vm.fetchAllDataAndFillReport(patientId: vm.currentRequest?.patientId ?? "")
         }
         .onTapGesture {
             isDrugsFocused = false

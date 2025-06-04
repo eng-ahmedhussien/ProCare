@@ -36,6 +36,10 @@ struct RequestCellView: View {
                     .font(.callout)
                     .foregroundStyle(.gray)
                 
+                Text((request.totalPrice ?? 0).asEGPCurrency())
+                    .font(.callout)
+                    .foregroundStyle(.gray)
+                
                 Text(request.status ?? "")
                     .font(.callout)
                     .foregroundStyle(request.statusId == .Completed ? .green : .red)
@@ -46,7 +50,7 @@ struct RequestCellView: View {
             Spacer()
         }
         .padding()
-        .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .gray)
+        .backgroundCard(cornerRadius: 10, shadowRadius: 1)
         .padding()
     }
 }

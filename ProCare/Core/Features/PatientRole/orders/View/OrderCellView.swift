@@ -38,7 +38,7 @@ struct OrderCellView: View {
                     .font(.callout)
                     .foregroundStyle(.gray)
                 
-                Text("\(order.totalPrice ?? 0) EGP")
+                Text((order.totalPrice ?? 0).asEGPCurrency())
                     .font(.callout)
                     .foregroundStyle(.gray)
                 

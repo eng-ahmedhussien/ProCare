@@ -25,14 +25,6 @@ struct NursesListScreen: View {
             return loc1.distance(from: userLocation) < loc2.distance(from: userLocation)
         }
 
-        // Print distances once
-//        for nurse in sorted {
-//            if let nurseLoc = nurse.coordinate {
-//                let distance = nurseLoc.distance(from: userLocation) / 1000
-//                print("Distance to \(nurse.fullName ?? "N/A"): \(distance) km")
-//            }
-//        }
-
         return sorted
     }
     
@@ -68,7 +60,12 @@ struct NursesListScreen: View {
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(sortedNurses, id: \.id) { nurse in
-                        NurseCellView(nurse: nurse)
+                        let distance: Double? = {
+                            guard let userLocation = locationManger.location,
+                                  let nurseLocation = nurse.coordinate else { return nil }
+                            return userLocation.distance(from: nurseLocation)
+                        }()
+                        NurseCellView(nurse: nurse, distance: distance)
                             .onAppear {
                                 if nurse.id == vm.nurseList.last?.id, vm.hasNextPage {
                                     Task {
@@ -124,38 +121,6 @@ struct NursesListScreen: View {
         }
         .padding()
     }
-    
-//    func sortNursesByDistance(nurses: [Nurse]) -> [Nurse] {
-//        guard let userLocation = locationManger.location else {
-//            return nurses // fallback: show unsorted list
-//        }
-//        
-//        return nurses.sorted {
-//            guard let loc1 = $0.coordinate else { return false }
-//            guard let loc2 = $1.coordinate else { return true }
-//            return loc1.distance(from: userLocation) < loc2.distance(from: userLocation)
-//        }
-//    }
-//    
-    func sortNursesByDistance(nurses: [Nurse]) -> [Nurse] {
-        guard let userLocation = locationManger.location else {
-            return nurses
-        }
-
-        return nurses.sorted {
-            guard let loc1 = $0.coordinate else { return false }
-            guard let loc2 = $1.coordinate else { return true }
-            
-            let dist1 = loc1.distance(from: userLocation)
-            let dist2 = loc2.distance(from: userLocation)
-
-            print("Distance to \($0.fullName ?? "Nurse 1"): \(dist1 / 1000) km")
-            print("Distance to \($1.fullName ?? "Nurse 2"): \(dist2 / 1000) km")
-
-            return dist1 < dist2
-        }
-        
-    }
 }
 
 
@@ -166,3 +131,12 @@ struct NursesListScreen: View {
 //}
 
 
+
+
+// Print distances once
+//        for nurse in sorted {
+//            if let nurseLoc = nurse.coordinate {
+//                let distance = nurseLoc.distance(from: userLocation) / 1000
+//                print("Distance to \(nurse.fullName ?? "N/A"): \(distance) km")
+//            }
+//        }

@@ -27,7 +27,7 @@ enum TapViewEnum : Identifiable, CaseIterable, View {
     var body: some View {
         switch self {
         case .home:
-            HomePage(vm: HomeVM())
+            HomeScreen()
         case .orders:
             OrdersTapScreen()
         case .profile:

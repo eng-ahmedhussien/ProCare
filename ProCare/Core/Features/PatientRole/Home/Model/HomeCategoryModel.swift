@@ -35,4 +35,11 @@ extension Category {
             imageUrl: "https://example.com/images/labtests.png"
         )
     ]
+    static let mockCategorie =  Category(
+        id: 1,
+        name: "Nursing",
+        description: "Professional nursing services at home.",
+        imageUrl: "https://example.com/images/nursing.png"
+    )
+        
 }

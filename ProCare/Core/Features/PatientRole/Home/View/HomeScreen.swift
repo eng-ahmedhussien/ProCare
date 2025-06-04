@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct HomeView: View {
-    @StateObject  var viewModel = HomeVM()
+struct HomeScreen: View {
+    @StateObject var vm  = HomeVM()
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var locationManager: LocationManager
@@ -22,23 +22,18 @@ struct HomeView: View {
     
     @ViewBuilder
     private var content: some View {
-        switch viewModel.loadingState {
+        switch vm.loadingState {
         case .idle:
             Color.clear.onAppear {
-                viewModel.fetchCategories {
+                vm.fetchCategories {
                     authManager.logout()
-                    print("Unauthorized access")
+                    debugPrint("Unauthorized access")
                 }
             }
             
         case .loading:
-            VStack {
-                Spacer()
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .scaleEffect(1.5)
-                Spacer()
-            }
+            categoriesList
+                .redacted(reason: .placeholder)
             
         case .loaded:
             categoriesList
@@ -51,12 +46,12 @@ struct HomeView: View {
                     .padding()
                 
                 Button("Try Again") {
-                    viewModel.fetchCategories {
+                    vm.fetchCategories {
                         authManager.logout()
-                        print("Unauthorized access")
+                        debugPrint("Unauthorized access")
                     }
-                }
-                .buttonStyle(.bordered)
+                }.foregroundStyle(.appPrimary)
+                
             }
         }
     }
@@ -64,12 +59,12 @@ struct HomeView: View {
     private var categoriesList: some View {
         ScrollView {
             LazyVStack(spacing: 16) {
-                ForEach(viewModel.categories, id: \.id) { category in
+                ForEach(vm.categories, id: \.id) { category in
                     CategoryCard(category: category) {
                         switch category.id {
                         case 2:
                             let nursingView = NursingServicesPage(id: category.id ?? 0)
-                                .environmentObject(viewModel)
+                                .environmentObject(vm)
                             appRouter.pushView(nursingView)
                         case 3:
                             debugPrint("ambulance")
@@ -86,14 +81,14 @@ struct HomeView: View {
             .padding()
         }
         .refreshable {
-            viewModel.fetchCategories {
+            vm.fetchCategories {
                 authManager.logout()
-                print("Unauthorized access")
+                debugPrint("Unauthorized access")
             }
         }
     }
 }
-extension HomeView{
+extension HomeScreen{
     var header: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
@@ -131,49 +126,17 @@ extension HomeView{
     }
 }
 
-struct CategoryCard: View {
-    let category: Category
-    let onTap: () -> Void
-    
-    var body: some View {
-        Button(action: {
-            onTap()
-        }) {
-            HStack(spacing: 8) {
-                AppImage(
-                    urlString: category.imageUrl ?? "",
-                    width: 50,
-                    height: 50
-                 
-                )
-                .foregroundStyle(.appPrimary)
-                
-                Text(category.name ?? "Unknown Category")
-                    .font(.headline)
-                    .foregroundStyle(.appPrimary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(.service)
-                    .shadow(radius: 2)
-            )
-        }
-        .buttonStyle(.plain)
-    }
-}
+
 
 #if DEBUG
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-            .environmentObject(AuthManager())
-            .environmentObject(AppRouter())
-            .environmentObject(LocationManager())
-    }
+#Preview {
+    HomeScreen(vm: HomeVM.preview)
+        .environmentObject(AuthManager())
+        .environmentObject(AppRouter())
+        .environmentObject(LocationManager())
+    
 }
-#endif 
+#endif
 
 enum SubCategories: Int {
     case nursing = 2

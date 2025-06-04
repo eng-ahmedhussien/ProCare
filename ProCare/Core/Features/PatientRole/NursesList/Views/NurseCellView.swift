@@ -10,6 +10,7 @@ import SwiftUI
 struct NurseCellView: View {
     
     var nurse: Nurse
+    let distance: Double? // in meters
     
     var body: some View {
             HStack(alignment: .center){
@@ -35,6 +36,12 @@ struct NurseCellView: View {
                     Text(nurse.specialization ?? "no_description".localized())
                         .font(.subheadline)
                         .bold()
+                    
+                    if let distance = distance {
+                        Text(String(format: NSLocalizedString("km_away", comment: ""), distance / 1000))
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
                 }
                 
                 Spacer()

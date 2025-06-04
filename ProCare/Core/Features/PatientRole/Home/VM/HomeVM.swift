@@ -6,58 +6,102 @@
 //
 
 import Combine
+import Foundation
 
+
+// MARK: - Home View Model
 @MainActor
 class HomeVM: ObservableObject {
-    // MARK: - Published Properties
-    @Published var viewState: ViewState = .empty
+
+    @Published private(set) var loadingState: LoadingState = .idle
     @Published var categories: [Category] = []
     @Published var subCategories: [NursingServices] = []
-  
-    private let apiClint: HomeApiClintProtocol
-    private var cancellables: Set<AnyCancellable> = []
     
-    init(apiClint: HomeApiClintProtocol = HomeApiClint()) {
-        self.apiClint = apiClint
+    private let apiClient: HomeApiClintProtocol
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(apiClient: HomeApiClintProtocol = HomeApiClint()) {
+        self.apiClient = apiClient
     }
     
-    // MARK: - API Methods
-    func getCategories(onUnauthorized: @escaping () -> Void) async {
-        viewState = .loading
-        do {
-            let response = try await apiClint.categories()
-            if let data = response.data {
-                viewState = .loaded
-                self.categories = data
-            } else {
-                debugPrint("HomeVM: Response received but no user data")
-            }
-        }
-        catch {
-            if let apiError = error as? APIResponseError, apiError.status == 401 {
-                debugPrint("HomeVM: Unauthorized error detected")
-                onUnauthorized()
-            } else {
-                debugPrint("HomeVM: Unexpected error: \(error.localizedDescription)")
-            }
-        }
-    }
+    // MARK: - Public Methods
     
-    func getSubCategories(id: Int) async {
-        viewState = .loading
-        do {
-            let response = try await apiClint.subCategories(id: id)
-            if let data = response.data {
-                viewState = .loaded
-                self.subCategories = data
-            } else {
-                debugPrint("Response received but no user data")
+    /// Fetches all available categories
+    /// - Parameter onUnauthorized: Callback to handle unauthorized access
+    func fetchCategories(onUnauthorized: @escaping () -> Void) {
+        Task {
+            do {
+                loadingState = .loading
+                let response = try await apiClient.categories()
+                
+                guard let data = response.data else {
+                    loadingState = .failed("No categories available")
+                    return
+                }
+                
+                categories = data
+                loadingState = .loaded
+                
+            } catch let error as APIResponseError where error.status == 401 {
+                handleUnauthorizedError(onUnauthorized)
+            } catch {
+                handleError(error)
             }
-        } catch {
-            debugPrint("Unexpected error: \(error.localizedDescription)")
         }
     }
     
+    /// Fetches sub-categories for a specific category
+    /// - Parameter id: Category identifier
+    func fetchSubCategories(for id: Int) {
+        Task {
+            do {
+                loadingState = .loading
+                let response = try await apiClient.subCategories(id: id)
+                
+                guard let data = response.data else {
+                    loadingState = .failed("No sub-categories available")
+                    return
+                }
+                
+                subCategories = data
+                loadingState = .loaded
+                
+            } catch {
+                handleError(error)
+            }
+        }
+    }
+    
+    // MARK: - Private Methods
+    
+    private func handleUnauthorizedError(_ onUnauthorized: () -> Void) {
+        loadingState = .failed("Unauthorized access")
+        onUnauthorized()
+    }
+    
+    private func handleError(_ error: Error) {
+        loadingState = .failed(error.localizedDescription)
+    }
+    
+    /// Resets the view model state
+    func reset() {
+        loadingState = .idle
+        categories.removeAll()
+        subCategories.removeAll()
+    }
 }
+
+// MARK: - Preview Helpers
+
+#if DEBUG
+extension HomeVM {
+    static var preview: HomeVM {
+        let vm = HomeVM()
+        vm.categories = Category.mockCategories
+        vm.loadingState = .loaded
+        return vm
+    }
+}
+#endif
 
 

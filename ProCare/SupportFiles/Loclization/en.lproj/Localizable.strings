@@ -123,3 +123,18 @@
 "cancel_request_confirmation" = "Are you sure you want to cancel this request?";
 "within_minutes" = "Within %d minutes";
 "call" = "Call";
+//MARK: - request
+"rejection_request" = "Rejection request";
+"cancel" = "Cancel";
+"yes" = "Yes";
+"are_you_sure_reject" = "Are you sure you want to reject this request?";
+"approve_request" = "Approve request";
+"approve" = "Approve";
+"are_you_sure_approve" = "Are you sure you want to approve this request?";
+"finish_request" = "Finish request";
+"finish" = "Finish";
+"are_you_sure_finish" = "Are you sure you want to Finish this request?";
+"finish_request_button" = "Finish Request";
+"accept" = "Accept";
+"reject" = "Reject";
+"km_away" = "km away";

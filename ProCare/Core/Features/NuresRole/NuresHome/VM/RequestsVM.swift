@@ -146,7 +146,6 @@ extension RequestsVM {
             let response = try await apiClient.getReportByPatientId(id: id)
             if let data = response.data {
                 report = data
-                fillReportData(report: data)    
             } else {
                 debugPrint("Response received but no report data")
             }
@@ -218,12 +217,22 @@ extension RequestsVM {
         }
     }
 
+    func fetchAllDataAndFillReport(patientId: String) async {
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { await self.fetchReportByPatientId(id: patientId) }
+            group.addTask { await self.fetchDiseases() }
+            group.addTask { await self.fetchServices() }
+        }
+        fillReportData()
+    }
     
 }
    
    //MARK: - Helpers
 extension RequestsVM {
-    func fillReportData(report: Report) {
+    func fillReportData() {
+        guard let report = report else { return }
+            
         drugs = report.drugs ?? ""
         notes = report.notes ?? ""
         selectedDiseases = report.diseases?.compactMap { disease in
