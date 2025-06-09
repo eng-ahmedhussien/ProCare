@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ServiceListPage: View {
     
-    @EnvironmentObject var vm: ServiceVM
+    @EnvironmentObject var vm: HomeVM
     @EnvironmentObject var locationManger: LocationManager
     @EnvironmentObject var appRouter : AppRouter
     @State var showAddressAlert = false
@@ -19,11 +19,16 @@ struct ServiceListPage: View {
         ZStack {
             content
         }
+        .padding(.bottom, 5)
+        .edgesIgnoringSafeArea(.bottom)
         .appNavigationBar(title: "service".localized())
         .onAppear {
             if vm.serviceItem.isEmpty {
                 Task {
-                    await vm.fetchServices(id: id, loadType: .initial)
+                    async let servicesTask = vm.fetchServices(id: id, loadType: .initial)
+                    async let priceTask = vm.getVisitServicePrice()
+                    // Wait for both tasks to complete as we need both for proper total calculation
+                    await (servicesTask, priceTask)
                 }
             }
         }
@@ -83,31 +88,54 @@ struct ServiceListPage: View {
 extension ServiceListPage{
     private var totalView: some View {
         VStack {
-            HStack {
-                Text("total")
-                    .font(.title2)
-                Spacer()
-                Text("\(vm.totalPrice) EGP")
-                    .font(.title3)
-                    .foregroundStyle(.appPrimary)
+            Text("visit_fee_message")
+                .font(.footnote)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+            
+            VStack(spacing: 5){
+                VStack(alignment: .leading, spacing: 5) {
+                    HStack{
+                        Text("services".localized() + ":")
+                        Spacer()
+                        Text(vm.totalPrice.asEGPCurrency())
+                    }
+                    HStack{
+                        Text("visit_Fee".localized() + ":")
+                        Spacer()
+                        Text(vm.visitServicePrice?.asEGPCurrency() ?? "")
+                    }
+                    Divider()
+                    HStack {
+                        Text("total".localized() + ":")
+                            .font(.headline)
+                            .foregroundStyle(.appPrimary)
+                        Spacer()
+                        Text((vm.totalPrice + (vm.visitServicePrice ?? 0)).asEGPCurrency())
+                            .font(.headline)
+                            .foregroundStyle(.appPrimary)
+                    }
+                }
+
+                Button {
+                    if locationManger.isPermissionDenied {
+                        showAddressAlert.toggle()
+                    }else{
+                        appRouter.pushView(NursesListScreen(servicesIds: vm.selectedServices))
+                    }
+                } label: {
+                    Text("continue")
+                        .font(.title3)
+                }
+                .buttonStyle(AppButton(kind: .solid, disabled: vm.selectedServices.isEmpty))
             }
             .padding()
-
-            Button {
-                if locationManger.isPermissionDenied {
-                    showAddressAlert.toggle()
-                }else{
-                    appRouter.pushView(NursesListScreen(servicesIds: vm.selectedServices))
-                }
-            } label: {
-                Text("continue")
-                    .font(.title3)
-            }
-            .buttonStyle(AppButton(kind: .solid, disabled: vm.selectedServices.isEmpty))
-            .padding(.horizontal)
+            .background(
+                Color(.systemBackground)
+                    .shadow(color: .gray.opacity(0.3), radius: 6, x: 0, y: 0)
+            )
         }
-        .background(Color(.systemBackground))
-        .shadow(color: Color.black.opacity(0.1), radius: 5, y: -1)
         .alert("location_required".localized(), isPresented: $showAddressAlert) {
             Button("add_address".localized()) {
                 appRouter.pushView(UpdateAddressView())
@@ -141,7 +169,7 @@ extension ServiceListPage{
 }
 
 #Preview {
-    let mockVM = ServiceVM()
+    let mockVM = HomeVM()
     mockVM.paginationViewState = .loaded
     mockVM.serviceItem = ServiceItem.mockServices
     return ServiceListPage().environmentObject(mockVM)

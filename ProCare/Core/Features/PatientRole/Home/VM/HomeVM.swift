@@ -17,6 +17,20 @@ class HomeVM: ObservableObject {
     @Published var categories: [Category] = []
     @Published var subCategories: [NursingServices] = []
     
+    //MARK: services
+    @Published var visitServicePrice: Int?
+    @Published var serviceItem: [ServiceItem] = []
+    @Published var selectedServices: [ServiceItem] = [] {
+        didSet {
+            totalPrice = selectedServices.reduce(0) { $0 + ($1.price ?? 0) }
+        }
+    }
+    @Published var paginationViewState: PaginationViewState = .initialLoading
+    @Published var hasNextPage = true
+    @Published var pageNumber = 1
+    @Published var totalPrice: Int = 0
+    private let pageSize = 5
+    
     private let apiClient: HomeApiClintProtocol
     private var cancellables = Set<AnyCancellable>()
     
@@ -91,8 +105,74 @@ class HomeVM: ObservableObject {
     }
 }
 
-// MARK: - Preview Helpers
+//MARK: sevices
+extension HomeVM {
+    func fetchServices(id: Int, loadType: LoadType) async {
+        switch loadType {
+        case .initial:
+            resetPaging()
+            paginationViewState = .initialLoading
+        case .paging:
+            guard hasNextPage else { return }
+            paginationViewState = .pagingLoading
+        case .refresh:
+            resetPaging()
+            paginationViewState = .refreshing
+        }
+        
+        let parameters = [
+            "pageNumber": "\(pageNumber)",
+            "pageSize": "\(pageSize)",
+            "searchKey": ""
+        ]
+        
+        do {
+            let response = try await apiClient.getServices(parameters: parameters, id: id)
+            if let data = response.data {
+                let items = data.pagedResult?.items ?? []
+                
+                if pageNumber == 1 {
+                    serviceItem = items
+                } else {
+                    serviceItem.append(contentsOf: items)
+                }
+                
+                hasNextPage = data.pagedResult?.hasNextPage ?? false
+                pageNumber += 1
+                paginationViewState = serviceItem.isEmpty ? .empty : .loaded
+            } else {
+                paginationViewState = serviceItem.isEmpty ? .empty : .loaded
+            }
+        } catch {
+            paginationViewState = .error(error.localizedDescription)
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getVisitServicePrice() async {
+        do {
+            let response = try await apiClient.getVisitService()
+            if let data = response.data, let price = data.price {
+                visitServicePrice = price
+            } else {
+                debugPrint("Response received but no service data")
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+    
+    private func resetPaging() {
+        pageNumber = 1
+        serviceItem = []
+        hasNextPage = true
+        paginationViewState = .loaded
+    }
+    
+    
+}
 
+// MARK: - Preview Helpers
 #if DEBUG
 extension HomeVM {
     static var preview: HomeVM {
