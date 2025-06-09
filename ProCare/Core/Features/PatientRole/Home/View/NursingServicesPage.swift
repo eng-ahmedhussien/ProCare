@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct NursingServicesPage: View {
-    @StateObject var serviceVM = ServiceVM()
     @EnvironmentObject var vm : HomeVM
     @EnvironmentObject var ordersVM: OrdersVM
     @EnvironmentObject var appRouter: AppRouter
@@ -59,7 +58,7 @@ struct NursingServicesPage: View {
                                 }else{
                                     appRouter.pushView(
                                         ServiceListPage(id: nursingServices.id ?? 0)
-                                            .environmentObject(serviceVM)
+                                            .environmentObject(vm)
                                     )
                                 }
                             case 2 :

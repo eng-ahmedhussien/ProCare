@@ -95,7 +95,8 @@
 "no_services_available" = "لا توجد خدمات متاحة";
 "error" = "خطأ";
 "retry" = "إعادة المحاولة";
-
+"visit_fee_message" = "رسوم الزيارة ثابتة لاي عدد من الخدمات";
+"visit_Fee" = "رسوم الزيارة";
 //MARK: - NursesList
 "nurses_list" = "قائمة الممرضات";
 "no_nurses_available" = "لا توجد ممرضات حالياً";
@@ -146,3 +147,13 @@
 "accept" = "قبول";
 "reject" = "رفض";
 "km_away" = "يبعد %.1f كم";
+//MARK: - pharmacies
+// Pharmacy List
+"pharmacies" = "الصيدليات";
+"phone" = "هاتف";
+"line" = "خط";
+"cancel" = "إلغاء";
+"choose_number_to_call" = "اختر رقماً للاتصال";
+// Pharmacy Card
+"location_separator" = "، ";
+

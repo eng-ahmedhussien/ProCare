@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - DataClass
 struct UserDataLogin: Codable {
-    let token, firstName, lastName, phoneNumber: String?
+    let token, firstName, lastName, phoneNumber, pictureUrl: String?
     let birthOfDate: String?
     let role: Roles?
     let loginStatus: LoginStatus?

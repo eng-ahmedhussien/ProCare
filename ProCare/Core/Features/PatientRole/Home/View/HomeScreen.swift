@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct HomeScreen: View {
-    @StateObject var vm  = HomeVM()
+    @StateObject var vm = HomeVM()
+    @StateObject var pharmaciesVM = PharmaciesVM()
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var locationManager: LocationManager
@@ -71,7 +72,8 @@ struct HomeScreen: View {
                         case 4:
                             debugPrint("doctor")
                         case 5:
-                            debugPrint("pharmacy")
+                            let PharmaciesScreen = PharmaciesScreen(vm: pharmaciesVM)
+                            appRouter.pushView(PharmaciesScreen)
                         default:
                             debugPrint("Unhandled category ID: \(category.id ?? 0 )")
                         }
@@ -97,7 +99,7 @@ extension HomeScreen{
                         .padding(.trailing)
                         .foregroundColor(.white.opacity(0.9))
                     
-                    Text("hello".localized() + "\(authManager.userDataLogin?.firstName ?? "")")
+                    Text("hello".localized() + " \(authManager.userDataLogin?.firstName ?? "")")
                         .font(.title)
                         .foregroundColor(.white)
                     

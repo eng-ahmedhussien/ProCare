@@ -18,8 +18,6 @@ extension AppRouter {
             TapBarView()
         case .RootScreen:
             RootScreen()
-        case .homeView2:
-            homeView2()
         case.otpScreen:
             OTPScreen()
         case.PhoneScreen:
@@ -59,7 +57,6 @@ extension AppRouter {
 enum Screen: Identifiable, Hashable {
     case tapBar
     case RootScreen
-    case homeView2
     case otpScreen
     case PhoneScreen
     case NewPasswordScreen(phone: String, resetToken: String)

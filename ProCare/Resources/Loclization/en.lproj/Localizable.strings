@@ -90,6 +90,8 @@
 "no_services_available" = "No Services Available";
 "error" = "Error";
 "retry" = "Retry";
+"visit_fee_message" = "The visit fee is fixed for any number of services.";
+"visit_Fee" = "Visit Fee";
 //MARK: - NursesList
 "nurses_list" = "Nurses List";
 "no_nurses_available" = "No nurses available at the moment";
@@ -138,3 +140,11 @@
 "accept" = "Accept";
 "reject" = "Reject";
 "km_away" = "km away";
+//MARK: - pharmacies
+"pharmacies" = "Pharmacies";
+"phone" = "Phone";
+"line" = "Line";
+"cancel" = "Cancel";
+"choose_number_to_call" = "Choose a number to call";
+// Pharmacy Card
+"location_separator" = ", ";
