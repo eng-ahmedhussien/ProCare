@@ -175,3 +175,7 @@
 "total" = "الإجمالي";
 "report_added_successfully" = "تمت إضافة التقرير بنجاح";
 "total_requests" = "إجمالي الطلبات: %d";
+//MARK: gender enum
+"not_specified" = "غير محدد";
+"male" = "ذكر";
+"female" = "أنثى";

@@ -164,7 +164,7 @@ class ProfileVM: ObservableObject {
 }
 
 extension ProfileVM {
-    private func putProfileData( _ profileData : Profile) {
+     func putProfileData( _ profileData : Profile) {
         AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
         firstName = profileData.firstName ?? ""
         lastName = profileData.lastName ?? ""

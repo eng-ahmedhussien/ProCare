@@ -16,9 +16,9 @@ enum Gender: Int, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .notSpecified: return "Not Specified"
-        case .male: return "Male"
-        case .female: return "Female"
+        case .notSpecified: return "not_specified".localized()
+        case .male: return "male".localized()
+        case .female: return "female".localized()
         }
     }
 }

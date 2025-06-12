@@ -29,7 +29,6 @@ struct ProfileTapScreen: View {
         VStack{
             header
             ScrollView(showsIndicators: false){
-                
                 VStack(alignment: .center, spacing: 20) {
                     profileImage
                     userInfo
@@ -135,26 +134,17 @@ extension ProfileTapScreen{
             }
             .foregroundStyle(.appPrimary)
             
-            HStack {
-                Text("first_name".localized() + ":")
-                    .font(.body)
-                    .foregroundStyle(.black)
-                   
-                Spacer()
+            HStack{
                 TextField("", text: $vm.firstName)
+                    .textFieldStyle(.roundedBorder)
                     .foregroundStyle(isEditingUserInfo ? .gray : Color.black)
-                    .multilineTextAlignment(.trailing)
+                   // .multilineTextAlignment(.trailing)
                     .disabled(!isEditingUserInfo)
-            }
-           
-            HStack {
-                Text("last_name".localized() + ":")
-                    .font(.body)
-                    .foregroundStyle(.black)
-                Spacer()
+                
                 TextField("", text: $vm.lastName)
+                    .textFieldStyle(.roundedBorder)
                     .foregroundStyle(isEditingUserInfo ? .gray : Color.black)
-                    .multilineTextAlignment(.trailing)
+                    //.multilineTextAlignment(.trailing)
                     .disabled(!isEditingUserInfo)
             }
             
@@ -173,7 +163,7 @@ extension ProfileTapScreen{
                             .font(.body)
                             .foregroundStyle(.black)
                     } else {
-                        Text("No selected")
+                        Text("no_selected".localized())
                             .foregroundColor(.gray)
                     }
                 }
@@ -282,7 +272,9 @@ extension ProfileTapScreen{
 
 
 #Preview {
-    NavigationView{
-        ProfileTapScreen().environmentObject(ProfileVM())
+    var vm = ProfileVM()
+    vm.putProfileData(Profile.mock)
+   return  NavigationView{
+        ProfileTapScreen().environmentObject(vm)
     }
 }

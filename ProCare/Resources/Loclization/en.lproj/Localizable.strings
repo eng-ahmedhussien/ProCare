@@ -167,3 +167,7 @@
 "total" = "Total";
 "report_added_successfully" = "Report Added successfully";
 "total_requests" = "Total requests: %d";
+//MARK: gender enum
+"not_specified" = "Not Specified";
+"male" = "Male";
+"female" = "Female";
