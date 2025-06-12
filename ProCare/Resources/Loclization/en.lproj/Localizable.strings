@@ -33,6 +33,14 @@
 "phone" = "Phone";
 "forget_password" = "Forget password?";
 "send" = "Send";
+"phone" = "Phone";
+//otp
+"please" = "Please";
+"enter otp!" = "Enter OTP!";
+"Verify" = "Verify";
+"resend_otp" = "Resend OTP";
+"resend_otp_in" = "Resend OTP in %ds";
+"otp" = "OTP";
 
 //MARK: - Requests
 "Orders" = "Orders";
@@ -148,3 +156,14 @@
 "choose_number_to_call" = "Choose a number to call";
 // Pharmacy Card
 "location_separator" = ", ";
+//MARK: - ReportScreen
+"drugs" = "Drugs";
+"notes" = "Notes";
+"select_diseases" = "Select Diseases";
+"select_services" = "Select Services";
+"submit" = "Submit";
+"add_report" = "Add Report";
+"cancel" = "Cancel";
+"total" = "Total";
+"report_added_successfully" = "Report Added successfully";
+"total_requests" = "Total requests: %d";

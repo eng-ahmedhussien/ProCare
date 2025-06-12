@@ -32,6 +32,14 @@
 "phone" = "رقم الهاتف";
 "forget_password" = "هل نسيت كلمة المرور؟";
 "send" = "إرسال";
+"phone" = "رقم الهاتف";
+//otp
+"please" = "من فضلك";
+"enter otp!" = "أدخل رمز التحقق!";
+"Verify" = "تحقق";
+"resend_otp" = "إعادة إرسال رمز التحقق";
+"resend_otp_in" = "إعادة إرسال رمز التحقق خلال %ds";
+"otp" = "رمز التحقق";
 
 //MARK: - Requests
 "Orders" = "الطلبات";
@@ -156,4 +164,14 @@
 "choose_number_to_call" = "اختر رقماً للاتصال";
 // Pharmacy Card
 "location_separator" = "، ";
-
+//MARK: - ReportScreen
+"drugs" = "الأدوية";
+"notes" = "ملاحظات";
+"select_diseases" = "اختر الأمراض";
+"select_services" = "اختر الخدمات";
+"submit" = "إرسال";
+"add_report" = "إضافة تقرير";
+"cancel" = "إلغاء";
+"total" = "الإجمالي";
+"report_added_successfully" = "تمت إضافة التقرير بنجاح";
+"total_requests" = "إجمالي الطلبات: %d";

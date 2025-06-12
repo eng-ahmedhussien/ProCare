@@ -33,29 +33,34 @@ struct ReportScreen: View {
         .onTapGesture {
             isDrugsFocused = false
         }
-        .alert("Total", isPresented: $showTotal) {
-            Button("Cancel", role: .cancel) {
+        .alert("total".localized(), isPresented: $showTotal) {
+            Button("cancel".localized(), role: .cancel) {
                 appRouter.popToRoot()
             }
         } message: {
             Text(String(format: "total_requests".localized(), vm.totalRequest))
         }
-        .appNavigationBar(title: "Add Report")
+        .appNavigationBar(title: "add_report")
     }
 }
 
 extension ReportScreen{
     var drugsView: some View {
-        VStack(alignment: .leading, spacing : 10){
-            Text("Drugs")
-                .font(.body)
-            
-            TextEditor(text: $vm.drugs)
-                .focused($isDrugsFocused)
-                .frame(height: 100)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
-        }
-        .padding()
+        AppTextEditor(
+            text: $vm.drugs,
+            placeholder: "drugs".localized(),
+            height: 100,
+            isFocused: $isDrugsFocused
+        ).padding()
+    }
+    
+    var notesView: some View {
+        AppTextEditor(
+            text: $vm.notes,
+            placeholder: "notes".localized(),
+            height: 100,
+            isFocused: $isDrugsFocused
+        ).padding()
     }
     
     var diseaseButton: some View {
@@ -64,7 +69,7 @@ extension ReportScreen{
             } label: {
                 VStack(alignment: .leading, spacing: 8) {
                     if vm.selectedDiseases.isEmpty {
-                        Text("Select Diseases")
+                        Text("select_diseases")
                     } else {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 8) {
@@ -108,7 +113,7 @@ extension ReportScreen{
             } label: {
                 VStack(alignment: .leading, spacing: 8) {
                     if vm.selectedServices.isEmpty {
-                        Text("Select Services")
+                        Text("select_services")
                     } else {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 8) {
@@ -146,26 +151,15 @@ extension ReportScreen{
         }
     }
 
-    var notesView: some View {
-        VStack(alignment: .leading, spacing : 10){
-            Text("Notes")
-                .font(.body)
-        
-            TextEditor(text: $vm.notes)
-                .focused($isDrugsFocused)
-                .frame(height: 100)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
-        }
-        .padding()
-    }
+   
     
     var submit: some View {
-        Button("Submit") {
+        Button("submit") {
             Task{
                 await  vm.addOrUpdateReport{ data in
                     if data {
                         showTotal.toggle()
-                        showToast("Report Added successfully", appearance: .success)
+                        showToast("report_added_successfully", appearance: .success)
                     }
                 }
             }

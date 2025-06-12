@@ -169,7 +169,7 @@ extension ProfileVM {
         firstName = profileData.firstName ?? ""
         lastName = profileData.lastName ?? ""
         gender = Gender(rawValue: profileData.gender ?? 0) ?? .notSpecified
-        dateOfBirth =  dateFromString(profileData.birthDate ?? "") ?? Date()
+        dateOfBirth =  profileData.birthDate?.toAPIDate()
         location = "\(profileData.city ?? "") - \(profileData.governorate ?? "") - \(profileData.addressNotes ?? "")"
         profileImage =   profileData.image ?? ""
         
@@ -193,25 +193,6 @@ extension ProfileVM {
 }
 
 
-func dateFromString(_ dateString: String) -> Date? {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd"
-    formatter.locale = Locale(identifier: "en_US_POSIX") // Recommended for fixed format parsing
-    return formatter.date(from: dateString)
-}
 
 
-func dateToString(_ date: Date, format: String = "yyyy-MM-dd") -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = format
-    return formatter.string(from: date)
-}
 
-extension Date {
-    func toAPIDateString() -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.string(from: self)
-    }
-}

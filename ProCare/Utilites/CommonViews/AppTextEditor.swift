@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-struct PlaceholderTextEditor: View {
+struct AppTextEditor: View {
     @Binding var text: String
     var placeholder: String
     var height: CGFloat = 120
-    @FocusState private var isFocused: Bool
+    @FocusState.Binding var isFocused: Bool
 
     var body: some View {
         ZStack(alignment: .topLeading) {
