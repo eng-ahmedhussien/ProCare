@@ -13,9 +13,14 @@ protocol HomeApiClintProtocol {
     //MARK:  - Services
     func getServices(parameters: [String: String], id: Int) async throws -> APIResponse<ServiceData>
     func getVisitService() async throws -> APIResponse<ServiceItem>
-    
-
+    //MARK: - Reservation
+    func reservation(parameters: [String: Any]) async throws -> APIResponse<String>
+    //MARK: - Nurses
+    func getAllNurses(parameters: [String: String]) async throws -> APIResponse<NurseData>
+    //MARK: - Request
+    func submitRequest(Parameters: [String : Any]) async throws -> APIResponse<String>
 }
+
 
 class HomeApiClint: ApiClient<HomeEndPoints>, HomeApiClintProtocol {
     func categories() async throws -> APIResponse<[Category]> {
@@ -31,5 +36,17 @@ class HomeApiClint: ApiClient<HomeEndPoints>, HomeApiClintProtocol {
     func getVisitService() async throws -> APIResponse<ServiceItem>{
         return try await request(HomeEndPoints.visitService)
     }
+    //MARK: - Reservation
+    func reservation(parameters: [String: Any]) async throws -> APIResponse<String> {
+        return try await request(HomeEndPoints.reservation(parameters: parameters))
+    }
+    //MARK: - Nurses
+    func getAllNurses(parameters: [String: String]) async throws -> APIResponse<NurseData> {
+        return try await request(HomeEndPoints.getAllNurses(parameters: parameters))
+    }
+    //MARK: - Request
+    func submitRequest(Parameters: [String : Any]) async throws -> APIResponse<String>{
+        return try await request(HomeEndPoints.submitRequest(Parameters: Parameters))
+    }
 
-}
+} 

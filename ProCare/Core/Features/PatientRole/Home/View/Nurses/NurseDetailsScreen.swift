@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct NurseDetailsScreen: View {
+    @EnvironmentObject var vm: HomeVM
     var servicesIds: [ServiceItem] = []
     var nurse: Nurse?
+    var total: Int = 0
     @EnvironmentObject var appRouter : AppRouter
     @State private var showAllReviews = false
     let width = UIScreen.main.bounds.width * 0.95
@@ -64,7 +66,11 @@ extension NurseDetailsScreen {
 
     var requestButton: some View {
         Button {
-            appRouter.pushView(RequestScreen(nurse: nurse, serviceItems: servicesIds))
+            appRouter.pushView(
+                RequestScreen(
+                    nurse: nurse
+                ).environmentObject(vm)
+            )
         } label: {
             Text("create_request".localized())
                 .font(.title3)

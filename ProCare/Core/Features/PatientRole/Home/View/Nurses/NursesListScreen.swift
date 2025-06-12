@@ -9,10 +9,11 @@ import SwiftUI
 import CoreLocation
 
 struct NursesListScreen: View {
-    @StateObject var vm: NursesVM = NursesVM()
+    @EnvironmentObject var vm: HomeVM
     @EnvironmentObject var locationManger: LocationManager
     @EnvironmentObject var appRouter: AppRouter
     var servicesIds: [ServiceItem] = []
+    var total: Int = 0
     
     private var sortedNurses: [Nurse] {
         guard let userLocation = locationManger.location else {
@@ -50,7 +51,7 @@ struct NursesListScreen: View {
     
     @ViewBuilder
     private var content: some View {
-        switch vm.viewState {
+        switch vm.paginationViewState {
         case .initialLoading:
             ProgressView()
                 .appProgressStyle(color: .appPrimary)
@@ -74,12 +75,18 @@ struct NursesListScreen: View {
                                 }
                             }
                             .onTapGesture {
-                                appRouter.pushView(NurseDetailsScreen(servicesIds: servicesIds, nurse: nurse))
+                                appRouter.pushView(
+                                    NurseDetailsScreen(
+                                        servicesIds: servicesIds,
+                                        nurse: nurse,
+                                        total: total
+                                    ).environmentObject(vm)
+                                )
                             }
                     }
-                    .redacted(reason: vm.viewState == .pagingLoading ? .placeholder : [])
+                    .redacted(reason: vm.paginationViewState == .pagingLoading ? .placeholder : [])
                     
-                    if vm.viewState == .pagingLoading {
+                    if vm.paginationViewState == .pagingLoading {
                         ProgressView()
                             .appProgressStyle(color: .appPrimary)
                             .padding()

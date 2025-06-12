@@ -16,7 +16,6 @@ class HomeVM: ObservableObject {
     @Published private(set) var loadingState: LoadingState = .idle
     @Published var categories: [Category] = []
     @Published var subCategories: [NursingServices] = []
-    
     //MARK: services
     @Published var visitServicePrice: Int?
     @Published var serviceItem: [ServiceItem] = []
@@ -29,7 +28,13 @@ class HomeVM: ObservableObject {
     @Published var hasNextPage = true
     @Published var pageNumber = 1
     @Published var totalPrice: Int = 0
-    private let pageSize = 5
+    private let pageSize = 10
+    //MARK: - reservation
+    @Published  var date: Date = Date()
+    @Published  var time: Date = Date()
+    @Published  var note: String = ""
+    //MARK: - Nurses
+    @Published var nurseList: [Nurse] = []
     
     private let apiClient: HomeApiClintProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -38,6 +43,10 @@ class HomeVM: ObservableObject {
         self.apiClient = apiClient
     }
     
+ 
+}
+//MARK: - Categories
+extension HomeVM{
     // MARK: - Public Methods
     
     /// Fetches all available categories
@@ -104,8 +113,7 @@ class HomeVM: ObservableObject {
         subCategories.removeAll()
     }
 }
-
-//MARK: sevices
+//MARK: - services
 extension HomeVM {
     func fetchServices(id: Int, loadType: LoadType) async {
         switch loadType {
@@ -170,6 +178,102 @@ extension HomeVM {
     }
     
     
+}
+//MARK: - reservation
+extension HomeVM{
+    func reservation(onSuccess: @escaping () -> Void) async {
+        let patientData = AppUserDefaults.shared.getCodable(Profile.self, forKey: .profileData)
+        let parameters: [String : Any] = [
+            "date": "\(date.toAPIDateString())",
+            "time": "\(time.toAPITimeString())",
+              "note": note,
+            "patientId": patientData?.id ?? "",
+            "addressId": patientData?.addressId ?? 0
+        ]
+        
+        do {
+            let response = try await apiClient.reservation(parameters: parameters)
+            if let _ = response.data {
+                onSuccess()
+            } else {
+                debugPrint("Response received but no service data")
+            }
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+        
+    }
+}
+//MARK: - Nurses
+extension HomeVM {
+    // MARK: - API Methods
+    func fetchNurses(loadType: LoadType) async {
+        switch loadType {
+        case .initial:
+            resetPaging()
+            paginationViewState = .initialLoading
+        case .paging:
+            guard hasNextPage else { return }
+            paginationViewState = .pagingLoading
+        case .refresh:
+            resetPaging()
+            paginationViewState = .refreshing
+        }
+        
+        let parameters = [
+            "pageNumber": "\(pageNumber)",
+            "pageSize": "\(pageSize)",
+            "searchKey": "",
+            "cityId": "0"
+        ]
+        
+        //try? await Task.sleep(nanoseconds: 600_000_000) // 0.3s
+        
+        do {
+            let response = try await apiClient.getAllNurses(parameters: parameters)
+            if let data = response.data {
+                let newItems = data.items ?? []
+                
+                if pageNumber == 1 {
+                    nurseList = newItems
+                } else {
+                    nurseList.append(contentsOf: newItems)
+                }
+                
+                hasNextPage = data.hasNextPage ?? false
+                pageNumber += 1
+                paginationViewState = nurseList.isEmpty ? .empty : .loaded
+            } else {
+                paginationViewState = nurseList.isEmpty ? .empty : .loaded
+            }
+        } catch {
+            paginationViewState = .error(error.localizedDescription)
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+}
+//MARK: - Request
+extension HomeVM{
+    // MARK: - API Methods
+    func submitRequest(Parameters: [String : Any],completion: @escaping () -> Void) async {
+        do {
+            let response = try await apiClient.submitRequest(Parameters: Parameters)
+            switch response.status {
+            case .Success:
+                showToast("request crated", appearance: .success, position: .top)
+                completion()
+            case .Error:
+                showToast(response.message, appearance: .error, position: .top)
+            case .AuthFailure:
+                showToast(response.message, appearance: .error, position: .top)
+            case .Conflict:
+                showToast(response.message, appearance: .error, position: .top)
+            }
+           
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
 }
 
 // MARK: - Preview Helpers

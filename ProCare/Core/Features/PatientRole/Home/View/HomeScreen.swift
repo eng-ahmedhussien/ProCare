@@ -146,3 +146,4 @@ enum SubCategories: Int {
     case doctor = 4
     case pharmacy = 5
 }
+

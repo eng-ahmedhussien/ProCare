@@ -9,10 +9,10 @@ import SwiftUI
 
 struct RequestScreen: View {
     @StateObject var vm = RequestVM()
+    @EnvironmentObject var hvm: HomeVM
     @EnvironmentObject var appRouter: AppRouter
 
     var nurse: Nurse?
-    var serviceItems: [ServiceItem] = []
     let profile = AppUserDefaults.shared.getCodable(Profile.self, forKey: .profileData)
 
     var body: some View {
@@ -82,25 +82,33 @@ extension RequestScreen{
     }
 
     var totalRequestView: some View{
-        VStack{
+        let totala = (hvm.totalPrice + (hvm.visitServicePrice ?? 0)).asEGPCurrency()
+       return VStack{
             VStack{
-                Text("services".localized())
+                Text("services".localized() + ":")
                     .font(.title2)
                     .bold()
                     .alignHorizontally(.leading)
 
-                ForEach(serviceItems, id: \.id) { result in
+                ForEach(hvm.selectedServices, id: \.id) { result in
                     HStack{
                         Text(result.name ?? "" )
                             .font(.title3)
 
                         Spacer()
 
-                        Text("\(result.price ?? 0)")
-                            .font(.title3)
-                            .foregroundStyle(.appPrimary)
+                        Text(result.price?.asEGPCurrency() ?? "")
+                           
+                           
                     }
                 }
+                
+                HStack{
+                    Text("visit_Fee".localized())
+                    Spacer()
+                    Text(hvm.visitServicePrice?.asEGPCurrency() ?? "")
+                }
+                
             }
 
             Divider()
@@ -113,10 +121,10 @@ extension RequestScreen{
 
                 Spacer()
 
-                Text("\(serviceItems.reduce(0, { $0 + ($1.price ?? 0) })) EG")
+                Text(totala)
                     .bold()
                     .font(.title2)
-            }
+            }  .foregroundStyle(.appPrimary)
         }
         .padding()
         .backgroundCard(color: .white, cornerRadius: 5, shadowRadius: 0.5, shadowColor: .gray)
@@ -125,12 +133,13 @@ extension RequestScreen{
 
     var ConfirmButton: some View {
         let parameters :[String : Any]  = [
-            "nurseId": "24998975-118d-4f79-089a-08dd8377516a",
+           // "nurseId": "24998975-118d-4f79-089a-08dd8377516a"
+            "nurseId": nurse?.id ?? "",
             "patientId": profile?.id ?? 0,
             "addressId": profile?.addressId ?? 0,
             "latitude": profile?.latitude ?? "",
             "longitude": profile?.longitude ?? "",
-            "serviceIds": serviceItems.map { $0.id }
+            "serviceIds": hvm.selectedServices.map { $0.id }
         ]
         return  Button {
             Task{

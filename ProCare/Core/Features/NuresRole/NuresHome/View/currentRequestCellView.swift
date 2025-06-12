@@ -88,6 +88,10 @@ extension currentRequestCellView{
                     .font(.callout)
                     .foregroundStyle(.gray)
                 
+                Text((request.totalPrice ?? 0).asEGPCurrency())
+                    .font(.callout)
+                    .foregroundStyle(.gray)
+                
                 Text((request.patientGovernorate ?? "") + " - " + (request.patientCity ?? ""))
                     .font(.callout)
                     .foregroundStyle(.gray)

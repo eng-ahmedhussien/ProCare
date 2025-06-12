@@ -87,7 +87,8 @@ struct ServiceListPage: View {
 
 extension ServiceListPage{
     private var totalView: some View {
-        VStack {
+        let total = vm.totalPrice + (vm.visitServicePrice ?? 0)
+        return VStack {
             Text("visit_fee_message")
                 .font(.footnote)
                 .foregroundColor(.secondary)
@@ -112,7 +113,7 @@ extension ServiceListPage{
                             .font(.headline)
                             .foregroundStyle(.appPrimary)
                         Spacer()
-                        Text((vm.totalPrice + (vm.visitServicePrice ?? 0)).asEGPCurrency())
+                        Text(total.asEGPCurrency())
                             .font(.headline)
                             .foregroundStyle(.appPrimary)
                     }
@@ -122,7 +123,12 @@ extension ServiceListPage{
                     if locationManger.isPermissionDenied {
                         showAddressAlert.toggle()
                     }else{
-                        appRouter.pushView(NursesListScreen(servicesIds: vm.selectedServices))
+                        appRouter.pushView(
+                            NursesListScreen(
+                                servicesIds: vm.selectedServices,
+                                total: total
+                            ).environmentObject(vm)
+                        )
                     }
                 } label: {
                     Text("continue")

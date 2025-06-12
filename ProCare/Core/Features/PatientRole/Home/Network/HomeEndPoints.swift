@@ -7,15 +7,23 @@
 
 import Foundation
 
-enum HomeEndPoints: APIEndpoint {
-
+enum HomeEndPoints{
+    
     case categories
     case subCategories(id : Int)
-    
-    //MARK: - services
+  
     case services(parameters: [String: Any], subCategoryId: Int)
     case visitService
     
+    case reservation(parameters: [String: Any])
+    
+    case getAllNurses(parameters: [String : String])
+    
+    case submitRequest(Parameters: [String:Any])
+}
+
+extension HomeEndPoints: APIEndpoint {
+
     var path: String {
         switch self {
         case .categories:
@@ -26,6 +34,12 @@ enum HomeEndPoints: APIEndpoint {
             return "/ServiceCatalog/GetMobileServices"
         case .visitService:
             return "/ServiceCatalog/GetVisitService"
+        case .reservation:
+            return "/Reservation/Reserve"
+        case .getAllNurses:
+            return "/Nurse/GetAllMobileNurses"
+        case .submitRequest:
+            return "/Request/Submit"
         }
     }
     
@@ -33,7 +47,7 @@ enum HomeEndPoints: APIEndpoint {
         switch self {
         case .categories, .subCategories, .visitService:
             return .get
-        case .services:
+        case .services, .reservation, .getAllNurses, .submitRequest:
             return  .post
         }
     }
@@ -52,6 +66,12 @@ enum HomeEndPoints: APIEndpoint {
                        body: parameters,
                        encoding: .JSONEncoding(.default)
                    )
+        case .reservation(let parameters):
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
+        case .getAllNurses(let parameters):
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
+        case .submitRequest(let Parameters):
+            return .requestParameters(parameters: Parameters, encoding: .JSONEncoding())
         default:
             return .requestNoParameters
         }
