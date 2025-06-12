@@ -44,7 +44,7 @@ struct OrderCellView: View {
                 
                 Text(order.status ?? "")
                     .font(.callout)
-                    .foregroundStyle(order.status == "Completed" ? .green : .red)
+                    .foregroundStyle(order.statusId == .Completed ? .green : .red)
                     .bold()
                 
             }

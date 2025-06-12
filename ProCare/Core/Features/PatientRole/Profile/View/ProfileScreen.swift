@@ -256,7 +256,7 @@ extension ProfileTapScreen{
                 
                 HStack{
                     Button("change_password".localized()) {
-
+                        appRouter.pushView(PhoneScreen())
                     }
                     .foregroundStyle(.appPrimary)
                     .buttonStyle(AppButton(kind: .border))

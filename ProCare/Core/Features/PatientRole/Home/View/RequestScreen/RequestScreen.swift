@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct RequestScreen: View {
-    @StateObject var vm = RequestVM()
-    @EnvironmentObject var hvm: HomeVM
+    @EnvironmentObject var vm: HomeVM
     @EnvironmentObject var appRouter: AppRouter
 
     var nurse: Nurse?
@@ -82,7 +81,7 @@ extension RequestScreen{
     }
 
     var totalRequestView: some View{
-        let totala = (hvm.totalPrice + (hvm.visitServicePrice ?? 0)).asEGPCurrency()
+        let totala = (vm.totalPrice + (vm.visitServicePrice ?? 0)).asEGPCurrency()
        return VStack{
             VStack{
                 Text("services".localized() + ":")
@@ -90,7 +89,7 @@ extension RequestScreen{
                     .bold()
                     .alignHorizontally(.leading)
 
-                ForEach(hvm.selectedServices, id: \.id) { result in
+                ForEach(vm.selectedServices, id: \.id) { result in
                     HStack{
                         Text(result.name ?? "" )
                             .font(.title3)
@@ -106,7 +105,7 @@ extension RequestScreen{
                 HStack{
                     Text("visit_Fee".localized())
                     Spacer()
-                    Text(hvm.visitServicePrice?.asEGPCurrency() ?? "")
+                    Text(vm.visitServicePrice?.asEGPCurrency() ?? "")
                 }
                 
             }
@@ -139,7 +138,7 @@ extension RequestScreen{
             "addressId": profile?.addressId ?? 0,
             "latitude": profile?.latitude ?? "",
             "longitude": profile?.longitude ?? "",
-            "serviceIds": hvm.selectedServices.map { $0.id }
+            "serviceIds": vm.selectedServices.map { $0.id }
         ]
         return  Button {
             Task{

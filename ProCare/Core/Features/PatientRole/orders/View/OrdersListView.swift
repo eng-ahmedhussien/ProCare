@@ -113,7 +113,7 @@ struct OrdersListView: View {
             nurseLongitude: "30.033334",
             nurseLatitude: "31.233335",
             createdAt: "2024-01-01T10:00:00Z",
-            totalPrice: 250
+            totalPrice: 250, statusId: .Completed
         ),
         Order(
             id: "2",
@@ -128,7 +128,7 @@ struct OrdersListView: View {
             nurseLongitude: "30.044421",
             nurseLatitude: "31.235713",
             createdAt: "2024-01-02T14:30:00Z",
-            totalPrice: 200
+            totalPrice: 200, statusId: .Cancelled
         )
     ]
 

@@ -23,6 +23,17 @@ struct Order: Codable {
     let longitude, latitude, nurseLongitude, nurseLatitude: String?
     let createdAt: String?
     let totalPrice: Int?
+    let statusId: RequestStatuses?
+}
+
+extension Order{
+    enum RequestStatuses : Int, Codable {
+        case New = 1
+        case Approved = 2
+        case Cancelled = 3
+        case Rejected = 4
+        case Completed = 5
+    }
 }
 
 extension Order {
@@ -88,6 +99,6 @@ extension Order {
         nurseLongitude: "31.2400",
         nurseLatitude: "30.0500",
         createdAt: "2024-06-01T12:34:56.1234567",
-        totalPrice: 200
+        totalPrice: 200, statusId: .Completed
     )
 }
