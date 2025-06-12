@@ -11,22 +11,36 @@ struct NurseDetailsScreen: View {
     var servicesIds: [ServiceItem] = []
     var nurse: Nurse?
     @EnvironmentObject var appRouter : AppRouter
+    @State private var showAllReviews = false
+    let width = UIScreen.main.bounds.width * 0.95
 
     var body: some View {
-        VStack {
-            AppImage(urlString: nurse?.image)
-            nurseInfo
-            reviewsSection
+        VStack{
+            ScrollView {
+                AppImage(
+                    urlString: nurse?.image,
+                    width: width, contentMode: .fill,
+                    backgroundColor: .clear
+                )
+                nurseInfo
+                reviewsSection
+            }
+    
             requestButton
         }
         .padding(5)
         .appNavigationBar(title: "")
+        .sheet(isPresented: $showAllReviews) {
+             AllReviewsSheet(reviews: nurse?.reviews ?? [])
+         }
     }
 }
 
+
+
 extension NurseDetailsScreen {
     var nurseInfo: some View {
-        HStack {
+        VStack {
             VStack(alignment: .leading) {
                 Text(nurse?.fullName ?? "unknown_nurse".localized())
                     .font(.title2)
@@ -35,10 +49,10 @@ extension NurseDetailsScreen {
                     .font(.title3)
                     .foregroundStyle(.appPrimary)
             }
-            Spacer()
+           // Spacer()
             HStack {
                 if let rating = nurse?.rating {
-                    Text(rating)
+                    Text("\(rating)")
                         .font(.title3)
                     Image(systemName: "star.fill")
                         .foregroundColor(.yellow)
@@ -46,25 +60,6 @@ extension NurseDetailsScreen {
             }
         }
         .padding(5)
-    }
-
-    var reviewsSection: some View {
-        Section {
-            ScrollView {
-                LazyVStack(spacing: 8) {
-                    ForEach(1...5, id: \.self) { _ in
-                        ReviewCellView()
-                    }
-                }
-            }
-        } header: {
-            HStack {
-                Text("reviews".localized())
-                    .font(.title2)
-                    .bold()
-                Spacer()
-            }
-        }
     }
 
     var requestButton: some View {
@@ -78,6 +73,53 @@ extension NurseDetailsScreen {
     }
 }
 
+extension NurseDetailsScreen {
+    var reviewsSection: some View {
+      //  let reviews = nurse?.reviews ?? []
+        
+        guard let reviews = nurse?.reviews, !reviews.isEmpty  else { return EmptyView()}
+        
+        return Section {
+            VStack(spacing: 8) {
+                ForEach(reviews.prefix(2), id: \.id) { review in
+                    ReviewCellView(review: review)
+                    
+                    Divider()
+                }
+                if reviews.count > 2 {
+                    Button(action: { showAllReviews = true }) {
+                        Text("See More")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+        } header: {
+            HStack {
+                Text("reviews".localized())
+                    .font(.title2)
+                    .bold()
+                Spacer()
+            }
+        }
+    }
+}
+
+struct AllReviewsSheet: View {
+    var reviews: [Review]
+
+    var body: some View {
+        NavigationView {
+            List(reviews, id: \.id) { review in
+                ReviewCellView(review: review)
+            }
+            .listStyle(.plain)
+            .navigationTitle("All Reviews")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
 #Preview {
-    NurseDetailsScreen()
+    NurseDetailsScreen(nurse: Nurse.mock)
 }

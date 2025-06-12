@@ -54,7 +54,7 @@ extension RequestScreen{
                     .bold()
 
                 HStack{
-                    Text(nurse?.rating ?? "0")
+                    Text("\(nurse?.rating ?? 0)")
                     Image(systemName: "star.fill")
                         .foregroundColor(.yellow)
                 }

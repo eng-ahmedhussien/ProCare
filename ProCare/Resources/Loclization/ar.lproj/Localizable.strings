@@ -98,7 +98,7 @@
 "visit_fee_message" = "رسوم الزيارة ثابتة لاي عدد من الخدمات";
 "visit_Fee" = "رسوم الزيارة";
 //MARK: - NursesList
-"nurses_list" = "قائمة الممرضات";
+"nurses_list" = "قائمة الممرضين";
 "no_nurses_available" = "لا توجد ممرضات حالياً";
 "error" = "خطأ";
 "retry" = "إعادة المحاولة";

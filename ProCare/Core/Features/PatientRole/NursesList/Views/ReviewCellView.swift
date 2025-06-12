@@ -8,35 +8,28 @@ import SwiftUI
 
 struct ReviewCellView: View {
     
+    var review: Review
+    
     var body: some View {
         HStack(alignment: .center){
-            AsyncImage(url: URL(string: "https://picsum.photos/seed/picsum/200/300")) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 70, height: 70)
-                    .clipShape(Circle())
-            } placeholder: {
-                Image(systemName: "photo.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 70, height: 70)
-                    .foregroundColor(.white.opacity(0.6))
-            }
-            
             VStack(alignment: .leading){
-                Text( "Customer name")
+                Text(review.patientName ?? "")
                     .font(.headline)
                 
-                Text("review")
+                Text(review.comment ?? "")
                     .font(.subheadline)
+                
+                Text(review.formattedCreatedAt ?? "")
+                    .font(.subheadline)
+                    .foregroundStyle(.gray)
         
             }
             
             Spacer()
             
             HStack{
-                Text("5")
+                Text("\(review.rating ?? 0)")
+                    
                 Image(systemName: "star.fill")
                     .foregroundColor(.yellow)
             }
@@ -46,4 +39,9 @@ struct ReviewCellView: View {
        // .backgroundCard(color: .white, cornerRadius: 10, shadowRadius: 2, shadowColor: .gray)
         .padding(.horizontal)
     }
+}
+
+
+#Preview {
+    ReviewCellView(review: Review.mock)
 }

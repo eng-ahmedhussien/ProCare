@@ -8,13 +8,13 @@
 import Foundation
 
 protocol NursesApiClintProtocol {
-    func getAllNurses(parameters: [String: String]) async throws -> APIResponse<NurseList>
+    func getAllNurses(parameters: [String: String]) async throws -> APIResponse<NurseData>
     
 }
 
 class NursesApiClint : ApiClient<NurseEndPoints>, NursesApiClintProtocol {
     
-    func getAllNurses(parameters: [String: String]) async throws -> APIResponse<NurseList> {
+    func getAllNurses(parameters: [String: String]) async throws -> APIResponse<NurseData> {
         return try await request(NurseEndPoints.getAllNurses(parameters: parameters))
     }
 }
