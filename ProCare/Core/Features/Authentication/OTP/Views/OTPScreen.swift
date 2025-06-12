@@ -49,6 +49,7 @@ struct OTPScreen: View {
             
             VerifyButton
         }
+        .appNavigationBar(title: "otp".localized())
 //        .disabled(vm.viewState == .loading)
 //        .appNavigationBar(title:"otp".localized())
         

@@ -20,8 +20,15 @@ struct ResendOTPView: View {
             Button(action: {
                 resendOTP()
             }) {
-                Text(timeRemaining > 0 ? "Resend OTP in \(timeRemaining)s" : "Resend OTP")
-                    .foregroundColor(timeRemaining > 0 ? .gray : .appPrimary)
+                Text(
+                    timeRemaining > 0
+                    ? String(
+                        format: NSLocalizedString("resend_otp_in", comment: ""),
+                        timeRemaining
+                    )
+                    : NSLocalizedString("resend_otp", comment: "")
+                )
+                .foregroundColor(timeRemaining > 0 ? .gray : .appPrimary)
             }
             .disabled(timeRemaining > 0)
         }
