@@ -14,7 +14,7 @@ struct CategoryCard: View {
         Button(action: {
             onTap()
         }) {
-            HStack(alignment: .top,spacing: 10) {
+            HStack(alignment: .top,spacing: 20) {
                 AppImage(
                     urlString: category.imageUrl ?? "",
                     width: 100,
@@ -24,7 +24,7 @@ struct CategoryCard: View {
                 
                 VStack(alignment: .leading, spacing: 5){
                     Text(category.name ?? "Unknown Category")
-                        .font(.headline)
+                        .font(.title2)
                         .foregroundStyle(.appPrimary)
                     
                     Text(category.description ?? "No description available")

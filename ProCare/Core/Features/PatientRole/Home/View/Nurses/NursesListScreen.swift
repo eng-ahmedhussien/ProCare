@@ -33,6 +33,7 @@ struct NursesListScreen: View {
         ZStack {
             content
         }
+        .background(.appBackground)
         .appNavigationBar(title: "nurses_list".localized())
         .onAppear {
             if vm.nurseList.isEmpty {

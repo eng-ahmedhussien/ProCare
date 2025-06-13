@@ -43,8 +43,8 @@ struct AppTextFieldPreview: View {
 
 struct AppTextField: View {
     @Binding var text: String
-    var placeholder: String
-    var validationRules: [ValidationRule]
+    var placeholder: String = ""
+    var validationRules: [ValidationRule] = []
     var isSecure: Bool = false
     var style: AppTextFieldStyle = .bordered // default style
     

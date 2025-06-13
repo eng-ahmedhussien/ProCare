@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AppTextEditor: View {
     @Binding var text: String
-    var placeholder: String
+    var placeholder: String = ""
     var height: CGFloat = 120
     @FocusState.Binding var isFocused: Bool
 
@@ -23,9 +23,21 @@ struct AppTextEditor: View {
             if text.isEmpty {
                 Text(placeholder)
                     .foregroundColor(.gray)
-                    .padding(8)
+                    .padding(14) // match TextEditor padding for alignment
             }
         }
         .frame(height: height)
+    }
+}
+
+#Preview {
+    @FocusState  var isDrugsFocused: Bool
+    VStack{
+        AppTextEditor(
+            text: .constant(""),
+            placeholder: "note",
+            height: 120,
+            isFocused: $isDrugsFocused)
+        .padding()
     }
 }

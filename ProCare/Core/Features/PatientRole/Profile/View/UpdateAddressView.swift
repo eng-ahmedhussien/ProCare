@@ -15,50 +15,59 @@ struct UpdateAddressView: View {
     @EnvironmentObject var appRouter: AppRouter
   
     @Environment(\.openURL) var openURL
+    @FocusState private var isFocused: Bool
     @State private var showLocationAlert = false
     
     var body: some View {
-        VStack(spacing: 16) {
+        content
+            .padding(.vertical)
+            .background(.appBackground)
+            .appNavigationBar(title: "update_location".localized())
+            .onFirstAppear {
+                Task {
+                    await vm.fetchGovernorates()
+                }
+            }
+            .onChange(of: vm.selectedGovernorate ?? 0) { id in
+                Task {
+                    await vm.fetchCityByGovernorateId(id: id)
+                }
+            }
+            .onTapGesture {
+                isFocused = false
+            }
+            .alert("location_required".localized(), isPresented: $showLocationAlert) {
+                Button("open_settings".localized()) {
+                    if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                        openURL(appSettings)
+                    }
+                }
+                Button("cancel".localized(), role: .cancel) {}
+            } message: {
+                Text("location_permission_message".localized())
+            }
+    }
+    
+    @ViewBuilder
+    private var content: some View {
+        VStack(spacing: 20) {
             
             DropdownListView(
                 selectedId: $vm.selectedGovernorate,
                 options: vm.governorates
-            )
+            ).padding(.vertical)
             
             
             DropdownListView(
                 selectedId: $vm.selectedCity,
                 options:  vm.citys
-            )
+            ).padding(.vertical)
             
             addressDetails
             
             Spacer()
             
-           // LocationButton
             saveButton
-        }
-        .padding(.vertical)
-        .appNavigationBar(title: "update_location".localized())
-        .onFirstAppear {
-            Task {
-                await vm.fetchGovernorates()
-            }
-        }
-        .onChange(of: vm.selectedGovernorate ?? 0) { id in
-            Task {
-                await vm.fetchCityByGovernorateId(id: id)
-            }
-        }
-        .alert("location_required".localized(), isPresented: $showLocationAlert) {
-            Button("open_settings".localized()) {
-                if let appSettings = URL(string: UIApplication.openSettingsURLString) {
-                    openURL(appSettings)
-                }
-            }
-            Button("cancel".localized(), role: .cancel) {}
-        } message: {
-            Text("location_permission_message".localized())
         }
     }
 }
@@ -69,9 +78,13 @@ extension UpdateAddressView {
         VStack(alignment: .leading, spacing : 10){
             Text("detailed_address")
                 .font(.body)
-            TextEditor(text: $vm.addressInDetails)
-                .frame(height: 120)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
+                .foregroundStyle(.appText)
+            
+            AppTextEditor(
+                text:  $vm.addressInDetails,
+                placeholder: "add_address".localized(),
+                isFocused:$isFocused
+            )
         }
         .padding()
     }

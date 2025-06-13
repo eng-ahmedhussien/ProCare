@@ -34,19 +34,39 @@ struct DropdownListView<T: DropdownOption>: View {
                             .padding(.horizontal, 12)
                             .background(
                                 option.id == selectedId ?
-                                Color.gray : Color.clear
+                                Color.appPrimary : Color.clear
                             )
+                            .foregroundStyle(.appText)
                             .cornerRadius(6)
                     }
-                    //.buttonStyle(PlainButtonStyle())
                 }
             }
             .padding(.vertical, 4)
         }
-        .foregroundStyle(.black)
+        .foregroundStyle(.appText)
         .padding()
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
         .padding(.horizontal)
         .tint(.black)
+    }
+}
+
+struct MockDropdownOption: DropdownOption, Hashable {
+    let id: Int
+    let name: String
+}
+
+struct DropdownListView_Previews: PreviewProvider {
+    @State static var selectedId: Int? = nil
+    static let options = [
+        MockDropdownOption(id: 1, name: "Option 1"),
+        MockDropdownOption(id: 2, name: "Option 2"),
+        MockDropdownOption(id: 3, name: "Option 3")
+    ]
+    
+    static var previews: some View {
+        DropdownListView<MockDropdownOption>(selectedId: $selectedId, options: options)
+            .previewLayout(.sizeThatFits)
+            .background(.appBackground)
     }
 }

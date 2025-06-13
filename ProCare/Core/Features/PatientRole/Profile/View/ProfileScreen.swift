@@ -44,7 +44,7 @@ struct ProfileTapScreen: View {
                 
             }
         }
-        .background(.gray.opacity(0.1))
+        .background(.appBackground)
         .onAppear {
             Task{
                 await  vm.getProfile()
@@ -135,16 +135,13 @@ extension ProfileTapScreen{
             .foregroundStyle(.appPrimary)
             
             HStack{
-                TextField("", text: $vm.firstName)
-                    .textFieldStyle(.roundedBorder)
-                    .foregroundStyle(isEditingUserInfo ? .gray : Color.black)
-                   // .multilineTextAlignment(.trailing)
+                
+                AppTextField(text: $vm.firstName)
+                    .foregroundStyle(isEditingUserInfo ? .gray : .black)
                     .disabled(!isEditingUserInfo)
                 
-                TextField("", text: $vm.lastName)
-                    .textFieldStyle(.roundedBorder)
-                    .foregroundStyle(isEditingUserInfo ? .gray : Color.black)
-                    //.multilineTextAlignment(.trailing)
+                AppTextField(text: $vm.lastName)
+                    .foregroundStyle(isEditingUserInfo ? .gray : .black)
                     .disabled(!isEditingUserInfo)
             }
             
@@ -162,6 +159,7 @@ extension ProfileTapScreen{
                         Text(gender.displayName)
                             .font(.body)
                             .foregroundStyle(.black)
+                            .padding()
                     } else {
                         Text("no_selected".localized())
                             .foregroundColor(.gray)
@@ -216,6 +214,8 @@ extension ProfileTapScreen{
             if let location = vm.location {
                 Text("\(location)")
                     .font(.body)
+                    .foregroundStyle(.black)
+                
             }else{
                 Text("No selected")
                     .foregroundColor(.gray)
@@ -245,11 +245,14 @@ extension ProfileTapScreen{
             VStack() {
                 
                 HStack{
-                    Button("change_password".localized()) {
+                    Button {
                         appRouter.pushView(PhoneScreen())
-                    }
-                    .foregroundStyle(.appPrimary)
-                    .buttonStyle(AppButton(kind: .border))
+                    } label: {
+                        Text("change_password")
+                            .lineLimit(1)
+                    }   .foregroundStyle(.appPrimary)
+                        .buttonStyle(AppButton(kind: .border))
+
                     
                     Button("logout".localized()) {
                         appRouter.popToRoot()

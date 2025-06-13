@@ -31,9 +31,11 @@ struct NurseDetailsScreen: View {
             requestButton
         }
         .padding(5)
+        .background(.appBackground)
         .appNavigationBar(title: "")
         .sheet(isPresented: $showAllReviews) {
              AllReviewsSheet(reviews: nurse?.reviews ?? [])
+                .background(.appBackground)
          }
     }
 }

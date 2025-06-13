@@ -15,7 +15,8 @@ struct cardBackground: View {
                 .foregroundStyle(.tint)
             Text("Hello, world!")
         }.padding()
-            .backgroundCard(color: .white, cornerRadius: 10, shadowRadius: 5, shadowColor: .black.opacity(5),shadowX:10,shadowY:10)
+            .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .gray)
+//            .backgroundCard(color: .white, cornerRadius: 10, shadowRadius: 5, shadowColor: .black.opacity(5),shadowX:10,shadowY:10)
     }
 }
 

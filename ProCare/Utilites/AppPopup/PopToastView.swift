@@ -20,7 +20,7 @@ struct PopToastView: View {
             if toast.position == .top {
                 toastBody
             }
-           // Spacer()
+            Spacer()
             if toast.position == .center {
                 toastCenterBody
             }
@@ -70,7 +70,6 @@ struct PopToastView: View {
     
     private var toastCenterBody: some View {
         VStack {
-            
             Image(systemName: "checkmark")
                 .resizable()
                 .frame(width: 50, height: 50, alignment: .center)
@@ -114,6 +113,14 @@ enum ToastPosition {
 
 #Preview {
     VStack{
-        PopToastView(toast: ToastData(style: .success, message: "sccuess", duration: 3, width: .infinity, position: .center))
+        PopToastView(
+            toast: ToastData(
+                style: .success,
+                message: "sccuess",
+                duration: 3,
+                width: .infinity,
+                position: .center
+            )
+        )
     }
 }
