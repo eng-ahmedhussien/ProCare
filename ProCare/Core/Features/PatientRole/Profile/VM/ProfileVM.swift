@@ -20,7 +20,7 @@ class ProfileVM: ObservableObject {
     @Published var dateOfBirth: Date?
     @Published var location: String?
     @Published var gender: Gender?
-    @Published var viewState: ViewState = .empty
+    @Published var viewState: LoadingState = .idle
     @Published var profileImage: String?
     
     // MARK: - Governorates
@@ -62,17 +62,19 @@ class ProfileVM: ObservableObject {
     }
     
     // MARK: - API Methods
-    func getProfile() async {
+    func fetchProfile() async {
+        viewState = .loading
         do {
             let response = try await apiClient.getProfile()
             if let profileData = response.data {
+                viewState = .loaded
                 AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
                 putProfileData(profileData)
             } else {
               //  AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
                 debugPrint("Response received but no user data")
             }
-        } catch {
+        }catch {
             debugPrint("Unexpected error: \(error.localizedDescription)")
         }
     }

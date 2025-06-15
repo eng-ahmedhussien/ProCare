@@ -45,7 +45,7 @@ struct LoginScreen: View {
                             case .withToken:
                                 guard let data = vm.userDataLogin else { return }
                                 Task{
-                                    await profileVM.getProfile()
+                                    await profileVM.fetchProfile()
                                 }
                                 authManager.login(userDataLogin: data )
                             }

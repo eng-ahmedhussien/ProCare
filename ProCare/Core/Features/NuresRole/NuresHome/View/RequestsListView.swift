@@ -70,23 +70,11 @@ struct RequestsListView: View {
             emptyView
         
         case .error(let message):
-            VStack(spacing: 12) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .font(.largeTitle)
-                    .foregroundColor(.orange)
-                
-                Text("Error: \(message)")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.gray)
-                
-                Button("Retry") {
-                    Task {
-                        await vm.fetchRequests(loadType: .initial)
-                    }
+            RetryView(message: "Error: \(message)") {
+                Task {
+                    await vm.fetchRequests(loadType: .initial)
                 }
-                .padding(.top, 8)
             }
-            .padding()
         }
     }
     

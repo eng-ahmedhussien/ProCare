@@ -75,10 +75,14 @@ struct ServiceListPage: View {
             }
         
         case .empty:
-            emptyView
+            EmptyScreen(message: "no_services_available")
         
         case .error(let message):
-            createErrorView(message)
+            RetryView(message: "error".localized() + ": \(message)") {
+                Task {
+                    await vm.fetchServices(id: id, loadType: .initial)
+                }
+            }
         }
     }
     
@@ -150,27 +154,6 @@ extension ServiceListPage{
         } message: {
             Text("address_permission_message")
         }
-    }
-    private var emptyView: some View {
-        VStack {
-            Text("no_services_available")
-                .foregroundColor(.gray)
-                .padding()
-        }
-    }
-    private func createErrorView(_ message: String) -> some View {
-        VStack(spacing: 12) {
-            Text("error" + "\(message)")
-                .multilineTextAlignment(.center)
-                
-            Button("retry".localized()) {
-                Task {
-                    await vm.fetchServices(id: id, loadType: .initial)
-                }
-            }
-            .foregroundStyle(.appPrimary)
-        }
-        .padding()
     }
 }
 

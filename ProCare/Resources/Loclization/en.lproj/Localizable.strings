@@ -104,7 +104,6 @@
 "nurses_list" = "Nurses List";
 "no_nurses_available" = "No nurses available at the moment";
 "error" = "Error";
-"retry" = "Retry";
 "no_title" = "No Title";
 "no_description" = "No Description Available";
 "unknown_nurse" = "Unknown Nurse";
@@ -124,7 +123,6 @@
 "previous_requests" = "Previous Requests";
 "current_request" = "Current Request";
 "error" = "Error";
-"retry" = "Retry";
 "no_orders_available" = "No orders available at the moment";
 "no_requests" = "No requests";
 "cancel_current_request" = "Cancel current request";

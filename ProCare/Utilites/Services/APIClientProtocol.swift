@@ -263,11 +263,7 @@ extension ApiClient {
 
 extension ApiClient {
     
-    func requestWithRetry<T: Codable>(
-        _ endpoint: EndpointType,
-        retries: Int = 3,
-        delay: TimeInterval = 2
-    ) async throws -> APIResponse<T> {
+    func requestWithRetry<T: Codable>( _ endpoint: EndpointType, retries: Int = 3, delay: TimeInterval = 2) async throws -> APIResponse<T> {
         var currentAttempt = 0
         
         while currentAttempt <= retries {

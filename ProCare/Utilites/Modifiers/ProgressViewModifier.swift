@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-
 struct ProgressViewStyle: ViewModifier {
-    var color: Color
+    var color: Color = .appPrimary // Use your visible color here
     func body(content: Content) -> some View {
         content
             .progressViewStyle(CircularProgressViewStyle(tint: color))
@@ -17,8 +16,8 @@ struct ProgressViewStyle: ViewModifier {
     }
 }
 
-extension  View {
-    func appProgressStyle(color: Color = .white) -> some View {
+extension View {
+    func appProgressStyle(color: Color = .appPrimary) -> some View {
         modifier(ProgressViewStyle(color: color))
     }
 }

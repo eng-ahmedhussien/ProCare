@@ -21,33 +21,43 @@ struct ProfileTapScreen: View {
     
     private let screenHeight = UIScreen.main.bounds.height
     private let screenWidth = UIScreen.main.bounds.width
+    
     private var isFormValid: Bool {
         ValidationRule.isEmpty.validate(vm.firstName) == nil &&
         ValidationRule.isEmpty.validate(vm.lastName) == nil
     }
+    
     var body: some View {
         VStack{
             header
-            ScrollView(showsIndicators: false){
-                VStack(alignment: .center, spacing: 20) {
-                    profileImage
-                    userInfo
+            switch vm.viewState {
+            case .idle:
+                EmptyView()
+            case .loading:
+                VStack {
+                    Spacer()
+                    ProgressView()
+                        .appProgressStyle()
+                    Spacer()
                 }
-                .padding()
-                .backgroundCard(cornerRadius: 10, shadowRadius: 4, shadowColor: .gray, shadowX: 2, shadowY: 2)
-                .padding()
-                .dismissKeyboardOnTap()
-                
-                locationView
-                
-                buttons
-                
+            case .loaded:
+                content
+            case .failed(let error):
+                VStack {
+                    Spacer()
+                    RetryView(message: error){
+                        Task {
+                            await vm.fetchProfile()
+                        }
+                    }
+                    Spacer()
+                }
             }
         }
         .background(.appBackground)
         .onAppear {
             Task{
-                await  vm.getProfile()
+                await  vm.fetchProfile()
             }
         }
         .photosPicker(isPresented: $openPhotoLibrary, selection: $vm.selectedImage, matching: .images)
@@ -73,6 +83,26 @@ struct ProfileTapScreen: View {
             Text("are_you_sure_delete_profile".localized())
         }
 
+    }
+    
+    @ViewBuilder
+    private var content: some View {
+        
+        ScrollView(showsIndicators: false){
+            VStack(alignment: .center, spacing: 20) {
+                profileImage
+                userInfo
+            }
+            .padding()
+            .backgroundCard(cornerRadius: 10, shadowRadius: 4, shadowColor: .gray, shadowX: 2, shadowY: 2)
+            .padding()
+            .dismissKeyboardOnTap()
+            
+            locationView
+            
+            buttons
+            
+        }
     }
 }
 
@@ -276,8 +306,10 @@ extension ProfileTapScreen{
 
 #Preview {
     var vm = ProfileVM()
+    vm.viewState = .loading
     vm.putProfileData(Profile.mock)
    return  NavigationView{
-        ProfileTapScreen().environmentObject(vm)
+        ProfileTapScreen()
+           .environmentObject(vm)
     }
 }

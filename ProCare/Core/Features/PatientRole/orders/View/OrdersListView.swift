@@ -61,38 +61,16 @@ struct OrdersListView: View {
             }
         
         case .empty:
-            emptyView
+            EmptyScreen(message: "no_orders_available".localized())
         
         case .error(let message):
-            VStack(spacing: 12) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .font(.largeTitle)
-                    .foregroundColor(.orange)
-                
-                Text("error".localized() + ": \(message)")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.gray)
-                
-                Button("retry".localized()) {
-                    Task {
-                        await vm.fetchOrders(loadType: .initial)
-                    }
+            
+            RetryView(message: "error".localized() + ": \(message)") {
+                Task {
+                    await vm.fetchOrders(loadType: .initial)
                 }
-                .padding(.top, 8)
             }
-            .padding()
         }
-    }
-    
-    private var emptyView: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "person.crop.circle.badge.exclam")
-                .font(.largeTitle)
-                .foregroundColor(.gray)
-            Text("no_orders_available".localized())
-                .foregroundColor(.gray)
-        }
-        .padding()
     }
 }
 

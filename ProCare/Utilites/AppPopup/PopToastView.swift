@@ -76,7 +76,7 @@ struct PopToastView: View {
             
             Text(toast.message)
                 .font(.title2)
-                .foregroundColor(.black)
+                .foregroundColor(.appText)
         }
         .frame(maxWidth: 200)
         .padding()

@@ -96,38 +96,15 @@ struct NursesListScreen: View {
             }
         
         case .empty:
-            emptyView
+            EmptyScreen(message: "no_nurses_available")
         
         case .error(let message):
-            VStack(spacing: 12) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .font(.largeTitle)
-                    .foregroundColor(.orange)
-                
-                Text("error".localized() + ": \(message)")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.gray)
-                
-                Button("retry".localized()) {
+            RetryView(message: "error".localized() + ": \(message)") {
                     Task {
                         await vm.fetchNurses(loadType: .initial)
                     }
-                }
-                .padding(.top, 8)
             }
-            .padding()
         }
-    }
-    
-    private var emptyView: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "person.crop.circle.badge.exclam")
-                .font(.largeTitle)
-                .foregroundColor(.gray)
-            Text("no_nurses_available")
-                .foregroundColor(.gray)
-        }
-        .padding()
     }
 }
 

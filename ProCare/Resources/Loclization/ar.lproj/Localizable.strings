@@ -109,7 +109,6 @@
 "nurses_list" = "قائمة الممرضين";
 "no_nurses_available" = "لا توجد ممرضات حالياً";
 "error" = "خطأ";
-"retry" = "إعادة المحاولة";
 "no_title" = "بدون عنوان";
 "no_description" = "لا يوجد وصف متاح";
 "unknown_nurse" = "ممرضة غير معروفة";
@@ -131,7 +130,6 @@
 "previous_requests" = "الطلبات السابقة";
 "current_request" = "الطلب الحالي";
 "error" = "خطأ";
-"retry" = "إعادة المحاولة";
 "no_orders_available" = "لا توجد طلبات حالياً";
 "no_requests" = "لا توجد طلبات";
 "cancel_current_request" = "إلغاء الطلب الحالي";
