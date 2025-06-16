@@ -15,7 +15,7 @@ class LoginVM: ObservableObject {
     @Published var password: String = ""
     @Published var userDataLogin : UserDataLogin?
     @Published var goToOTP = false
-    @Published var viewState: ViewState = .empty
+    @Published var viewState: ViewState = .idle
     
 
     private let apiClient: LoginApiClintProtocol

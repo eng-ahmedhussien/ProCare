@@ -15,7 +15,7 @@ class ResetPasswordFlowVM: ObservableObject {
     @Published var phone: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
-    @Published var viewState: ViewState = .empty
+    @Published var viewState: ViewState = .idle
     
     // MARK: - Validation Prompts
     var phonePrompt: String {
@@ -49,7 +49,7 @@ class ResetPasswordFlowVM: ObservableObject {
     // MARK: - API Methods
     func resendCode(completion: @escaping () -> Void) async {
    
-            viewState = .loading
+        viewState = .loading
 
         let parameters = ["phoneNumber": phone]
         do {

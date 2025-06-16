@@ -13,7 +13,7 @@ import SwiftUI
 class OTPVM : ObservableObject{
     @Published var userDataLogin : UserDataLogin?
     @Published var errorMessage: APIResponseError?
-    @Published var viewState: ViewState = .empty
+    @Published var viewState: ViewState = .idle
 
     private let apiClient:  OTPApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []

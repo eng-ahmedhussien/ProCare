@@ -13,7 +13,7 @@ import Foundation
 @MainActor
 class HomeVM: ObservableObject {
 
-    @Published private(set) var loadingState: LoadingState = .idle
+    @Published private(set) var loadingState: ViewState = .idle
     @Published var categories: [Category] = []
     @Published var subCategories: [NursingServices] = []
     //MARK: services

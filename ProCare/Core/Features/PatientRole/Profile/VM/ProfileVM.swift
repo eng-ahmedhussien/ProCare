@@ -20,7 +20,7 @@ class ProfileVM: ObservableObject {
     @Published var dateOfBirth: Date?
     @Published var location: String?
     @Published var gender: Gender?
-    @Published var viewState: LoadingState = .idle
+    @Published var viewState: ViewState = .idle
     @Published var profileImage: String?
     
     // MARK: - Governorates
