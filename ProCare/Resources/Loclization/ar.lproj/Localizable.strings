@@ -177,3 +177,12 @@
 "not_specified" = "غير محدد";
 "male" = "ذكر";
 "female" = "أنثى";
+//MARK: - validation text fields
+"validation_empty" = "هذا الحقل مطلوب";
+"validation_phone" = "يجب أن يبدأ رقم الهاتف بـ +20 (مثال: +201XXXXXXXXX)";
+"validation_password" = "كلمة المرور يجب أن تكون 8 أحرف على الأقل وتحتوي على حرف كبير وصغير ورقم ورمز.";
+"validation_confirm_password" = "كلمتا المرور غير متطابقتين";
+"validation_number" = "يجب أن يكون رقمًا صحيحًا";
+"validation_min" = "يجب أن تكون القيمة ≥ %@";
+"validation_max" = "يجب أن تكون القيمة ≤ %@";
+"validation_and" = " و ";

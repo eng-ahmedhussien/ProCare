@@ -184,15 +184,15 @@ extension ApiClient {
     }
     
     // Helper function to create APIResponseError
-    private func createAPIError<T>(from response: APIResponse<T>) -> APIResponseError {
-        return APIResponseError(
-            type: nil,
-            title: nil,
-            status: response.subStatus,
-            errors: [response.status.rawValue.description: [response.message]],
-            traceId: nil
-        )
-    }
+//    private func createAPIError<T>(from response: APIResponse<T>) -> APIResponseError {
+//        return APIResponseError(
+//            type: nil,
+//            title: nil,
+//            status: response.subStatus,
+//            errors: [response.status?.rawValue.description: [response.message ?? ""]],
+//            traceId: nil
+//        )
+//    }
     
     // MARK: - handleURLError
     private func handleURLError(_ error: URLError,_ request: URLRequest?) {

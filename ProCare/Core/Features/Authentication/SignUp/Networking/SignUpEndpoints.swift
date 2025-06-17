@@ -6,8 +6,7 @@
 //
 
 import Foundation
-
-
+import SwiftUI
 
 enum SignUpEndpoints: APIEndpoint {
     case signUp(parameters: [String: String])

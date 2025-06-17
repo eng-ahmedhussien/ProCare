@@ -8,8 +8,8 @@
 import Foundation
 
 struct APIResponse<T: Codable>: Codable,Error {
-    let status: ResponseStatus
-    let message: String
+    let status: ResponseStatus?
+    let message: String?
     let internalMessage: String?
     let data: T?
     let subStatus: Int

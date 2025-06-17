@@ -19,6 +19,14 @@ struct SignUPScreen: View {
     }
     //MARK: - Body
     var body: some View {
+            content
+                .popupHost()
+                .disabled(vm.viewState == .loading)
+                .dismissKeyboardOnTap()
+    }
+    
+    @ViewBuilder
+    private var content: some View {
         VStack{
             header
             signUpForm
@@ -26,7 +34,6 @@ struct SignUPScreen: View {
             SignUpButton
             haveAccountButton
         }
-        .appNavigationBar(title: "sign_up".localized())
     }
 }
 
@@ -44,12 +51,32 @@ extension SignUPScreen {
     var signUpForm: some View {
         VStack(spacing: 30){
             HStack(spacing: 30){
-                AppTextField(text: $vm.name, placeholder: "name".localized(), validationRules: [.isEmpty])
-                AppTextField(text: $vm.secondName, placeholder: "second_name".localized(), validationRules: [.isEmpty])
+                AppTextField(
+                    text: $vm.name,
+                    placeholder: "name".localized(),
+                    validationRules: [.isEmpty]
+                )
+                AppTextField(
+                    text: $vm.secondName,
+                    placeholder: "second_name".localized(),
+                    validationRules: [.isEmpty]
+                )
             }
-            AppTextField(text: $vm.phone, placeholder: "phone".localized(), validationRules: [.phone])
-            AppTextField(text: $vm.password, placeholder: "password".localized(), validationRules: [.password])
-            AppTextField(text:  $vm.confirmPassword, placeholder: "confirm_password".localized(), validationRules: [.confirmPassword($vm.password)])
+            AppTextField(
+                text: $vm.phone,
+                placeholder: "phone".localized(),
+                validationRules: [.phone]
+            )
+            AppTextField(
+                text: $vm.password,
+                placeholder: "password".localized(),
+                validationRules: [.password],isSecure: true
+            )
+            AppTextField(
+                text:  $vm.confirmPassword,
+                placeholder: "confirm_password".localized(),
+                validationRules: [.confirmPassword($vm.password)], isSecure: true
+            )
         }
         .padding()
         .autocapitalization(.none)
@@ -59,15 +86,32 @@ extension SignUPScreen {
     var SignUpButton: some View {
         Button {
             Task {
-                await vm.signUp(){ otp in
-                    debugPrint(otp ?? "nil")
-                    appRouter.dismissFullScreenOver()
-                    appRouter.pushView(OTPScreen(phonNumber: vm.phone))
+                await vm.signUp(){ response in
+                    if let status = response.status {
+                        switch status {
+                        case .Success:
+                            showToast("\(response.message ?? "")", appearance: .success)
+                            appRouter.dismissFullScreenOver()
+                            appRouter.pushView(OTPScreen(phonNumber: vm.phone))
+                        case .Error:
+                            showToast("\(response.message ?? "")", appearance: .error)
+                        case .AuthFailure:
+                            return
+                        case .Conflict:
+                            return
+                        }
+                    }
                 }
             }
         } label: {
-            Text("sign_up".localized())
-                .font(.title3)
+            if vm.viewState == .loading {
+                ProgressView()
+                    .appProgressStyle()
+            } else {
+                Text("sign_up".localized())
+                    .font(.title3)
+            }
+      
         }
         .buttonStyle(AppButton(kind: .solid,disabled: !isFormValid))
         .disabled(!isFormValid)

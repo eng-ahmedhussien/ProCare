@@ -37,7 +37,6 @@ struct AppButton: ButtonStyle {
             .frame(maxWidth: .infinity)
             .foregroundColor(foregroundColor)
             .background(background(isPressed: isPressed, color: backgroundColor))
-            .cornerRadius(10)
             .padding(.horizontal,5)
             .opacity(disabled ? 0.6 : 1.0)
     }
@@ -57,10 +56,10 @@ struct AppButton: ButtonStyle {
     private func background(isPressed: Bool,color: Color) -> some View {
         switch kind {
         case .solid:
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 15)
                 .fill(disabled ? Color.gray : (isPressed ? color.opacity(0.7) : color))
         case .border:
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 15)
                 .stroke(disabled ? .gray.opacity(0.8) : .appPrimary, lineWidth: 1)
         case .plain:
             Color.clear
@@ -68,25 +67,15 @@ struct AppButton: ButtonStyle {
     }
 }
 
-
-//#Preview{
-//    VStack{
-//        Section{
-//            Text("Solid")
-//                .buttonStyle(CustomButton(kind: .solid, width: 300, height: 50, disabled: !isFormValid))
-//                .disabled(!isFormValid)
-//            Text("Solid")
-//                .buttonStyle(.solid,hight: 5, disabled: true)
-//        }
-//
-//        Text("Border")
-//            .buttonStyle(.border, width: 120, disabled: false)
-//        Text("Border")
-//            .buttonStyle(.border, width: 120, disabled: true)
-//
-//        Text("Plain")
-//            .buttonStyle(.plain, disabled: true)
-//        Text("Plain")
-//            .buttonStyle(.plain, disabled: false)
-//    }
-//}
+#Preview {
+    VStack(spacing: 16) {
+        Button("Solid") {}
+            .buttonStyle(AppButton(kind: .solid))
+        Button("Border") {}
+            .buttonStyle(AppButton(kind: .border))
+        Button("Plain") {}
+            .buttonStyle(AppButton(kind: .plain))
+    }
+    .padding()
+    .background(Color(.systemBackground))
+}

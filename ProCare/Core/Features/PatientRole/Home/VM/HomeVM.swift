@@ -263,11 +263,13 @@ extension HomeVM{
                 showToast("request crated", appearance: .success, position: .top)
                 completion()
             case .Error:
-                showToast(response.message, appearance: .error, position: .top)
+                showToast(response.message ?? "", appearance: .error, position: .top)
             case .AuthFailure:
-                showToast(response.message, appearance: .error, position: .top)
+                showToast(response.message ?? "", appearance: .error, position: .top)
             case .Conflict:
-                showToast(response.message, appearance: .error, position: .top)
+                showToast(response.message ?? "", appearance: .error, position: .top)
+            case .none:
+                return
             }
            
         } catch {

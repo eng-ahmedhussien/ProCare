@@ -21,36 +21,36 @@ extension ValidationRule {
         switch self {
         case .isEmpty:
             let newText = value.trimmingCharacters(in: .whitespacesAndNewlines)
-            return newText.isEmpty ? "This field cannot be empty" : nil
+            return newText.isEmpty ? "validation_empty".localized() : nil
             
         case .phone:
             let phoneRegex = "^(?:\\+?20|0)?1[0125][0-9]{8}$"
             let predicate = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
-            return predicate.evaluate(with: value) ? nil : "Phone number must start with +20 (e.g. +201XXXXXXXXX)"
+            return predicate.evaluate(with: value) ? nil : "validation_phone".localized()
             
         case .password:
             let pattern = #"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$"#
               let regexMatch = value.range(of: pattern, options: .regularExpression) != nil
-              return regexMatch ? nil : "Password must be 8+ characters, with uppercase, lowercase, number, and symbol."
+            return regexMatch ? nil : "validation_password".localized()
             
         case .confirmPassword(let binding):
-            return value == binding.wrappedValue ? nil : "Passwords do not match"
+            return value == binding.wrappedValue ? nil : "validation_confirm_password".localized()
             
         case .limit(let min, let max):
             guard let numericValue = Double(value) else {
-                return "Must be a valid number"
+                return "validation_number".localized()
             }
             var errors = [String]()
             if let min = min, numericValue < min {
-                errors.append("Value must be ≥ \(min)")
+                errors.append(String(format: NSLocalizedString("validation_min", comment: ""), min))
             }
             if let max = max, numericValue > max {
-                errors.append("Value must be ≤ \(max)")
+                errors.append(String(format: NSLocalizedString("validation_max", comment: ""), max))
             }
-            return errors.isEmpty ? nil : errors.joined(separator: " and ")
+            return errors.isEmpty ? nil : errors.joined(separator: NSLocalizedString("validation_and", comment: ""))
             
         case .numeric:
-            return Double(value) == nil ? "Must be a numeric value" : nil
+            return Double(value) == nil ? "validation_number".localized() : nil
         }
     }
     

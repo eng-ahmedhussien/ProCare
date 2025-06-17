@@ -15,7 +15,6 @@ struct ProCareApp: App {
     @StateObject var profileVM = ProfileVM()
     @StateObject var ordersVM =  OrdersVM()
     @State private var isLoading = true
-    @Environment(\.colorScheme) var colorScheme
 
     var body: some Scene {
         WindowGroup {
@@ -33,8 +32,7 @@ struct ProCareApp: App {
                         .popupHost()
       
                 }
-            }           
-            .background(colorScheme == .dark ? Color(.secondarySystemBackground) : Color.clear)
+            }
             .task {
                 try? await Task.sleep(nanoseconds: 2_000_000_000)
                 isLoading = false

@@ -89,11 +89,11 @@ struct AppTextField: View {
                 Group {
                     switch style {
                     case .bordered:
-                        RoundedRectangle(cornerRadius: 8)
+                        RoundedRectangle(cornerRadius: 15)
                             .stroke(showError ? Color.red : Color.gray, lineWidth: 1)
                     case .plain:
                         if showError {
-                            RoundedRectangle(cornerRadius: 8)
+                            RoundedRectangle(cornerRadius: 15)
                                 .stroke(Color.red, lineWidth: 1)
                         }
                     }
