@@ -22,6 +22,8 @@ class ProfileVM: ObservableObject {
     @Published var gender: Gender?
     @Published var viewState: ViewState = .idle
     @Published var profileImage: String?
+    @Published var profileData: Profile?
+        
     
     // MARK: - Governorates
     @Published var governorates: [Governorates] = []
@@ -70,6 +72,7 @@ class ProfileVM: ObservableObject {
                 viewState = .loaded
                 AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
                 putProfileData(profileData)
+                self.profileData = profileData
             } else {
               //  AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
                 debugPrint("Response received but no user data")

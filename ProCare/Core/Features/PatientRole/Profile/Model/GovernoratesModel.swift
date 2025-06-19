@@ -12,3 +12,13 @@ struct Governorates: Codable, DropdownOption {
     var name: String
 }
 
+extension Governorates {
+    static let mock: Governorates = Governorates(id: 1, name: "Cairo")
+
+    static let mockList: [Governorates] = [
+        Governorates(id: 1, name: "Cairo"),
+        Governorates(id: 2, name: "Giza"),
+        Governorates(id: 3, name: "Alexandria"),
+        Governorates(id: 4, name: "Aswan")
+    ]
+}

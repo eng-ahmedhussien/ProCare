@@ -21,7 +21,7 @@ struct UpdateAddressView: View {
     var body: some View {
         content
             .padding(.vertical)
-            .background(.appBackground)
+            //.background(.appBackground)
             .appNavigationBar(title: "update_location".localized())
             .onFirstAppear {
                 Task {
@@ -54,12 +54,14 @@ struct UpdateAddressView: View {
             
             DropdownListView(
                 selectedId: $vm.selectedGovernorate,
+                placeholder: "governorate",
                 options: vm.governorates
             ).padding(.vertical)
             
             
             DropdownListView(
                 selectedId: $vm.selectedCity,
+                placeholder: "city",
                 options:  vm.citys
             ).padding(.vertical)
             
@@ -76,9 +78,9 @@ extension UpdateAddressView {
     
     var addressDetails: some View {
         VStack(alignment: .leading, spacing : 10){
-            Text("detailed_address")
-                .font(.body)
-                .foregroundStyle(.appText)
+//            Text("detailed_address")
+//                .font(.body)
+//                .foregroundStyle(.appText)
             
             AppTextEditor(
                 text:  $vm.addressInDetails,
@@ -99,17 +101,8 @@ extension UpdateAddressView {
                     let lat = String(location.coordinate.latitude)
                     let lon = String(location.coordinate.longitude)
                     await vm.updateProfile(updateKind: .location, latitude: lat, longitude: lon)
-                   // showToast("update location successfuly", appearance: .success)
+
                     showToast("update location successfuly", appearance: .success,position: .center)
-//                    showPopup {
-//                        VStack{
-//                            Image(systemName: "checkmark")
-//                                .resizable()
-//                                .frame(width: 50, height: 50, alignment: .center)
-//                            
-//                            Text("update location successfuly")
-//                        }
-//                    }
                     appRouter.pop()
                 }
             }
@@ -122,6 +115,9 @@ extension UpdateAddressView {
 
 #Preview{
     NavigationStack{
-        UpdateAddressView().environmentObject(ProfileVM())
+        var vm = ProfileVM()
+        vm.governorates = Governorates.mockList
+        vm.citys = City.mockList
+      return  UpdateAddressView().environmentObject(vm)
     }
 }
