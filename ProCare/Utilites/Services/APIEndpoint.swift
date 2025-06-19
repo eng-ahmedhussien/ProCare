@@ -99,7 +99,8 @@ enum HTTPHeader {
     }
     
     private static var bearer: [String: String] {
-        guard let  token : String = AppUserDefaults.shared.get(forKey: .authToken) else { return [:] }
+       // guard let  token : String = AppUserDefaults.shared.get(forKey: .authToken) else { return [:] }
+        guard let  token : String = KeychainHelper.shared.get(forKey: .authToken) else { return [:] }
         return [
             "accept": "*/*",
             "Authorization": "Bearer \(token)",

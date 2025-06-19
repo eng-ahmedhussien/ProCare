@@ -12,6 +12,8 @@ struct ServiceListPage: View {
     @EnvironmentObject var vm: HomeVM
     @EnvironmentObject var locationManger: LocationManager
     @EnvironmentObject var appRouter : AppRouter
+    @EnvironmentObject var profileVM: ProfileVM
+    @EnvironmentObject var locationManager: LocationManager
     @State var showAddressAlert = false
     var id = 1
     
@@ -124,7 +126,7 @@ extension ServiceListPage{
                 }
 
                 Button {
-                    if locationManger.isPermissionDenied {
+                    if locationManger.isPermissionDenied || profileVM.profileData?.city == nil {
                         showAddressAlert.toggle()
                     }else{
                         appRouter.pushView(
