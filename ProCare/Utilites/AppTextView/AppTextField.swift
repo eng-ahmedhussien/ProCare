@@ -62,6 +62,7 @@ struct AppTextField: View {
                         TextField(placeholder, text: $text)
                     }
                 }
+                .foregroundStyle(.appSecode)
                // .textFieldStyle(style)
                 .onChange(of: text, perform: { _ in
                     if text.isEmpty {
@@ -89,11 +90,11 @@ struct AppTextField: View {
                 Group {
                     switch style {
                     case .bordered:
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(showError ? Color.red : Color.gray, lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 30)
+                            .stroke(showError ? Color.red : Color.appSecode, lineWidth: 1)
                     case .plain:
                         if showError {
-                            RoundedRectangle(cornerRadius: 15)
+                            RoundedRectangle(cornerRadius: 30)
                                 .stroke(Color.red, lineWidth: 1)
                         }
                     }

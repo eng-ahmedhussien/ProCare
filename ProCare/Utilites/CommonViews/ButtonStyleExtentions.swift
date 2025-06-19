@@ -56,10 +56,10 @@ struct AppButton: ButtonStyle {
     private func background(isPressed: Bool,color: Color) -> some View {
         switch kind {
         case .solid:
-            RoundedRectangle(cornerRadius: 15)
+            RoundedRectangle(cornerRadius: 30)
                 .fill(disabled ? Color.gray : (isPressed ? color.opacity(0.7) : color))
         case .border:
-            RoundedRectangle(cornerRadius: 15)
+            RoundedRectangle(cornerRadius: 30)
                 .stroke(disabled ? .gray.opacity(0.8) : .appPrimary, lineWidth: 1)
         case .plain:
             Color.clear
