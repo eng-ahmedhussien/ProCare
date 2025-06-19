@@ -19,10 +19,10 @@ struct SignUPScreen: View {
     }
     //MARK: - Body
     var body: some View {
-            content
-                .popupHost()
-                .disabled(vm.viewState == .loading)
-                .dismissKeyboardOnTap()
+        content
+            .popupHost()
+            .disabled(vm.viewState == .loading)
+            .dismissKeyboardOnTap()
     }
     
     @ViewBuilder
@@ -93,6 +93,7 @@ extension SignUPScreen {
                             showToast("\(response.message ?? "")", appearance: .success)
                             appRouter.dismissFullScreenOver()
                             appRouter.pushView(OTPScreen(phonNumber: vm.phone))
+                            
                         case .Error:
                             showToast("\(response.message ?? "")", appearance: .error)
                         case .AuthFailure:
@@ -132,4 +133,5 @@ extension SignUPScreen {
 
 #Preview {
     SignUPScreen()
+    
 }

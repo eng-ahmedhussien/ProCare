@@ -25,8 +25,10 @@ class LoginVM: ObservableObject {
         self.apiClient = apiClient
     }
 
-    func login(completion: @escaping (_ userSate: UserState) -> Void) async {
+    func login(completion: @escaping (APIResponse<UserDataLogin>) -> Void) async {
+        
         viewState = .loading
+        
         let parameter = [
             "phoneNumber": phone,
             "password": password,
@@ -35,40 +37,34 @@ class LoginVM: ObservableObject {
         
         do {
             let response = try await apiClient.login(parameters: parameter)
+            viewState = .loaded
             
-            await MainActor.run {
-                if  let userDataLogin = response.data {
-                    self.userDataLogin = userDataLogin
-                    viewState = .loaded
-                    switch userDataLogin.loginStatus {
-                    case .Success:
-                        if userDataLogin.token != nil {
-                            completion(.withToken)
-                            
-                            //get profile
-//                            Task{
-//                                await profileVM.getProfile()
-//                            }
-                        }
-                    case .InValidCredintials:
-                        debugPrint("InValidCredintials")
-                        showToast("InValidCredintials", appearance: .error, position: .top)
-                    case .UserLockedOut:
-                        debugPrint("UserLockedOut")
-                    case .UserNotConfirmed:
-                        completion(.userNotConfirmed)
-                    case .Error:
-                        debugPrint("Error")
-                        showToast("Error", appearance: .error, position: .top)
-                    case .none:
-                        debugPrint("none")
-                        showToast("none", appearance: .error, position: .top)
-                    }
-                    
-                } else {
-                    showToast("Response received but no user data", appearance: .error, position: .top)
-                    debugPrint("Response received but no user data")
-                }
+            completion(response)
+            
+            if  let userDataLogin = response.data {
+                self.userDataLogin = userDataLogin
+                
+//                switch userDataLogin.loginStatus {
+//                case .Success:
+//                    if userDataLogin.token != nil {
+//                        completion(.withToken)
+//                    }
+//                case .InValidCredintials:
+//                    debugPrint("InValidCredintials")
+//                case .UserLockedOut:
+//                    debugPrint("UserLockedOut")
+//                case .UserNotConfirmed:
+//                    showToast(response.message ?? "" , appearance: .error)
+//                    completion(.userNotConfirmed)
+//                case .Error:
+//                    debugPrint("Error")
+//                case .none:
+//                    debugPrint("none")
+//                }
+                
+            } else {
+                showToast("Response received but no user data", appearance: .error, position: .top)
+                debugPrint("Response received but no user data")
             }
         } catch let APIError{
             await MainActor.run {

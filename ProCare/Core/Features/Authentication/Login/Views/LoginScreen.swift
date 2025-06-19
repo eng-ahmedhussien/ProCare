@@ -18,69 +18,37 @@ struct LoginScreen: View {
     }
     
     var body: some View {
+        NavigationView{
+            content
+                .disabled(vm.viewState == .loading)
+                .dismissKeyboardOnTap()
+                .toolbar {
+                    changeLanguageButton
+                }
+        }
+    }
+    
+    @ViewBuilder
+    private var content: some View {
         VStack{
-            heater
-
-            Spacer()
-            
-            VStack(alignment: .leading){
-                Text("hello".localized())
-                Text("log_in_to_start".localized())
-            }
-            .font(.title.bold())
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
+            headerTitle
             
             loginTextFields
             
+            forgotPasswordButton
+            
             Spacer()
             
-            VStack(spacing: 0){
-                Button {
-                    Task {
-                        await vm.login(){ state in
-                            switch state {
-                            case .userNotConfirmed:
-                                appRouter.pushView(OTPScreen(phonNumber: vm.phone))
-                            case .withToken:
-                                guard let data = vm.userDataLogin else { return }
-                                Task{
-                                    await profileVM.fetchProfile()
-                                }
-                                authManager.login(userDataLogin: data )
-                            }
-                        }
-                    }
-                } label: {
-                    if vm.viewState == .loading {
-                        ProgressView()
-                            .appProgressStyle()
-                    } else {
-                        Text("log_in".localized())
-                            .font(.title3)
-                    }
-                }
-                .buttonStyle(AppButton(kind: .solid,width: 300 ,disabled: !isFormValid))
-                .disabled(!isFormValid)
-                .padding(.horizontal)
-                
-                Button {
-                    appRouter.presentFullScreenCover(.signUp)
-                } label: {
-                    Text("create_account".localized())
-                        .font(.title3)
-                        .underline()
-                }
-                .buttonStyle(AppButton(kind: .plain))
-            }
+            loginButton
+            
+            createAccountButton
+ 
         }
-        .disabled(vm.viewState == .loading)
-        .dismissKeyboardOnTap()
     }
 }
 
 extension LoginScreen {
-    var heater: some View {
+    var changeLanguageButton: some View {
         HStack {
             Button(action: {
                 if let appSettings = URL(string: UIApplication.openSettingsURLString) {
@@ -102,6 +70,21 @@ extension LoginScreen {
         }
     }
     
+    var headerTitle: some View {
+        VStack(alignment: .center){
+            Image(.proCareLogo)
+                .resizable()
+                .frame(width: 250, height: 250, alignment: .center)
+                .opacity(0.9)
+
+                Text("hello".localized())
+                Text("log_in_to_start".localized())
+        }
+        .font(.title.bold())
+        .foregroundStyle(.appSecode)
+     
+    }
+    
     var loginTextFields: some View {
         VStack(alignment: .leading,spacing: 0){
             Group {
@@ -110,22 +93,81 @@ extension LoginScreen {
             }
             .padding(.horizontal)
             .padding(.vertical, 12)
-            
-            Button {
-                appRouter.push(.PhoneScreen)
-            } label: {
-                Text("forget_password".localized())
-                    .foregroundStyle(.appPrimary)
-                    .font(.title3)
-                    .underline()
-            }
-            .buttonStyle(AppButton(kind: .plain))
         }
         .autocapitalization(.none)
         .disableAutocorrection(true)
+    }
+    
+    var forgotPasswordButton: some View {
+        Button {
+            appRouter.push(.PhoneScreen)
+        } label: {
+            Text("forget_password".localized())
+                .foregroundStyle(.appPrimary)
+                .font(.title3)
+                .underline()
+        }
+        .buttonStyle(AppButton(kind: .plain))
+    }
+    
+    var loginButton: some View {
+        Button {
+            Task {
+                await vm.login(){ response in
+                    guard let data = response.data else {return}
+                    
+                    switch data.loginStatus {
+                    case .Success:
+                        if data.token != nil {
+                            Task{
+                                await profileVM.fetchProfile()
+                            }
+                            authManager.login(userDataLogin: data )
+                        }
+                    case .InValidCredintials:
+                        showToast(response.message ?? "" , appearance: .error)
+                        debugPrint("InValidCredintials")
+                    case .UserLockedOut:
+                        debugPrint("UserLockedOut")
+                    case .UserNotConfirmed:
+                        showToast(response.message ?? "" , appearance: .error)
+                        appRouter.pushView(OTPScreen(phonNumber: vm.phone))
+                    case .Error:
+                        debugPrint("Error")
+                    case .none:
+                        debugPrint("none")
+                    }
+                }
+            }
+        } label: {
+            if vm.viewState == .loading {
+                ProgressView()
+                    .appProgressStyle()
+            } else {
+                Text("log_in".localized())
+                    .font(.title3)
+            }
+        }
+        .buttonStyle(AppButton(kind: .solid,width: 300 ,disabled: !isFormValid))
+        .disabled(!isFormValid)
+        .padding(.horizontal)
+    }
+    
+    var createAccountButton: some View {
+        Button {
+            appRouter.presentFullScreenCover(.signUp)
+        } label: {
+            Text("create_account".localized())
+                .font(.title3)
+                .foregroundStyle(.appSecode)
+                .underline()
+        }
+        .buttonStyle(AppButton(kind: .plain))
     }
 }
 
 #Preview {
     LoginScreen()
 }
+
+
