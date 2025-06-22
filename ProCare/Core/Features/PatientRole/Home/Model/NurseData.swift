@@ -23,13 +23,12 @@ struct Nurse: Codable {
     let licenseNumber: String?
     let image: String?
     let rating: Int?
-    let latitude, longitude: String?
+    let latitude, longitude: Double?
     let reviews: [Review]
     
     var coordinate: CLLocation? {
-           if let lat = latitude, let lon = longitude,
-              let latDouble = Double(lat), let lonDouble = Double(lon) {
-               return CLLocation(latitude: latDouble, longitude: lonDouble)
+           if let lat = latitude, let lon = longitude {
+               return CLLocation(latitude: lat, longitude: lon)
            }
            return nil
        }
@@ -71,8 +70,8 @@ extension Nurse {
             licenseNumber: "123456",
             image: "https://fastly.picsum.photos/id/214/200/300.jpg?hmac=XWc2pr4xabaprbyVoKEw9VsBDZ0ibySoVWMJaKokGRU",
             rating: 4,
-            latitude: "37.7749",
-            longitude: "-122.4194",
+            latitude: 37.7749,
+            longitude: -122.4194,
             reviews: Review.mockReviews
         )
     }

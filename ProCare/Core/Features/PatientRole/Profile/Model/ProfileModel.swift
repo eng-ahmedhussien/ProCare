@@ -11,7 +11,8 @@ struct Profile: Codable {
     let firstName, lastName: String?
     let image, birthDate: String?
     let phoneNumber: String?
-    let medicalHistory, bloodType, latitude, longitude: String?
+    let medicalHistory, bloodType : String?
+    let latitude, longitude : Double?
     let city, governorate, addressNotes: String?
     let governorateId, gender, addressId, cityId: Int?
 }
@@ -26,8 +27,8 @@ extension Profile {
         phoneNumber: "01012345678",
         medicalHistory: "No known allergies",
         bloodType: "O+",
-        latitude: "30.0444",
-        longitude: "31.2357",
+        latitude: 30.0444,
+        longitude: 31.2357,
         city: "Cairo",
         governorate: "Cairo",
         addressNotes: "Near the Nile",
