@@ -10,7 +10,7 @@ import SwiftUI
 struct currentOrderCellView: View {
     
     @ObservedObject var vm: OrdersVM
-    let buttonWidth = UIScreen.main.bounds.width * 0.33
+    let buttonWidth = UIScreen.main.bounds.width * 0.1
     @State var showCancelAlert: Bool = false
     
     var body: some View {
@@ -85,7 +85,7 @@ extension currentOrderCellView{
     }
 
     var actionButtons: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 0) {
             Button {
                 if let url = URL(string: "tel://\(vm.currentOrder?.phoneNumber ?? "")"),
                    UIApplication.shared.canOpenURL(url) {
@@ -95,9 +95,9 @@ extension currentOrderCellView{
                 HStack {
                     Image(systemName: "phone.fill")
                     Text("call".localized())
-                }.frame(width: buttonWidth)
+                }/*.frame(width: buttonWidth)*/
             }
-            .buttonStyle(AppButton(kind: .solid,height: 45, backgroundColor: .green))
+            .buttonStyle(AppButton(kind: .solid,width: buttonWidth,height: 45, backgroundColor: .green))
 
             Button {
                 showCancelAlert.toggle()
@@ -106,9 +106,9 @@ extension currentOrderCellView{
                     Image(systemName: "xmark")
                     Text("cancel".localized())
                 }
-                .frame(width: buttonWidth)
+                //.frame(width: buttonWidth)
             }
-            .buttonStyle(AppButton(kind: .solid,height: 45,backgroundColor: .red))
+            .buttonStyle(AppButton(kind: .solid,width: buttonWidth, height: 45,backgroundColor: .red))
         }
     }
 }
