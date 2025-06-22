@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct RequestsPagination: Codable {
+struct NurseRequest: Codable {
     let items: [Request]?
     let totalCount, pageNumber, pageSize, totalPages: Int?
     let count: Int?
@@ -21,7 +21,8 @@ struct Request: Codable {
     let patientPicture: String?
     let phoneNumber, patientId, status: String?
     let birthDate, bloodType, medicalHistory : String?
-    let patientCity,  addressNotes, patientGovernorate, longitude, latitude, nurseLongitude, nurseLatitude: String?
+    let patientCity,  addressNotes, patientGovernorate:  String?
+    let longitude, latitude, nurseLongitude, nurseLatitude: Double?
     let createdAt: String?
     let totalPrice: Int?
     let gender: Int?
@@ -70,10 +71,10 @@ extension Request{
         patientCity: "naser city",
         addressNotes: "Near the main square",
         patientGovernorate: "Cairo",
-        longitude: "31.2357",
-        latitude: "30.0444",
-        nurseLongitude: "31.2400",
-        nurseLatitude: "30.0500",
+        longitude: 31.2357,
+        latitude: 30.0444,
+        nurseLongitude: 31.2400,
+        nurseLatitude: 30.0500,
         createdAt: "2025-05-14T17:27:16.0523865",
         totalPrice: 1500,
         gender: 1, statusId: .New

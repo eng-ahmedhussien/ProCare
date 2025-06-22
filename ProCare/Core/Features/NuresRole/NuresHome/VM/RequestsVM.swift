@@ -30,9 +30,9 @@ class RequestsVM: ObservableObject {
     private var pageNumber = 1
     private let pageSize = 10
     
-    private let apiClient: PatientRequestApiClintProtocol
+    private let apiClient: NurseRequestApiClintProtocol
     
-    init(apiClient: PatientRequestApiClintProtocol = PatientRequestApiClint()) {
+    init(apiClient: NurseRequestApiClintProtocol = NurseRequestApiClint()) {
         self.apiClient = apiClient
     }
 }
