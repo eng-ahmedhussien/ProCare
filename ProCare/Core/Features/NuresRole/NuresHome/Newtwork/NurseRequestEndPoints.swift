@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum PatientRequestEndPoints: APIEndpoint {
+enum NurseRequestEndPoints: APIEndpoint {
     
     case getCurrentRequest
     case getPreviousRequests(parameters: [String: Any])
