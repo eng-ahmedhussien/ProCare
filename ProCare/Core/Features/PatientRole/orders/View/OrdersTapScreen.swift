@@ -28,7 +28,7 @@ struct OrdersTapScreen: View {
                 }
             }
             .pickerStyle(SegmentedPickerStyle())
-            .padding()
+            .padding(.horizontal)
             
             if segmentationSelection == .CurrentRequest {
                 currentOrderCellView(vm: vm)
