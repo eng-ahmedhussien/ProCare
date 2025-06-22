@@ -61,7 +61,7 @@ struct NursesListScreen: View {
         case .pagingLoading, .refreshing, .loaded:
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(sortedNurses, id: \.id) { nurse in
+                    ForEach(vm.nurseList, id: \.id) { nurse in
                         let distance: Double? = {
                             guard let userLocation = locationManger.location,
                                   let nurseLocation = nurse.coordinate else { return nil }
