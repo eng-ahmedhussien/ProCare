@@ -10,7 +10,7 @@ import SwiftUI
 struct DropdownListView<T: DropdownOption>: View {
     @State private var isExpanded: Bool = false
     @Binding var selectedId: Int?
-    var placeholder: String = "select"
+    var placeholder: String = "select".localized()
     var options: [T]
     
     private var selectedName: String {
@@ -32,17 +32,23 @@ struct DropdownListView<T: DropdownOption>: View {
                         Text(option.name)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.vertical, 8)
+                            .foregroundStyle(.appSecode)
+                            .padding(.horizontal, 16)
                             .background(
                                 option.id == selectedId ?
-                                Color.appPrimary : Color.clear
+                                    .service : Color.clear
                             )
+                            .cornerRadius(30)
                     }
                 }
             }
         }
         .padding()
-        .backgroundCard(cornerRadius: 30, shadowRadius: 1)
-      //  .overlay(RoundedRectangle(cornerRadius: 30).stroke(Color.gray))
+        .backgroundCard(
+            cornerRadius: 30,
+            shadowRadius: 1.5,
+            shadowColor: .appSecode,shadowY: 0.5
+        )
         .padding(.horizontal)
         .tint(.black)
     }
@@ -54,7 +60,7 @@ struct MockDropdownOption: DropdownOption, Hashable {
 }
 
 struct DropdownListView_Previews: PreviewProvider {
-    @State static var selectedId: Int? = nil
+    @State static var selectedId: Int? = 1
     static let options = [
         MockDropdownOption(id: 1, name: "Option 1"),
         MockDropdownOption(id: 2, name: "Option 2"),

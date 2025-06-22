@@ -34,12 +34,13 @@ struct ProfileTapScreen: View {
             case .idle:
                 EmptyView()
             case .loading:
-                VStack {
-                    Spacer()
-                    ProgressView()
-                        .appProgressStyle()
-                    Spacer()
-                }
+//                VStack {
+//                    Spacer()
+//                    ProgressView()
+//                        .appProgressStyle()
+//                    Spacer()
+//                }
+                content
             case .loaded:
                 content
             case .failed(let error):
@@ -54,7 +55,6 @@ struct ProfileTapScreen: View {
                 }
             }
         }
-        .background(.appBackground)
         .onAppear {
             Task{
                 await  vm.fetchProfile()
@@ -166,12 +166,15 @@ extension ProfileTapScreen{
             
             HStack{
                 
-                AppTextField(text: $vm.firstName)
-                    .foregroundStyle(isEditingUserInfo ? .gray : .black)
+                TextField("user name", text:  $vm.firstName)
+                    .textFieldStyle(.roundedBorder)
+                    .foregroundStyle(isEditingUserInfo ? .gray : .appSecode)
                     .disabled(!isEditingUserInfo)
+    
                 
-                AppTextField(text: $vm.lastName)
-                    .foregroundStyle(isEditingUserInfo ? .gray : .black)
+                TextField("user name", text:   $vm.lastName)
+                    .textFieldStyle(.roundedBorder)
+                    .foregroundStyle(isEditingUserInfo ? .gray : .appSecode)
                     .disabled(!isEditingUserInfo)
             }
             
@@ -183,12 +186,11 @@ extension ProfileTapScreen{
                         }
                     }
                     .pickerStyle(.menu)
-                    
                 } else {
-                    if let gender = vm.gender, gender != .notSpecified {
+                    if let gender = vm.gender {
                         Text(gender.displayName)
                             .font(.body)
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.appSecode)
                             .padding()
                     } else {
                         Text("no_selected".localized())
@@ -216,7 +218,7 @@ extension ProfileTapScreen{
                     if let dob = vm.dateOfBirth {
                         Text(dob.formatted(date: .abbreviated, time: .omitted))
                             .font(.body)
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.appSecode)
                     } else {
                         Text("No selected")
                             .foregroundColor(.gray)
@@ -306,10 +308,11 @@ extension ProfileTapScreen{
 
 #Preview {
     var vm = ProfileVM()
-    vm.viewState = .loading
+    vm.viewState = .loaded
     vm.putProfileData(Profile.mock)
    return  NavigationView{
         ProfileTapScreen()
            .environmentObject(vm)
+           .environment(\.locale, .init(identifier: "ar"))
     }
 }

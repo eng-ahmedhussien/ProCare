@@ -19,7 +19,7 @@ struct AppTextEditor: View {
             TextEditor(text: $text)
                 .focused($isFocused)
                 .frame(height: height)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.appSecode))
             if text.isEmpty {
                 Text(placeholder)
                     .foregroundColor(.gray)

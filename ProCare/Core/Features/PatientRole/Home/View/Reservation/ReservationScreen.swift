@@ -25,10 +25,10 @@ struct ReservationScreen: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 30, height: 30)
-                        .foregroundStyle(.black)
+                        .foregroundColor(.appPrimary)
                 }
                 .padding()
-                .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .black)
+                .backgroundCard(cornerRadius: 10, shadowRadius: 1.5, shadowColor: .appSecode)
                 .padding()
             }
             
@@ -43,10 +43,10 @@ struct ReservationScreen: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 30, height: 30)
-                        .foregroundColor(.black)
+                        .foregroundColor(.appPrimary)
                 }
                 .padding()
-                .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .black)
+                .backgroundCard(cornerRadius: 10, shadowRadius: 1.5, shadowColor: .appSecode)
                 .padding()
             }
             
@@ -58,17 +58,19 @@ struct ReservationScreen: View {
                 
                 AppTextEditor(
                     text: $vm.note,
-                    placeholder: "Enter your note",
+                    placeholder: "enter_your_note".localized(),
                     height: 150,
                     isFocused: $isFocused
                 )
+                .backgroundCard(cornerRadius: 10, shadowRadius: 1.5, shadowColor: .appSecode)
                 .padding()
+               
             }
          
             
             Spacer().frame(height: 50)
             
-            Button("Submit") {
+            Button("submit".localized()) {
                 debugPrint("Date = \(vm.date.toAPIDateString())")
                 debugPrint("Time = \(vm.time.toAPITimeString())")
             }
@@ -79,7 +81,6 @@ struct ReservationScreen: View {
         .onTapGesture {
             isFocused = false
         }
-        .background(.appBackground)
         .appNavigationBar(title: "new_appointment")
     }
 }
@@ -89,6 +90,7 @@ struct ReservationScreen: View {
     NavigationView{
         ReservationScreen()
             .environmentObject(HomeVM())
+            .environment(\.locale, .init(identifier: "ar"))
     }
 }
 #endif

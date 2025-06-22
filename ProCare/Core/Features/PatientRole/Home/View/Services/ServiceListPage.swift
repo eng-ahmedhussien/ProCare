@@ -77,7 +77,7 @@ struct ServiceListPage: View {
             }
         
         case .empty:
-            EmptyScreen(message: "no_services_available")
+            AppEmptyView(message: "no_services_available")
         
         case .error(let message):
             RetryView(message: "error".localized() + ": \(message)") {

@@ -43,7 +43,7 @@ struct ServiceMultiSelectSheet: View {
                 }
             }
             .listStyle(.plain)
-            .navigationTitle("Select Services")
+            .navigationTitle("select_services".localized())
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {

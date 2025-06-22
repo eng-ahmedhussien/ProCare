@@ -96,7 +96,7 @@ struct NursesListScreen: View {
             }
         
         case .empty:
-            EmptyScreen(message: "no_nurses_available")
+            AppEmptyView(message: "no_nurses_available")
         
         case .error(let message):
             RetryView(message: "error".localized() + ": \(message)") {

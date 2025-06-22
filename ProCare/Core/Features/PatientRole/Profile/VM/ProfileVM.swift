@@ -113,15 +113,20 @@ class ProfileVM: ObservableObject {
         case .image:
             parameters   = [:]
         case .info:
-            parameters   = [
-                "FirstName": firstName,
-                "LastName": lastName,
-                "BirthDate": dateOfBirth?.toAPIDateString() ?? "",
-                "GovernorateId": selectedGovernorate ?? 0,
-                "CityId": selectedCity ?? 0,
-                "AddressNotes": addressInDetails,
-                "Gender": gender?.rawValue ?? 0
-            ]
+            if let gender = gender, gender != .notSpecified {
+                parameters   = [
+                    "FirstName": firstName,
+                    "LastName": lastName,
+                    "BirthDate": dateOfBirth?.toAPIDateString() ?? "",
+                    "Gender": gender.rawValue
+                ]
+            }else{
+                parameters   = [
+                    "FirstName": firstName,
+                    "LastName": lastName,
+                    "BirthDate": dateOfBirth?.toAPIDateString() ?? "",
+                ]
+            }
         }
        
         do {

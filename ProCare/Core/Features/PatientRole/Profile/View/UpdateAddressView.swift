@@ -21,7 +21,6 @@ struct UpdateAddressView: View {
     var body: some View {
         content
             .padding(.vertical)
-            //.background(.appBackground)
             .appNavigationBar(title: "update_location".localized())
             .onFirstAppear {
                 Task {
@@ -54,14 +53,14 @@ struct UpdateAddressView: View {
             
             DropdownListView(
                 selectedId: $vm.selectedGovernorate,
-                placeholder: "governorate",
+                placeholder: "governorate".localized(),
                 options: vm.governorates
             ).padding(.vertical)
             
             
             DropdownListView(
                 selectedId: $vm.selectedCity,
-                placeholder: "city",
+                placeholder: "city".localized(),
                 options:  vm.citys
             ).padding(.vertical)
             
@@ -78,9 +77,9 @@ extension UpdateAddressView {
     
     var addressDetails: some View {
         VStack(alignment: .leading, spacing : 10){
-//            Text("detailed_address")
-//                .font(.body)
-//                .foregroundStyle(.appText)
+            Text("detailed_address")
+                .font(.body)
+                .foregroundStyle(.appSecode)
             
             AppTextEditor(
                 text:  $vm.addressInDetails,
@@ -102,7 +101,7 @@ extension UpdateAddressView {
                     let lon = String(location.coordinate.longitude)
                     await vm.updateProfile(updateKind: .location, latitude: lat, longitude: lon)
 
-                    showToast("update location successfuly", appearance: .success,position: .center)
+                    showToast("update_location_successfully".localized(), appearance: .success,position: .center)
                     appRouter.pop()
                 }
             }
@@ -118,6 +117,8 @@ extension UpdateAddressView {
         var vm = ProfileVM()
         vm.governorates = Governorates.mockList
         vm.citys = City.mockList
-      return  UpdateAddressView().environmentObject(vm)
+      return  UpdateAddressView()
+            .environmentObject(vm)
+            .environment(\.locale, .init(identifier: "ar"))
     }
 }

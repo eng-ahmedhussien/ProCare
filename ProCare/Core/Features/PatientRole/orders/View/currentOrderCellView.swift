@@ -25,7 +25,7 @@ struct currentOrderCellView: View {
                 .padding()
             }
             else {
-                Text("no_requests".localized())
+                AppEmptyView(message: "no_orders_available".localized())
             }
         }
         .alert("cancel_current_request".localized(), isPresented: $showCancelAlert) {
@@ -97,7 +97,7 @@ extension currentOrderCellView{
                     Text("call".localized())
                 }.frame(width: buttonWidth)
             }
-            .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))
+            .buttonStyle(AppButton(kind: .solid,height: 45, backgroundColor: .green))
 
             Button {
                 showCancelAlert.toggle()
@@ -108,7 +108,7 @@ extension currentOrderCellView{
                 }
                 .frame(width: buttonWidth)
             }
-            .buttonStyle(AppButton(kind: .solid,backgroundColor: .red))
+            .buttonStyle(AppButton(kind: .solid,height: 45,backgroundColor: .red))
         }
     }
 }

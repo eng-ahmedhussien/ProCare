@@ -55,9 +55,11 @@ struct RequestCellView: View {
     }
 }
 
-//#Preview {
-//    VStack{
-//        RequestCellView(order: MockManger.shared.orderMockModel)
-//    }
-//}
+#Preview {
+    VStack{
+        RequestCellView(request: Request.mock)
+            
+        Spacer()
+    }.environment(\.locale, .init(identifier: "ar"))
+}
 

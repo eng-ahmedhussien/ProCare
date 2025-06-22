@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct AppEmptyView: View {
-    var title: String = "No Requests"
-    var message: String = "You don’t have any requests at the moment."
+    var title: String = ""
+    var message: String = ""
     var imageName: String = "tray" // system icon
 
     var body: some View {
@@ -35,4 +35,9 @@ struct AppEmptyView: View {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
+}
+
+#Preview {
+    AppEmptyView()
+        .padding()
 }

@@ -21,12 +21,9 @@ struct NuresProfileScreen: View {
         VStack(spacing: 30) {
 
             Spacer()
-
+            
             // Online / Offline Switch
             HStack {
-                Text("Status:")
-                    .font(.title3.bold())
-                Spacer()
                 // In your Toggle:
                 Toggle(isOn: Binding(
                     get: { !isBusy },
@@ -37,14 +34,14 @@ struct NuresProfileScreen: View {
                         }
                     }
                 )) {
-                    Text(!isBusy ? "Online" : "Offline")
+                    Text(!isBusy ? "online".localized() : "offline".localized())
                         .foregroundColor(!isBusy ? .green : .red)
                         .bold()
                 }
                 .toggleStyle(SwitchToggleStyle(tint: .green))
             }
             .padding()
-            .backgroundCard(cornerRadius: 10 , shadowRadius: 0.5, shadowColor: .black)
+            .backgroundCard(cornerRadius:30 , shadowRadius: 0.5, shadowColor: .black)
             .padding(.horizontal)
             .animation(.easeInOut, value: isBusy)
 
@@ -59,11 +56,12 @@ struct NuresProfileScreen: View {
             }) {
                 HStack {
                     Image(systemName: "location.fill")
-                    Text("update my location")
+                    Text("update_my_location")
                         .bold()
                 }
             }
             .buttonStyle(AppButton(kind: .border))
+            .padding(.horizontal)
 
             // Logout Button
             Button(action: {
@@ -77,10 +75,13 @@ struct NuresProfileScreen: View {
                 }
             }
             .buttonStyle(AppButton(kind: .solid))
+            .padding(.horizontal)
 
             Spacer()
         }
-        .appNavigationBar(title: "Profile")
+        .appNavigationBar(title: "profile".localized())
+            
+        
     }
 }
 
@@ -88,7 +89,9 @@ struct NuresProfileScreen: View {
 #Preview {
     NavigationStack{
         NuresProfileScreen()
-            .appNavigationBar(title: "Profile")
+            .appNavigationBar(title: "Profile".localized())
+            .environment(\.locale, .init(identifier: "ar")) // "ar" for Arabic, "fr" for French, etc.
+
     }
         
 }

@@ -112,7 +112,7 @@ extension currentRequestCellView{
                         Text("finish_request".localized())
                     }//.frame(maxWidth: .infinity)
                 }
-                .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))
+                .buttonStyle(AppButton(kind: .solid, height: 45, backgroundColor: .green))
             }
            
         }else{
@@ -124,7 +124,7 @@ extension currentRequestCellView{
                         Text("accept".localized())
                     }//.frame(width: buttonWidth)
                 }
-                .buttonStyle(AppButton(kind: .solid, backgroundColor: .green))
+                .buttonStyle(AppButton(kind: .solid, height: 45, backgroundColor: .green))
                 
                 Button {
                     showRejectAlert.toggle()
@@ -136,7 +136,7 @@ extension currentRequestCellView{
                    // .frame(width: buttonWidth)
                     //.frame(maxWidth: .infinity)
                 }
-                .buttonStyle(AppButton(kind: .solid,backgroundColor: .red))
+                .buttonStyle(AppButton(kind: .solid,height: 45, backgroundColor: .red))
             }
         }
         

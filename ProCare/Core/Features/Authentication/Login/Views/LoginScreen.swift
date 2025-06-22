@@ -142,7 +142,7 @@ extension LoginScreen {
         } label: {
             if vm.viewState == .loading {
                 ProgressView()
-                    .appProgressStyle()
+                    .appProgressStyle(color: .white)
             } else {
                 Text("log_in".localized())
                     .font(.title3)

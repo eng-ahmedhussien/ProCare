@@ -61,7 +61,7 @@ struct OrdersListView: View {
             }
         
         case .empty:
-            EmptyScreen(message: "no_orders_available".localized())
+            AppEmptyView(message: "no_orders_available".localized())
         
         case .error(let message):
             

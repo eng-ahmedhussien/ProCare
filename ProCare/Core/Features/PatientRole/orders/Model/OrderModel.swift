@@ -101,4 +101,9 @@ extension Order {
         createdAt: "2024-06-01T12:34:56.1234567",
         totalPrice: 200, statusId: .Completed
     )
+    
+    static let mocklist: [Order] = [
+        Order(id: "1", nurseName: "Jane Doe", nursePicture: "https://example.com/nurse.jpg", phoneNumber: "1234567890", nurseId: "nurse_001", status: "active", speciality: "Pediatrics", longitude: "31.2357", latitude: "30.0444", nurseLongitude: "31.2400", nurseLatitude: "30.0500", createdAt: "2024-06-01T12:34:56.1234567", totalPrice: 200, statusId: .Completed),
+        Order(id: "2", nurseName: "John Smith", nursePicture: "https://example.com/nurse2.jpg", phoneNumber: "0987654321", nurseId: "nurse_002", status: "active", speciality: "Cardiology", longitude: "31.2357", latitude: "30.0444", nurseLongitude: "31.2400", nurseLatitude: "30.0500", createdAt: "2024-06-02T14:20:00.1234567", totalPrice: 250, statusId: .New)
+    ]
 }

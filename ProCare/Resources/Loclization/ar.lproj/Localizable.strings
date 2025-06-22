@@ -80,7 +80,9 @@
 "location_permission_message" = "لإكمال هذا الطلب، نحتاج إلى الوصول إلى موقعك. يرجى تمكين أذونات الموقع في الإعدادات.";
 "detailed_address" = "العنوان التفصيلي";
 "save" = "حفظ";
-
+"update_location_successfully" = "تم تحديث الموقع بنجاح";
+"governorate" = "المحافظة";
+"city" = "المدينة";
 //MARK: - HomeScreen
 "hello" = "مرحبًا";
 "home" = "الرئيسية";
@@ -173,6 +175,10 @@
 "total" = "الإجمالي";
 "report_added_successfully" = "تمت إضافة التقرير بنجاح";
 "total_requests" = "إجمالي الطلبات: %d";
+"diseases" = "الأمراض";
+"select_diseases" = "اختر الأمراض";
+"select_services" = "اختر الخدمات";
+"Done" = "تم";
 //MARK: gender enum
 "not_specified" = "غير محدد";
 "male" = "ذكر";
@@ -186,3 +192,14 @@
 "validation_min" = "يجب أن تكون القيمة ≥ %@";
 "validation_max" = "يجب أن تكون القيمة ≤ %@";
 "validation_and" = " و ";
+//MARK: nures profile
+"update_my_location" = "تحديث موقعي";
+"online" = "متصل";
+"offline" = "غير متصل";
+//MARK: - Reservation
+"new_appointment" = "موعد جديد";
+"date" = "التاريخ";
+"time" = "الوقت";
+"note" = "ملاحظة";
+"enter_your_note" = "أدخل ملاحظتك";
+"submit" = "إرسال";

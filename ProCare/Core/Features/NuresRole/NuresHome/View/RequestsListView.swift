@@ -93,38 +93,7 @@ struct RequestsListView: View {
 #Preview {
     let vm = OrdersVM()
     vm.viewState = .loaded
-    vm.ordersList = [
-        Order(
-            id: "1",
-            nurseName: "Sarah Johnson",
-            nursePicture: nil,
-            phoneNumber: "01012345678",
-            nurseId: "101",
-            status: "completed",
-            speciality: "Pediatric Nurse",
-            longitude: "30.033333",
-            latitude: "31.233334",
-            nurseLongitude: "30.033334",
-            nurseLatitude: "31.233335",
-            createdAt: "2024-01-01T10:00:00Z",
-            totalPrice: 250, statusId: .Completed
-        ),
-        Order(
-            id: "2",
-            nurseName: "Ahmed Ali",
-            nursePicture: nil,
-            phoneNumber: "01123456789",
-            nurseId: "102",
-            status: "pending",
-            speciality: "Emergency Nurse",
-            longitude: "30.044420",
-            latitude: "31.235712",
-            nurseLongitude: "30.044421",
-            nurseLatitude: "31.235713",
-            createdAt: "2024-01-02T14:30:00Z",
-            totalPrice: 200, statusId: .Cancelled
-        )
-    ]
+    vm.ordersList =  Order.mocklist
 
     return NavigationStack {
         OrdersListView(vm: vm) // ✅ use the actual instance you configured

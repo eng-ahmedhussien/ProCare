@@ -33,10 +33,10 @@ struct DiseaseMultiSelectSheet: View {
                 }
             }
             .listStyle(.plain)
-            .navigationTitle("Select Diseases")
+            .navigationTitle("Select Diseases".localized())
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    Button("Done".localized()) {
                         dismiss()
                     }.foregroundStyle(.appPrimary)
                 }

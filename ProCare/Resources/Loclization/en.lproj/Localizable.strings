@@ -78,6 +78,9 @@
 "location_permission_message" = "To complete this request, we need access to your location. Please enable location permissions in Settings.";
 "detailed_address" = "Detailed address";
 "save" = "Save";
+"update_location_successfully" = "Update Location Successfully";
+"governorate" = "Governorate";
+"city" =    "City";
 //MARK: - HomeScreen
 "hello" = "Hello";
 "home" = "Home";
@@ -165,6 +168,10 @@
 "total" = "Total";
 "report_added_successfully" = "Report Added successfully";
 "total_requests" = "Total requests: %d";
+"diseases" = "Diseases";
+"select_diseases" = "Select Diseases";
+"select_services" = "Select Services";
+"Done" = "Done";
 //MARK: gender enum
 "not_specified" = "Not Specified";
 "male" = "Male";
@@ -178,3 +185,14 @@
 "validation_min" = "Value must be ≥ %@";
 "validation_max" = "Value must be ≤ %@";
 "validation_and" = " and ";
+//MARK: nures profile
+"update_my_location" = "Update my location";
+"online" = "online";
+"offline" = "offline";
+//MARK: - Reservation
+"new_appointment" = "New Appointment";
+"date" = "Date";
+"time" = "Time";
+"note" = "Note";
+"enter_your_note" = "Enter your note";
+"submit" =  "Submit";
