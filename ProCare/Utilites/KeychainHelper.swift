@@ -31,5 +31,6 @@ class KeychainHelper {
 extension KeychainHelper{
     enum KeychainKey: String {
         case authToken = "auth_token"
+        case deviceToken = "device_token"
     }
 }
