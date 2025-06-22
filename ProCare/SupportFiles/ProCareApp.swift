@@ -15,6 +15,8 @@ struct ProCareApp: App {
     @StateObject var profileVM = ProfileVM()
     @StateObject var ordersVM =  OrdersVM()
     @State private var isLoading = true
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate   // register app delegate for Firebase setup
+
 
     var body: some Scene {
         WindowGroup {
