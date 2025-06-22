@@ -30,9 +30,9 @@ class LoginVM: ObservableObject {
         viewState = .loading
         
         let parameter = [
-            "phoneNumber": phone,
+            "Email": phone,
             "password": password,
-            "DeviceToken": "DeviceToken"
+            "DeviceToken": KeychainHelper.shared.get(forKey: .deviceToken) ?? "",
         ]
         
         do {
