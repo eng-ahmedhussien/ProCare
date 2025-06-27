@@ -72,10 +72,12 @@ extension View {
 func showToast(_ message: String, appearance: ToastStyle, position: ToastPosition = .top) {
     PopupManager.shared.showToast(message: message, style: appearance, position: position)
 }
-
 func showPopup<Content: View>(@ViewBuilder content: () -> Content) {
     PopupManager.shared.showCustomPopup {
             AnyView(content())
     }
+}
+func showAlert(title: String,message: String) {
+    PopupManager.shared.showAlert(title: title, message: message)
 }
 
