@@ -40,11 +40,18 @@ class NuresProfileVM: ObservableObject {
         }
     }
     
-    func changeStatus(isBusy: Bool) async {
+    func changeStatus(isBusy: Bool, onSuccess: ((Bool) -> Void)? = nil) async {
         do {
             let response = try await apiClient.changeStatus(isBusy: isBusy)
-            if let _ = response.data {
-               
+            if let responseData = response.data {
+                switch responseData {
+                case true:
+                    showToast("Status updated successfully!", appearance: .success)
+                    onSuccess?(true)
+                case false:
+                    showToast(" \(response.message ?? "")", appearance: .error)
+                    onSuccess?(false)
+                }
             } else {
                 debugPrint("Response received but no user data")
             }

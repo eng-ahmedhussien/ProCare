@@ -30,7 +30,15 @@ struct NuresProfileScreen: View {
                     set: { isOnline in
                         isBusy = !isOnline
                         Task {
-                            await vm.changeStatus(isBusy: isBusy)
+                            await vm.changeStatus(isBusy: isBusy){ result in
+                                if result {
+                                    
+                                }else{
+                                    isBusy = false // revert the toggle state if the change fails
+                                    
+                                }
+                                    
+                            }
                         }
                     }
                 )) {
