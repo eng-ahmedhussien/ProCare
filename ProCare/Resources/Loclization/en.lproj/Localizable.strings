@@ -21,6 +21,7 @@
 "create_account" = "Create account";
 "name" = "Name";
 "second_name" = "Second name";
+"email" = "Email";
 "phone" = "Phone";
 "password" = "Password";
 "confirm_password" = "Confirm password";
@@ -58,6 +59,7 @@
 "first_name" = "First Name";
 "last_name" = "Last Name";
 "gender" = "Gender";
+"dateOfBirth" = "DateOfBirth";
 "user_location" = "User location";
 "no_selected" = "No selected";
 "update_profile" = "Update Profile";
@@ -179,6 +181,7 @@
 //MARK: - validation text fields
 "validation_empty" = "This field cannot be empty";
 "validation_phone" = "Phone number must start with +20 (e.g. +201XXXXXXXXX)";
+"validation_empty" = "email is not valid";
 "validation_password" = "Password must be 8+ characters, with uppercase, lowercase, number, and symbol.";
 "validation_confirm_password" = "Passwords do not match";
 "validation_number" = "Must be a valid number";
