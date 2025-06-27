@@ -22,7 +22,7 @@ struct RequestScreen: View {
             Spacer()
             ConfirmButton
         }
-        .background(.appBackground)
+      //  .background(.appBackground)
         .appNavigationBar(title: "review_request".localized())
     }
 }
