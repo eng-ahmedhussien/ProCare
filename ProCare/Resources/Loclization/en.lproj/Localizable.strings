@@ -136,6 +136,8 @@
 "cancel_request_confirmation" = "Are you sure you want to cancel this request?";
 "within_minutes" = "Within %d minutes";
 "call" = "Call";
+"contact_options" = "Contact Options";
+"WhatsApp" = "WhatsApp";
 //MARK: - request
 "rejection_request" = "Rejection request";
 "cancel" = "Cancel";
@@ -199,3 +201,5 @@
 "note" = "Note";
 "enter_your_note" = "Enter your note";
 "submit" =  "Submit";
+//MARK: - Request Limit
+"request_limit_message" = "You currently have an active request. Please wait for it to be completed before creating a new one.";

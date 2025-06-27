@@ -142,6 +142,8 @@
 "cancel_request_confirmation" = "هل أنت متأكد أنك تريد إلغاء هذا الطلب؟";
 "within_minutes" = "خلال %d دقيقة";
 "call" = "اتصال";
+"contact_options" = "خيارات التواصل";
+"WhatsApp" = "واتساب";
 //MARK: - request
 "rejection_request" = "رفض الطلب";
 "cancel" = "إلغاء";
@@ -206,3 +208,5 @@
 "note" = "ملاحظة";
 "enter_your_note" = "أدخل ملاحظتك";
 "submit" = "إرسال";
+//MARK: - Request Limit
+"request_limit_message" = "لديك طلب نشط حالياً. يرجى الانتظار حتى يتم إكماله قبل إنشاء طلب جديد.";
