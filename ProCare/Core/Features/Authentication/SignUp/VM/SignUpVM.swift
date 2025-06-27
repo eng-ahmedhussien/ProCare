@@ -13,6 +13,7 @@ final class SignUpVM: ObservableObject {
 
     @Published var name: String = ""
     @Published var secondName: String = ""
+    @Published var email: String = ""
     @Published var phone: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
@@ -31,6 +32,7 @@ final class SignUpVM: ObservableObject {
         let parameter = [
             "firstName": name,
             "lastName": secondName,
+            "email": email,
             "phoneNumber": phone,
             "password": password,
             "confirmPassword": confirmPassword

@@ -13,6 +13,7 @@ struct SignUPScreen: View {
     private var isFormValid: Bool {
         ValidationRule.isEmpty.validate(vm.name) == nil &&
         ValidationRule.isEmpty.validate(vm.secondName) == nil &&
+        ValidationRule.email.validate(vm.email) == nil &&
         ValidationRule.phone.validate(vm.phone) == nil &&
         ValidationRule.password.validate(vm.password) == nil &&
         ValidationRule.confirmPassword($vm.password).validate(vm.confirmPassword) == nil
@@ -63,6 +64,11 @@ extension SignUPScreen {
                 )
             }
             AppTextField(
+                text: $vm.email,
+                placeholder: "email".localized(),
+                validationRules: [.email]
+            )
+            AppTextField(
                 text: $vm.phone,
                 placeholder: "phone".localized(),
                 validationRules: [.phone]
@@ -92,8 +98,7 @@ extension SignUPScreen {
                         case .Success:
                             showToast("\(response.message ?? "")", appearance: .success)
                             appRouter.dismissFullScreenOver()
-                            appRouter.pushView(OTPScreen(phonNumber: vm.phone))
-                            
+                            appRouter.pushView(OTPScreen(email: vm.email))
                         case .Error:
                             showToast("\(response.message ?? "")", appearance: .error)
                         case .AuthFailure:
@@ -133,5 +138,5 @@ extension SignUPScreen {
 
 #Preview {
     SignUPScreen()
-    
+        .environment(\.locale, .init(identifier: "ar"))
 }

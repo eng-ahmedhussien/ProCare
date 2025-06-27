@@ -13,7 +13,7 @@ struct LoginScreen: View {
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var profileVM: ProfileVM
     private var isFormValid: Bool {
-        ValidationRule.phone.validate(vm.phone) == nil &&
+        ValidationRule.email.validate(vm.email) == nil &&
         ValidationRule.password.validate(vm.password) == nil
     }
     
@@ -30,14 +30,12 @@ struct LoginScreen: View {
     
     @ViewBuilder
     private var content: some View {
-        VStack{
+        ScrollView{
             headerTitle
             
             loginTextFields
             
             forgotPasswordButton
-            
-            Spacer()
             
             loginButton
             
@@ -88,7 +86,7 @@ extension LoginScreen {
     var loginTextFields: some View {
         VStack(alignment: .leading,spacing: 0){
             Group {
-                AppTextField(text: $vm.phone, placeholder: "phone_number".localized(), validationRules: [.phone])
+                AppTextField(text: $vm.email, placeholder: "email".localized(), validationRules: [.email])
                 AppTextField(text: $vm.password, placeholder: "password".localized(), validationRules: [.password], isSecure: true)
             }
             .padding(.horizontal)
@@ -100,7 +98,7 @@ extension LoginScreen {
     
     var forgotPasswordButton: some View {
         Button {
-            appRouter.push(.PhoneScreen)
+            appRouter.push(.EmailScreen)
         } label: {
             Text("forget_password".localized())
                 .foregroundStyle(.appPrimary)
@@ -131,7 +129,7 @@ extension LoginScreen {
                         debugPrint("UserLockedOut")
                     case .UserNotConfirmed:
                         showToast(response.message ?? "" , appearance: .error)
-                        appRouter.pushView(OTPScreen(phonNumber: vm.phone))
+                        appRouter.pushView(OTPScreen(email: vm.email))
                     case .Error:
                         debugPrint("Error")
                     case .none:

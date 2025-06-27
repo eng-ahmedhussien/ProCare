@@ -11,7 +11,8 @@ import Combine
 @MainActor
 class LoginVM: ObservableObject {
     
-    @Published var phone: String = ""
+    //@Published var phone: String = ""
+    @Published var email: String = ""
     @Published var password: String = ""
     @Published var userDataLogin : UserDataLogin?
     @Published var goToOTP = false
@@ -30,7 +31,7 @@ class LoginVM: ObservableObject {
         viewState = .loading
         
         let parameter = [
-            "Email": phone,
+            "email": email,
             "password": password,
             "DeviceToken": KeychainHelper.shared.get(forKey: .deviceToken) ?? "",
         ]
@@ -43,25 +44,6 @@ class LoginVM: ObservableObject {
             
             if  let userDataLogin = response.data {
                 self.userDataLogin = userDataLogin
-                
-//                switch userDataLogin.loginStatus {
-//                case .Success:
-//                    if userDataLogin.token != nil {
-//                        completion(.withToken)
-//                    }
-//                case .InValidCredintials:
-//                    debugPrint("InValidCredintials")
-//                case .UserLockedOut:
-//                    debugPrint("UserLockedOut")
-//                case .UserNotConfirmed:
-//                    showToast(response.message ?? "" , appearance: .error)
-//                    completion(.userNotConfirmed)
-//                case .Error:
-//                    debugPrint("Error")
-//                case .none:
-//                    debugPrint("none")
-//                }
-                
             } else {
                 showToast("Response received but no user data", appearance: .error, position: .top)
                 debugPrint("Response received but no user data")
