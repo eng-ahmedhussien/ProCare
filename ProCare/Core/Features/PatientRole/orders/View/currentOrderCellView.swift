@@ -12,6 +12,7 @@ struct currentOrderCellView: View {
     @ObservedObject var vm: OrdersVM
     let buttonWidth = UIScreen.main.bounds.width * 0.1
     @State var showCancelAlert: Bool = false
+    @State private var showContactOptions = false
     
     var body: some View {
         ScrollView {
@@ -38,6 +39,26 @@ struct currentOrderCellView: View {
         } message: {
             Text("cancel_request_confirmation".localized())
         }
+        .confirmationDialog(
+            "contact_options".localized(),
+            isPresented: $showContactOptions,
+            titleVisibility: .visible
+        ) {
+            Button("call".localized()) {
+                if let url = URL(string: "tel://\(vm.currentOrder?.phoneNumber ?? "")"),
+                   UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            Button("WhatsApp".localized()) {
+                if let phone = vm.currentOrder?.phoneNumber,
+                   let url = URL(string: "https://wa.me/\(phone)") {
+                    UIApplication.shared.open(url)
+                }
+            }
+            Button("cancel".localized(), role: .cancel) { }
+        }
+    
     }
 }
 
@@ -87,15 +108,12 @@ extension currentOrderCellView{
     var actionButtons: some View {
         HStack(spacing: 0) {
             Button {
-                if let url = URL(string: "tel://\(vm.currentOrder?.phoneNumber ?? "")"),
-                   UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url)
-                }
+                showContactOptions = true
             } label: {
                 HStack {
                     Image(systemName: "phone.fill")
                     Text("call".localized())
-                }/*.frame(width: buttonWidth)*/
+                }
             }
             .buttonStyle(AppButton(kind: .solid,width: buttonWidth,height: 45, backgroundColor: .green))
 
@@ -106,7 +124,6 @@ extension currentOrderCellView{
                     Image(systemName: "xmark")
                     Text("cancel".localized())
                 }
-                //.frame(width: buttonWidth)
             }
             .buttonStyle(AppButton(kind: .solid,width: buttonWidth, height: 45,backgroundColor: .red))
         }
