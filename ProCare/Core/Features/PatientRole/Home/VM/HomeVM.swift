@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import CoreLocation
 
 
 // MARK: - Home View Model
@@ -220,11 +221,17 @@ extension HomeVM {
             paginationViewState = .refreshing
         }
         
-        let parameters = [
+        let location = LocationManager.shared.location ?? CLLocation()
+        let lat = location.coordinate.latitude
+        let lon = location.coordinate.longitude
+        
+        let parameters: [String:Any] = [
             "pageNumber": "\(pageNumber)",
             "pageSize": "\(pageSize)",
             "searchKey": "",
-            "cityId": "0"
+            "cityId": "0",
+            "latitude": lat,
+            "longitude": lon
         ]
         
         //try? await Task.sleep(nanoseconds: 600_000_000) // 0.3s

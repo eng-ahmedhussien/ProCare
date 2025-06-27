@@ -17,7 +17,7 @@ enum HomeEndPoints{
     
     case reservation(parameters: [String: Any])
     
-    case getAllNurses(parameters: [String : String])
+    case getAllNurses(parameters: [String : Any])
     
     case submitRequest(Parameters: [String:Any])
 }

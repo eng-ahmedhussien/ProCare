@@ -19,7 +19,7 @@ struct HomeScreen: View {
             header
             content
         }
-        .background(.appBackground)
+       // .background(.appBackground)
     }
     
     @ViewBuilder
@@ -136,7 +136,7 @@ extension HomeScreen{
     HomeScreen(vm: HomeVM.preview)
         .environmentObject(AuthManager())
         .environmentObject(AppRouter())
-        .environmentObject(LocationManager())
+       // .environmentObject(LocationManager())
     
 }
 #endif
