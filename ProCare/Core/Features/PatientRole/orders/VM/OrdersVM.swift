@@ -57,8 +57,6 @@ class OrdersVM: ObservableObject {
             "pageSize": "\(pageSize)"
         ]
         
-        //try? await Task.sleep(nanoseconds: 600_000_000) // 0.3s
-        
         do {
             let response = try await apiClient.getPreviousOrders(parameters: parameters)
             if let data = response.data {
@@ -91,15 +89,31 @@ class OrdersVM: ObservableObject {
     func cancelOrder(id: String) async {
         do {
             let response = try await apiClient.cancelOrder(id: id)
+            handleApiResponse(response)
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+    
+    private func handleApiResponse<T: Codable>(_ response: APIResponse<T>) {
+        switch response.status {
+        case .Success:
             if let data = response.data {
-                if data {
+                if data as! Bool {
                     Task{
                         await fetchCurrentOrder()
                     }
                 }
+            }else{
+                debugPrint("Response received but no user data")
             }
-        } catch {
-            debugPrint("Unexpected error: \(error.localizedDescription)")
+        case .Error, .AuthFailure, .Conflict:
+            showToast(
+                response.message ?? "network error",
+                appearance: .error
+            )
+        case .none:
+            break
         }
     }
 }
