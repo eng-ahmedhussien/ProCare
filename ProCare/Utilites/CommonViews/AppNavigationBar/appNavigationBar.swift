@@ -23,7 +23,7 @@ struct AppNavigationBarStyle : ViewModifier {
     func body(content: Content) -> some View {
             content
             .navigationTitle(title.localized())
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.appPrimary)
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)

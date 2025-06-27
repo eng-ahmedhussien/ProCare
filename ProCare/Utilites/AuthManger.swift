@@ -68,27 +68,35 @@ class AuthManager: ObservableObject {
     }
     
     private func loadUserData() {
-        if let savedUserData = defaults.getCodable(UserDataLogin.self, forKey: .userData) {
+        if let savedUserData = keychainHelper.getData(UserDataLogin.self, forKey: .userData),
+           let token = savedUserData.token, !token.isEmpty {
             self.userDataLogin = savedUserData
-            self.isLoggedIn = (savedUserData.token?.isEmpty == false)
+            self.isLoggedIn = true
         } else {
             self.isLoggedIn = false
         }
+         
+        
+//        if let savedUserData = defaults.getCodable(UserDataLogin.self, forKey: .userData) {
+//            self.userDataLogin = savedUserData
+//            self.isLoggedIn = (savedUserData.token?.isEmpty == false)
+//        } else {
+//            self.isLoggedIn = false
+//        }
     }
     
     func login(userDataLogin: UserDataLogin) {
         self.userDataLogin = userDataLogin
         self.isLoggedIn = userDataLogin.token?.isEmpty == false
-        defaults.setCodable(userDataLogin, forKey: .userData)
-       // defaults.set(userDataLogin.token ?? "", forKey: .authToken)
+        keychainHelper.set(userDataLogin, forKey: .userData)
         keychainHelper.set(userDataLogin.token ?? "", forKey: .authToken)
     }
     
     func logout() {
         defaults.remove(forKey: .userData)
-       // defaults.remove(forKey: .authToken)
         defaults.remove(forKey: .profileData)
         keychainHelper.delete(forKey: .authToken)
+        keychainHelper.delete(forKey: .userData)
         self.userDataLogin = nil
         self.isLoggedIn = false
     }

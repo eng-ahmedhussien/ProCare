@@ -13,7 +13,7 @@ struct AppTextFieldPreview: View {
     @State private var age = ""
     @State private var phoneNumber = ""
     @State private var name = ""
-    
+
     var body: some View {
         VStack(spacing: 20) {
             AppTextField(text: $password, placeholder: "Enter password", validationRules: [.isEmpty, .password],
@@ -34,6 +34,13 @@ struct AppTextFieldPreview: View {
             )
         }
         .padding()
+        .onAppear {
+              password = "123"
+              confirmPassword = "1234"
+              age = "abc"
+              phoneNumber = ""
+              name = " "
+          }
     }
 }
 #Preview {
@@ -82,10 +89,6 @@ struct AppTextField: View {
                 }
             }
             .padding()
-//            .overlay(
-//                RoundedRectangle(cornerRadius: 8)
-//                    .stroke(showError ? .red : .gray, lineWidth: 1)
-//            )
             .overlay(
                 Group {
                     switch style {
@@ -94,30 +97,19 @@ struct AppTextField: View {
                             .stroke(showError ? Color.red : Color.appSecode, lineWidth: 1)
                     case .plain:
                         if showError {
-                            RoundedRectangle(cornerRadius: 30)
-                                .stroke(Color.red, lineWidth: 1)
+//                            RoundedRectangle(cornerRadius: 30)
+//                                .stroke(Color.red, lineWidth: 1)
                         }
                     }
                 }
             )
-//            .background(
-//                Group {
-//                    switch style {
-//                    case .plain:
-//                        Color.clear
-//                            .stroke(showError ? .red : .gray, lineWidth: 1)
-//                    case .bordered:
-//                        RoundedRectangle(cornerRadius: 8)
-//                            .stroke(showError ? .red : .gray, lineWidth: 1)
-//                    }
-//                }
-//            )
             
             if showError {
                 Text(errorMessage)
                     .font(.caption)
                     .foregroundColor(.red)
                     .transition(.opacity)
+                    .padding(.leading)
             }
         }
         .animation(.easeInOut, value: showError)

@@ -16,7 +16,7 @@ struct AppImage<S: Shape>: View {
     var shape: S
     var placeholder: Image?
     var overlay: AnyView?
-    var showLoadingIndicator: Bool = true
+    var showLoadingIndicator: Bool
     var backgroundColor: Color = Color.gray.opacity(0.1)
     
     init(
@@ -27,7 +27,7 @@ struct AppImage<S: Shape>: View {
         shape: S = RoundedRectangle(cornerRadius: 10),
         placeholder: Image? = nil,
         overlay: AnyView? = nil,
-        showLoadingIndicator: Bool = true,
+        showLoadingIndicator: Bool = false,
         backgroundColor: Color = Color.gray.opacity(0.1)
     ) {
         self.urlString = urlString
@@ -61,7 +61,11 @@ struct AppImage<S: Shape>: View {
                             .frame(width: width, height: height)
                             .clipShape(shape)
                     } else {
-                        Color.clear
+                        Image(systemName: "photo.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: width * 0.5, height: height * 0.5)
+                            .foregroundColor(.gray.opacity(0.6))
                     }
                 case .success(let image):
                     image

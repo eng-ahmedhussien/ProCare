@@ -11,7 +11,7 @@ import SwiftUI
 struct ProCareApp: App {
     @StateObject var authManager = AuthManager()
     @StateObject var appRouter: AppRouter = AppRouter()
-    @StateObject var locationManager = LocationManager()
+    @StateObject var locationManager = LocationManager.shared
     @StateObject var profileVM = ProfileVM()
     @StateObject var ordersVM =  OrdersVM()
     @State private var isLoading = true
@@ -27,7 +27,7 @@ struct ProCareApp: App {
                     RouterView()
                         .environmentObject(authManager)
                         .environmentObject(appRouter)
-                        .environmentObject(locationManager)
+                        //.environmentObject(locationManager)
                         .id(authManager.isLoggedIn)
                         .environmentObject(profileVM)
                         .environmentObject(ordersVM)

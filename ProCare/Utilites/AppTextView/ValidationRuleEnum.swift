@@ -14,6 +14,7 @@ enum ValidationRule {
     case confirmPassword(Binding<String>)
     case limit(min: Double?, max: Double?)
     case numeric
+    case email
 }
 
 extension ValidationRule {
@@ -22,7 +23,10 @@ extension ValidationRule {
         case .isEmpty:
             let newText = value.trimmingCharacters(in: .whitespacesAndNewlines)
             return newText.isEmpty ? "validation_empty".localized() : nil
-            
+        case .email:
+            let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+            let predicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+            return predicate.evaluate(with: value) ? nil : "validation_email".localized()
         case .phone:
             let phoneRegex = "^(?:\\+?20|0)?1[0125][0-9]{8}$"
             let predicate = NSPredicate(format: "SELF MATCHES %@", phoneRegex)

@@ -11,6 +11,8 @@ import SwiftUI
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
+    static let shared = LocationManager()
+
     private let manager = CLLocationManager()
     private let geocoder = CLGeocoder()   // Used for reverse geocoding coordinates to human-readable address
     
@@ -25,7 +27,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let geocodeDistanceThreshold: CLLocationDistance = 50 // meters  // Minimum distance required to trigger a new reverse geocode
     private let geocodeTimeThreshold: TimeInterval = 10 // seconds   // Minimum time interval required to trigger a new reverse geocode
 
-    override init() {
+    private override init() {
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest

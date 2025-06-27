@@ -20,8 +20,8 @@ extension AppRouter {
             RootScreen()
         case.otpScreen:
             OTPScreen()
-        case.PhoneScreen:
-            PhoneScreen()
+        case.EmailScreen:
+            EmailScreen()
         case .NewPasswordScreen(let phone, let resetToken):
             NewPasswordScreen(phone: phone, resetToken: resetToken)
 
@@ -58,7 +58,7 @@ enum Screen: Identifiable, Hashable {
     case tapBar
     case RootScreen
     case otpScreen
-    case PhoneScreen
+    case EmailScreen
     case NewPasswordScreen(phone: String, resetToken: String)
 
     var id: Self { return self }
