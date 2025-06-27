@@ -73,26 +73,55 @@ class PasswordFlowVM: ObservableObject {
         let parameters = ["email": email, "code": otp]
         do {
             let response = try await apiClient.checkCode(parameters: parameters)
-            await MainActor.run {
+            viewState = .loaded
+            handleApiResponse(response){
                 if let _ = response.data?.isValid {
-                    viewState = .loaded
                     completion(response.data?.resetToken ?? "")
-                    debugPrint("Code valid: \(response.data?.resetToken ?? "")")
-                } else {
-                    debugPrint("Code check returned nil")
-                    completion("nil")
                 }
             }
+           // await MainActor.run {
+//                if let _ = response.data?.isValid {
+//                    viewState = .loaded
+//                    completion(response.data?.resetToken ?? "")
+//                    debugPrint("Code valid: \(response.data?.resetToken ?? "")")
+//                } else {
+//                    debugPrint("Code check returned nil")
+//                    completion("nil")
+//                }
+           // }
         } catch {
             debugPrint("Check code error: \(error.localizedDescription)")
             completion("nil")
         }
     }
     
-    func resetPassword(phoneNumber: String, resetToken: String,completion: @escaping () -> Void) async {
+    fileprivate  func handleApiResponse<T: Codable>(_ response: APIResponse<T>, onSuccess: (() -> Void)) {
+        switch response.status {
+        case .Success:
+            if let _ = response.data {
+                onSuccess()
+            } else {
+                handleError("Response received but no user data")
+            }
+        case .Error, .AuthFailure, .Conflict:
+            showToast(
+                response.message ?? "network error",
+                appearance: .error
+            )
+        case .none:
+            break
+        }
+    }
+    
+    fileprivate func handleError(_ response: String) {
+        viewState = .failed(response)
+        debugPrint("⚠️⚠️⚠️\(response)")
+    }
+    
+    func resetPassword(email: String, resetToken: String,completion: @escaping () -> Void) async {
         viewState = .loading
         let parameters = [
-            "phoneNumber": phoneNumber,
+            "email": email,
             "newPassword": password,
             "resetToken": resetToken
         ]
@@ -133,15 +162,11 @@ extension PasswordFlowVM{
         let parameters = ["email": email]
         
         do {
-            let response = try await apiClient.forgetPassword(parameters: parameters)
-                if let _ = response.data {
-                    viewState = .loaded
-                    completion()
-                } else {
-                    debugPrint("Response received but no user data")
-                }
+            _ = try await apiClient.forgetPassword(parameters: parameters)
+            viewState = .loaded
+            completion()
         } catch {
-                debugPrint("Unexpected error: \(error.localizedDescription)")
+            debugPrint("Unexpected error: \(error.localizedDescription)")
         }
     }
 }

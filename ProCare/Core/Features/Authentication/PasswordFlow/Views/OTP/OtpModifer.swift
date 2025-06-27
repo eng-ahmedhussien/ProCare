@@ -27,7 +27,10 @@ struct OtpModifer: ViewModifier {
             .frame(width: 45, height: 60)
             .background(
                 RoundedRectangle(cornerRadius: 5)
-                    .stroke(isFocused ? Color.red : Color.gray, lineWidth: 2) // Change border color when focused
+                    .stroke(
+                        isFocused ? .appPrimary : .appSecode,
+                        lineWidth: 2
+                    ) // Change border color when focused
             )
     }
 }

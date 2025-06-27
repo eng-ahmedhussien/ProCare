@@ -32,7 +32,7 @@ struct NewPasswordScreen: View {
             
             Button {
                 Task {
-                    await vm.resetPassword(phoneNumber: phone,resetToken: resetToken) {
+                    await vm.resetPassword(email: phone,resetToken: resetToken) {
                         appRouter.popToRoot()
                     }
                 }

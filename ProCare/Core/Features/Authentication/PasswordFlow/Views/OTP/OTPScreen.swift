@@ -34,7 +34,7 @@ struct OTPScreen: View {
     
     //MARK: - Body
     var body: some View {
-        VStack {
+        ScrollView {
             header
             
             pinView
@@ -45,7 +45,6 @@ struct OTPScreen: View {
         }
         .appNavigationBar(title: "otp".localized())
 //        .disabled(vm.viewState == .loading)
-//        .appNavigationBar(title:"otp".localized())
         
     }
 }
@@ -53,13 +52,20 @@ struct OTPScreen: View {
 //MARK: - Extension
 extension OTPScreen {
     var header: some View {
-        VStack(alignment: .leading){
-            Text("please".localized())
-            Text("enter otp!".localized())
+        VStack(alignment: .center){
+            Image(.proCareLogo)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 250, alignment: .center)
+                .opacity(0.9)
+            VStack{
+                Text("please".localized())
+                Text("enter otp!".localized())
+            }.font(.title3.bold())
         }
         .font(.title.bold())
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
+        .foregroundStyle(.appSecode)
+     
     }
     
     var pinView: some View {
