@@ -12,7 +12,6 @@ struct ProfileTapScreen: View {
     @EnvironmentObject var vm: ProfileVM
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
-    @EnvironmentObject var locationManager: LocationManager
     
     @State private var isEditingUserInfo: Bool = false
     @State private var isEditingLocation: Bool = false
@@ -34,13 +33,13 @@ struct ProfileTapScreen: View {
             case .idle:
                 EmptyView()
             case .loading:
-//                VStack {
-//                    Spacer()
-//                    ProgressView()
-//                        .appProgressStyle()
-//                    Spacer()
-//                }
-                content
+                VStack {
+                    Spacer()
+                    ProgressView()
+                        .appProgressStyle()
+                    Spacer()
+                }
+               // content
             case .loaded:
                 content
             case .failed(let error):
@@ -150,7 +149,8 @@ extension ProfileTapScreen{
     }
     
     var userInfo: some View {
-        VStack(spacing: 15){
+        VStack( spacing: 10){
+            // header
             HStack {
                 Text("user_info")
                     .font(.headline)
@@ -158,27 +158,54 @@ extension ProfileTapScreen{
                 Button(action: {
                     isEditingUserInfo.toggle()
                 }) {
-                    Image(systemName: isEditingUserInfo ? "xmark" : "pencil")
+                    Image(systemName: isEditingUserInfo ? "xmark" : "square.and.pencil")
                         .foregroundStyle(.appPrimary)
                 }
             }
             .foregroundStyle(.appPrimary)
-            
+            .padding(.bottom)
+            // firstName
             HStack{
+                Text("first_name")
+                    .foregroundStyle(.appSecode)
                 
-                TextField("user name", text:  $vm.firstName)
-                    .textFieldStyle(.roundedBorder)
-                    .foregroundStyle(isEditingUserInfo ? .gray : .appSecode)
-                    .disabled(!isEditingUserInfo)
-    
-                
-                TextField("user name", text:   $vm.lastName)
-                    .textFieldStyle(.roundedBorder)
-                    .foregroundStyle(isEditingUserInfo ? .gray : .appSecode)
-                    .disabled(!isEditingUserInfo)
+                Spacer()
+
+                if isEditingUserInfo{
+                    TextField("first_name", text:  $vm.firstName)
+                        .textFieldStyle(.roundedBorder)
+                        .foregroundStyle(.appSecode)
+                        .frame(width: screenWidth / 3)
+                }else{
+                    Text(vm.firstName)
+                        .foregroundStyle(.appSecode)
+                }
             }
-            
+            // last_name
+            HStack{
+                Text("last_name")
+                    .foregroundStyle(.appSecode)
+                
+                Spacer()
+                
+                if isEditingUserInfo{
+                    TextField("last_name", text:   $vm.lastName)
+                        .textFieldStyle(.roundedBorder)
+                        .foregroundStyle(.appSecode)
+                        .frame(width: screenWidth / 3)
+                }else{
+                    Text(vm.lastName)
+                        .foregroundStyle(.appSecode)
+                }
+            }
+            // gender
             HStack {
+                Text("gender")
+                    .font(.body)
+                    .foregroundStyle(.appSecode)
+                
+                Spacer()
+                
                 if isEditingUserInfo {
                     Picker("gender".localized(), selection: $vm.gender) {
                         ForEach(Gender.allCases) { gender in
@@ -191,16 +218,20 @@ extension ProfileTapScreen{
                         Text(gender.displayName)
                             .font(.body)
                             .foregroundStyle(.appSecode)
-                            .padding()
                     } else {
                         Text("no_selected".localized())
                             .foregroundColor(.gray)
                     }
                 }
+            }
+            // dateOfBirth
+            HStack {
+                Text("dateOfBirth")
+                    .font(.body)
+                    
                 
                 Spacer()
                 
-          
                 if isEditingUserInfo {
                     DatePicker(
                         "",
@@ -218,12 +249,32 @@ extension ProfileTapScreen{
                     if let dob = vm.dateOfBirth {
                         Text(dob.formatted(date: .abbreviated, time: .omitted))
                             .font(.body)
-                            .foregroundStyle(.appSecode)
+                           
                     } else {
-                        Text("No selected")
-                            .foregroundColor(.gray)
+                        Text("no_selected")
+                            .font(.body)
                     }
                 }
+            }.foregroundStyle(.appSecode)
+            // phone number
+            HStack{
+                Text("phone_number")
+                    .foregroundStyle(.appSecode)
+      
+                Spacer()
+                if isEditingUserInfo{
+                    AppTextField(
+                        text: $vm.phoneNumber,
+                        placeholder: "phoneNumber".localized(),
+                        validationRules: [.phone],style: .plain
+                    )
+                    .textFieldStyle(.roundedBorder)
+                   // .frame(width: screenWidth / 2.5)
+                }else{
+                    Text(vm.phoneNumber)
+                        .foregroundStyle(.appSecode)
+                }
+
             }
         }
     }
@@ -238,7 +289,7 @@ extension ProfileTapScreen{
                 Button(action: {
                     appRouter.pushView(UpdateAddressView())
                 }) {
-                    Image(systemName: "pencil")
+                    Image(systemName: "square.and.pencil")
                         .foregroundStyle(.appPrimary)
                 }
             }.foregroundStyle(.appPrimary)
@@ -278,7 +329,7 @@ extension ProfileTapScreen{
                 
                 HStack{
                     Button {
-                        appRouter.pushView(PhoneScreen())
+                        appRouter.pushView(EmailScreen())
                     } label: {
                         Text("change_password")
                             .lineLimit(1)
@@ -309,10 +360,12 @@ extension ProfileTapScreen{
 #Preview {
     var vm = ProfileVM()
     vm.viewState = .loaded
-    vm.putProfileData(Profile.mock)
+    vm.updateProfileData(Profile.mock)
    return  NavigationView{
         ProfileTapScreen()
            .environmentObject(vm)
            .environment(\.locale, .init(identifier: "ar"))
+           .environment(\.layoutDirection, .rightToLeft)   //
+           
     }
 }

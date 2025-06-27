@@ -4,7 +4,7 @@ import MapKit
 struct PharmacyCardView: View {
     let pharmacy: PharmacyItem
     let onCallTap: (PharmacyItem) -> Void
-    let onMapTap: (String, String, String) -> Void
+    let onMapTap: (Double, Double, String) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -39,7 +39,7 @@ struct PharmacyCardView: View {
                             .clipShape(Circle())
                     }
                     Button(action: {
-                        onMapTap(pharmacy.latitude ?? "", pharmacy.longitude ?? "", pharmacy.name ?? "")
+                        onMapTap(pharmacy.latitude ?? 0, pharmacy.longitude ?? 0, pharmacy.name ?? "")
                     }) {
                         Image(systemName: "map.fill")
                             .foregroundColor(.green)

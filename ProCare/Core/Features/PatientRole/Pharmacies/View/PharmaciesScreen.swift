@@ -80,9 +80,8 @@ struct PharmaciesScreen: View {
         }
     }
 
-    private func openInMaps(latitude: String, longitude: String, name: String) {
-        guard let lat = Double(latitude), let lon = Double(longitude) else { return }
-        let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    private func openInMaps(latitude: Double, longitude: Double, name: String) {
+        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let placemark = MKPlacemark(coordinate: coordinate)
         let mapItem = MKMapItem(placemark: placemark)
         mapItem.name = name

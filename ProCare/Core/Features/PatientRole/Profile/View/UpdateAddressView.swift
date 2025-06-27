@@ -11,7 +11,7 @@ import SwiftUI
 struct UpdateAddressView: View {
     
     @EnvironmentObject var vm: ProfileVM
-    @EnvironmentObject var locationManager: LocationManager
+   // @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var appRouter: AppRouter
   
     @Environment(\.openURL) var openURL
@@ -92,16 +92,14 @@ extension UpdateAddressView {
     
     var saveButton: some View {
         Button("save") {
-            if locationManager.isPermissionDenied {
+            if LocationManager.shared.isPermissionDenied {
                 showLocationAlert.toggle()
             }else{
                 Task{
-                    guard let location = locationManager.location else { return }
-                    let lat = String(location.coordinate.latitude)
-                    let lon = String(location.coordinate.longitude)
-                    await vm.updateProfile(updateKind: .location, latitude: lat, longitude: lon)
+                  
+                    await vm.updateProfile(updateKind: .location)
 
-                    showToast("update_location_successfully".localized(), appearance: .success,position: .center)
+                    showToast("update_location_successfully".localized(), appearance: .success)
                     appRouter.pop()
                 }
             }

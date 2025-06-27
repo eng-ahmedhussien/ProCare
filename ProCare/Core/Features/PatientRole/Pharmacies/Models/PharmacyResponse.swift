@@ -19,8 +19,8 @@ struct PharmacyItem: Codable, Identifiable {
     let name: String?
     let email: String?
     let lineNumber: String?
-    let latitude: String?
-    let longitude: String?
+    let latitude: Double?
+    let longitude: Double?
     let cityName: String?
     let governorateName: String?
     let phoneNumber: String?
@@ -28,9 +28,9 @@ struct PharmacyItem: Codable, Identifiable {
     
   
     var location: CLLocation? {
-           if let lat = latitude, let lon = longitude,
-              let latDouble = Double(lat), let lonDouble = Double(lon) {
-               return CLLocation(latitude: latDouble, longitude: lonDouble)
+        if let lat = latitude, let lon = longitude{
+            
+               return CLLocation(latitude: lat, longitude: lon)
            }
            return nil
        }
@@ -61,8 +61,8 @@ extension PharmacyItem {
             name: "صيدلية هلال Helal pharmacy",
             email: "healthfirst@example.com",
             lineNumber: "02-12345678",
-            latitude: "30.0396934",
-            longitude: "31.3605326",
+            latitude: 30.0396934,
+            longitude: 31.3605326,
             cityName: "مدينة نصر",
             governorateName: "القاهرة",
             phoneNumber: "01234567890",
