@@ -12,8 +12,8 @@ import Combine
 struct ResendOTPView: View {
     @State private var timeRemaining = 10
     @State private var timerSubscription: AnyCancellable?
-    @ObservedObject var vm : OTPVM
-    var phonNumber: String = ""
+    @ObservedObject var vm : PasswordFlowVM
+    var email: String = ""
     
     var body: some View {
         VStack {
@@ -58,7 +58,7 @@ struct ResendOTPView: View {
     private func resendOTP() {
         startTimer()
         Task {
-            let parameter = ["phoneNumber": phonNumber]
+            let parameter = ["email": email]
            await vm.resendCode(parameter: parameter)
         }
     }
@@ -66,5 +66,5 @@ struct ResendOTPView: View {
 
 
 #Preview {
-    ResendOTPView(vm: OTPVM())
+    ResendOTPView(vm: PasswordFlowVM())
 }

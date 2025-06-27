@@ -9,17 +9,20 @@ import Foundation
 import Combine
 
 @MainActor
-class ResetPasswordFlowVM: ObservableObject {
+class PasswordFlowVM: ObservableObject {
     
     // MARK: - Published Properties
-    @Published var phone: String = ""
+    @Published var email: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
     @Published var viewState: ViewState = .idle
+    //MARK: - otp Properties
+    @Published var userDataLogin : UserDataLogin?
+    @Published var errorMessage: APIResponseError?
     
     // MARK: - Validation Prompts
     var phonePrompt: String {
-        if phone.isEmpty || isPhoneValid() {
+        if email.isEmpty || isEmailValid() {
             return ""
         } else {
             return "Phone number must start with +20 (e.g. +201XXXXXXXXX)"
@@ -40,10 +43,10 @@ class ResetPasswordFlowVM: ObservableObject {
         }
     }
 
-    private let apiClient: ResetPasswordFlowApiClintProtocol
+    private let apiClient: PasswordFlowApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
 
-    init(apiClient: ResetPasswordFlowApiClintProtocol = ResetPasswordFlowApiClint()) {
+    init(apiClient: PasswordFlowApiClintProtocol = PasswordFlowApiClint()) {
         self.apiClient = apiClient
     }
     // MARK: - API Methods
@@ -51,7 +54,7 @@ class ResetPasswordFlowVM: ObservableObject {
    
         viewState = .loading
 
-        let parameters = ["phoneNumber": phone]
+        let parameters = ["email": email]
         do {
             let response = try await apiClient.resendCode(parameters: parameters)
                 if let _ = response.data {
@@ -65,9 +68,9 @@ class ResetPasswordFlowVM: ObservableObject {
         }
     }
 
-    func checkCode(phoneNumber: String, otp: String, completion: @escaping (String) -> Void) async {
+    func checkCode(email: String, otp: String, completion: @escaping (String) -> Void) async {
         viewState = .loading
-        let parameters = ["phoneNumber": phoneNumber, "code": otp]
+        let parameters = ["email": email, "code": otp]
         do {
             let response = try await apiClient.checkCode(parameters: parameters)
             await MainActor.run {
@@ -108,17 +111,69 @@ class ResetPasswordFlowVM: ObservableObject {
         }
     }
     // MARK: - Validation Methods
-     func isPhoneValid() -> Bool {
-        let pattern = #"^\+20(1[0125][0-9]{8})$"#
-        return phone.range(of: pattern, options: .regularExpression) != nil
+    private func isEmailValid() -> Bool {
+        let pattern = #"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"#
+        return email.range(of: pattern, options: .regularExpression) != nil
     }
 
-     func isPasswordValid() -> Bool {
+    private func isPasswordValid() -> Bool {
         let pattern = #"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$"#
         return password.range(of: pattern, options: .regularExpression) != nil
     }
 
-     func isConfirmedPasswordValid() -> Bool {
+    private func isConfirmedPasswordValid() -> Bool {
         return password == confirmPassword && isPasswordValid()
+    }
+}
+
+extension PasswordFlowVM{
+    func forgetPassword(completion: @escaping () -> Void) async {
+        viewState = .loading
+
+        let parameters = ["email": email]
+        
+        do {
+            let response = try await apiClient.forgetPassword(parameters: parameters)
+                if let _ = response.data {
+                    viewState = .loaded
+                    completion()
+                } else {
+                    debugPrint("Response received but no user data")
+                }
+        } catch {
+                debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+}
+
+extension PasswordFlowVM{
+    func confirmCode(parameter: [String : String], completion: @escaping () -> Void) async {
+        viewState = .loading
+        do {
+            let response = try await apiClient.confirmCode(parameters: parameter)
+            if response.status == .Success, let userDataLogin = response.data {
+                viewState = .loaded
+                self.userDataLogin = userDataLogin
+                if let _ = userDataLogin.token {
+                    completion()
+                }
+            }
+        } catch let APIError{
+            await MainActor.run {
+                self.errorMessage = APIError as? APIResponseError
+            }
+        }
+    }
+    
+    func resendCode(parameter: [String : String]) async {
+        viewState = .loading
+        do {
+            let _ = try await apiClient.resendCode(parameters: parameter)
+            viewState = .loaded
+        } catch let APIError{
+            await MainActor.run {
+                self.errorMessage = APIError as? APIResponseError
+            }
+        }
     }
 }

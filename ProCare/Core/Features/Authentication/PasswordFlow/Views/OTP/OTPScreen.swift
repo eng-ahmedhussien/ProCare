@@ -10,21 +10,20 @@ import Combine
 
 struct OTPScreen: View {
     
-    //MARK: - Properties
-    @State private var pinOne: String = ""
-    @State private var pinTwo: String = ""
-    @State private var pinThree: String = ""
-    @State private var pinFour: String = ""
-    
-    @State private var isLoading = false
-    @StateObject var vm = OTPVM()
-    @StateObject var resetPasswordFlowVM = ResetPasswordFlowVM()
-    @FocusState private var pinFocusState : FocusPin?
+    @StateObject var vm                 = PasswordFlowVM()
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var authManager: AuthManager
     
-    var phonNumber: String = ""
-    var comeFrom: ComeFrom = .login
+    //MARK: - Properties
+    @State private var pinOne: String   = ""
+    @State private var pinTwo: String   = ""
+    @State private var pinThree: String = ""
+    @State private var pinFour: String  = ""
+    @State private var isLoading        = false
+    @FocusState private var pinFocusState : FocusPin?
+
+    var email: String                   = ""
+    var comeFrom: ComeFrom              = .login
     
     enum FocusPin {
         case  pinOne, pinTwo, pinThree, pinFour
@@ -32,20 +31,15 @@ struct OTPScreen: View {
     enum ComeFrom {
         case login, signUp, forgetPassword
     }
+    
     //MARK: - Body
     var body: some View {
         VStack {
-            VStack(alignment: .leading){
-                Text("please".localized())
-                Text("enter otp!".localized())
-            }
-            .font(.title.bold())
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
+            header
             
             pinView
          
-            ResendOTPView(vm: vm, phonNumber: phonNumber)
+            ResendOTPView(vm: vm, email: email)
             
             VerifyButton
         }
@@ -58,6 +52,16 @@ struct OTPScreen: View {
 
 //MARK: - Extension
 extension OTPScreen {
+    var header: some View {
+        VStack(alignment: .leading){
+            Text("please".localized())
+            Text("enter otp!".localized())
+        }
+        .font(.title.bold())
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+    }
+    
     var pinView: some View {
         HStack(spacing:15) {
             TextField("", text: $pinOne)
@@ -112,7 +116,7 @@ extension OTPScreen {
     var VerifyButton: some View {
         Button {
             let parameter = [
-                "phoneNumber": phonNumber,
+                "email": email,
                 "code": pinOne + pinTwo + pinThree + pinFour
             ]
             isLoading = true
@@ -125,9 +129,9 @@ extension OTPScreen {
                         authManager.login(userDataLogin: userDataLogin)
                     }
                 case .forgetPassword:
-                    await resetPasswordFlowVM.checkCode(phoneNumber:phonNumber, otp: pinOne + pinTwo + pinThree + pinFour){ resetToken in
+                    await vm.checkCode(email:email, otp: pinOne + pinTwo + pinThree + pinFour){ resetToken in
                         //if status {
-                        appRouter.push(.NewPasswordScreen(phone: phonNumber,resetToken: resetToken))
+                        appRouter.push(.NewPasswordScreen(phone: email,resetToken: resetToken))
                        // }
                         
                         

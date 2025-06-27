@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewPasswordScreen: View {
 
-    @StateObject var vm = ResetPasswordFlowVM()
+    @StateObject var vm = PasswordFlowVM()
     @EnvironmentObject var appRouter: AppRouter
     var phone: String = ""
     var resetToken: String = ""
