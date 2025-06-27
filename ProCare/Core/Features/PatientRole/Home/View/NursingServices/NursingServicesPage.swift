@@ -18,7 +18,7 @@ struct NursingServicesPage: View {
     var body: some View {
         
         content
-            .background(.appBackground)
+            //.background(.appBackground)
             .appNavigationBar(title: "nursing_services")
     }
     

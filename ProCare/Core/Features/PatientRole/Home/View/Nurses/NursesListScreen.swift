@@ -10,13 +10,12 @@ import CoreLocation
 
 struct NursesListScreen: View {
     @EnvironmentObject var vm: HomeVM
-    @EnvironmentObject var locationManger: LocationManager
     @EnvironmentObject var appRouter: AppRouter
     var servicesIds: [ServiceItem] = []
-    var total: Int = 0
+    var total: Int = 0 
     
     private var sortedNurses: [Nurse] {
-        guard let userLocation = locationManger.location else {
+        guard let userLocation = LocationManager.shared.location else {
             return vm.nurseList
         }
 
@@ -33,13 +32,11 @@ struct NursesListScreen: View {
         ZStack {
             content
         }
-        .background(.appBackground)
         .appNavigationBar(title: "nurses_list".localized())
         .onAppear {
             if vm.nurseList.isEmpty {
                 Task {
                     await vm.fetchNurses(loadType: .initial)
-                    
                 }
             }
         }
@@ -63,7 +60,7 @@ struct NursesListScreen: View {
                 LazyVStack(spacing: 0) {
                     ForEach(vm.nurseList, id: \.id) { nurse in
                         let distance: Double? = {
-                            guard let userLocation = locationManger.location,
+                            guard let userLocation = LocationManager.shared.location,
                                   let nurseLocation = nurse.coordinate else { return nil }
                             return userLocation.distance(from: nurseLocation)
                         }()
