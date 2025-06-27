@@ -25,10 +25,9 @@ struct ServiceListPage: View {
         .onAppear {
             if vm.serviceItem.isEmpty {
                 Task {
-                    async let servicesTask = vm.fetchServices(id: id, loadType: .initial)
-                    async let priceTask = vm.getVisitServicePrice()
-                    // Wait for both tasks to complete as we need both for proper total calculation
-                    await (servicesTask, priceTask)
+                    async let servicesTask: () = vm.fetchServices(id: id, loadType: .initial)
+                    async let priceTask: () = vm.getVisitServicePrice()
+                    _ = await (servicesTask, priceTask) // Explicitly ignore the result
                 }
             }
         }

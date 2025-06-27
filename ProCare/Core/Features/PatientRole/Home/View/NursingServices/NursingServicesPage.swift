@@ -16,9 +16,7 @@ struct NursingServicesPage: View {
     
     @State var isSelected = false
     var body: some View {
-        
         content
-            //.background(.appBackground)
             .appNavigationBar(title: "nursing_services")
     }
     
@@ -57,8 +55,11 @@ struct NursingServicesPage: View {
         } else {
             switch nursingServices.id {
             case 1:
-                if let order = ordersVM.currentOrder {
-                    showToast("you have currently request with id \(order.id ?? "")", appearance: .error)
+                if let _ = ordersVM.currentOrder {
+                    showToast(
+                        "request_limit_message".localized(),
+                        appearance: .error
+                    )
                 } else {
                     appRouter.pushView(
                         ServiceListPage(id: nursingServices.id ?? 0)
