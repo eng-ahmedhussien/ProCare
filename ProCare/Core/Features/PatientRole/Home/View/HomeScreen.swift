@@ -19,7 +19,6 @@ struct HomeScreen: View {
             header
             content
         }
-       // .background(.appBackground)
     }
     
     @ViewBuilder
@@ -41,43 +40,47 @@ struct HomeScreen: View {
             categoriesList
             
         case .failed(let message):
-            VStack(spacing: 16) {
-                Text(message)
-                    .foregroundColor(.red)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                
-                Button("Try Again") {
+            VStack {
+                Spacer()
+                RetryView(message: message){
                     vm.fetchCategories {
                         authManager.logout()
                         debugPrint("Unauthorized access")
                     }
-                }.foregroundStyle(.appPrimary)
-                
+                }
+                Spacer()
             }
         }
     }
     
-    private var categoriesList: some View {
+    fileprivate func handleCategoryTap(_ id: Int) {
+        switch id {
+        case 2:
+            let nursingView = NursingServicesPage(id: 2)
+                .environmentObject(vm)
+            appRouter.pushView(nursingView)
+        case 3,4:
+        //3 ambulance
+        //4 doctor
+            showAlert(
+                title: "alert".localized(),
+                message: "this_feature_coming_soon".localized()
+            )
+        case 5:
+            let PharmaciesScreen = PharmaciesScreen(vm: pharmaciesVM)
+            appRouter.pushView(PharmaciesScreen)
+        default:
+            debugPrint("Unhandled category ID: \(id )")
+        }
+    }
+    
+    var categoriesList: some View {
         ScrollView {
             LazyVStack(spacing: 16) {
                 ForEach(vm.categories, id: \.id) { category in
                     CategoryCard(category: category) {
-                        switch category.id {
-                        case 2:
-                            let nursingView = NursingServicesPage(id: category.id ?? 0)
-                                .environmentObject(vm)
-                            appRouter.pushView(nursingView)
-                        case 3:
-                            debugPrint("ambulance")
-                        case 4:
-                            debugPrint("doctor")
-                        case 5:
-                            let PharmaciesScreen = PharmaciesScreen(vm: pharmaciesVM)
-                            appRouter.pushView(PharmaciesScreen)
-                        default:
-                            debugPrint("Unhandled category ID: \(category.id ?? 0 )")
-                        }
+                        guard let id = category.id else { return  debugPrint("error no category id")}
+                        handleCategoryTap(id)
                     }
                 }
             }

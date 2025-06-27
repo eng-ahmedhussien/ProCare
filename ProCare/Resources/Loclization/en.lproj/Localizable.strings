@@ -88,6 +88,8 @@
 "home" = "Home";
 "services" = "Services";
 "unknown_location" = "Unknown location";
+"alert" = "Alert";
+"this_feature_coming_soon" = "This feature is coming soon";
 //MARK: - NursingServicesPage
 "nursing_services" = "Nursing Services";
 "no_title" = "No Title";

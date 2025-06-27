@@ -90,6 +90,8 @@
 "home" = "الرئيسية";
 "services" = "الخدمات";
 "unknown_location" = "موقع غير معروف";
+"alert" = "تنبيه";
+"this_feature_coming_soon" = "هذه الميزة ستتوفر قريبًا";
 
 //MARK: - NursingServicesPage
 "nursing_services" = "خدمات التمريض";
