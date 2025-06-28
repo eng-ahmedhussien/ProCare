@@ -27,8 +27,8 @@ struct cardBackground: View {
 extension View {
     func backgroundCard(color: Color = Color.white,
                         cornerRadius: CGFloat = 10,
-                        shadowRadius: CGFloat = 0,
-                        shadowColor: Color = .gray,
+                        shadowRadius: CGFloat = 2,
+                        shadowColor: Color = Color(.systemGray4),
                         shadowX: CGFloat = 0,
                         shadowY: CGFloat = 0) -> some View {
         modifier(CardBackground(color: color,

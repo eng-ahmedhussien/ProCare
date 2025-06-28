@@ -29,6 +29,9 @@ struct ServiceItem: Codable, Identifiable,Equatable{
 }
 
 extension ServiceItem {
+    static let mockService = 
+        ServiceItem(id: 1, name: "Home Nursing", description: "Professional nursing care at home.", price: 500, subCategoryId: 10)
+    
     static let mockServices: [ServiceItem] = [
         ServiceItem(id: 1, name: "Home Nursing", description: "Professional nursing care at home.", price: 500, subCategoryId: 10),
         ServiceItem(id: 2, name: "Physiotherapy", description: "Expert physiotherapy sessions.", price: 300, subCategoryId: 11),

@@ -10,36 +10,39 @@ import SwiftUI
 struct NursingServiceCell: View {
     let nursingServices: NursingServices
     let onTap: () -> Void
-    
+
     var body: some View {
-        
-        Button(action: {
-            onTap()
-        }) {
-            HStack(alignment: .center){
+        Button(action: onTap) {
+            HStack(alignment: .center, spacing: 16) {
                 AppImage(
-                    urlString: nursingServices.imageUrl  ?? "",
+                    urlString: nursingServices.imageUrl ?? "",
                     width: 72,
                     height: 72,
                     backgroundColor: .clear
                 )
-                
-                VStack(alignment: .leading){
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .accessibilityLabel(Text(nursingServices.name ?? ""))
+
+                VStack(alignment: .leading, spacing: 6) {
                     Text(nursingServices.name ?? "no_title".localized())
-                        .font(.title3)
-                        .foregroundStyle(.appSecode)
-                        .bold()
-                    
+                        .font(.headline)
+                        .foregroundStyle(Color.primary)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+
                     Text(nursingServices.description ?? "no_description".localized())
                         .font(.subheadline)
-                        .bold()
-                        .foregroundStyle(.appSecode)
+                        .foregroundStyle(Color.secondary)
+                        .lineLimit(2)
+                        .truncationMode(.tail)
                 }
             }
-            .padding()
+            .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
             .backgroundCard(color: .white, cornerRadius: 10, shadowRadius: 2, shadowColor: .gray)
-        } .buttonStyle(.plain)
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
     }
 }
 

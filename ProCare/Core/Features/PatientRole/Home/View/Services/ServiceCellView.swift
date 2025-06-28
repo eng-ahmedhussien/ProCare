@@ -28,46 +28,50 @@ struct ServiceCellView: View {
     }
      
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 5) {
-                Text(service.name ?? "")
+        Button(action: toggleSelection) {
+            HStack(spacing: 16) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(service.name ?? "Service")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                        .accessibilityAddTraits(.isHeader)
+                    
+                    Text(service.description ?? "")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .lineLimit(2)
+                        .accessibilityLabel("Description: \(service.description ?? "")")
+                }
+                Spacer()
+                Text("\(service.price ?? 0)")
                     .font(.body)
-                    .bold()
-                  
-                Text(service.description ?? "")
-                    .lineLimit(2)
-                    .font(.footnote)
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.appPrimary)
+                
+                Image(systemName: isSelected ? "checkmark.square.fill" : "square")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(isSelected ? .appPrimary : .gray)
+                    .accessibilityLabel(isSelected ? "Selected" : "Not selected")
+                
             }
-            
-            Spacer()
-            
-            Text("\(service.price ?? 0)")
-                .font(.body)
-                .foregroundStyle(.appPrimary)
-            
-            Image(systemName: isSelected ? "checkmark.square.fill" : "square")
-                           .resizable()
-                           .frame(width: 22, height: 22)
-                           .foregroundColor(isSelected ? .appPrimary : .gray)
-
-        }
-        .frame(minHeight: 70, maxHeight: 100)
-        .padding(12)
-        .contentShape(Rectangle()) // makes the full area tappable
-        .onTapGesture {
-            toggleSelection()
-        }
-        .backgroundCard(
-            color: .white,
-            cornerRadius: 10,
-            shadowRadius: 2,
-            shadowColor: .gray
-        )
-        .padding(.horizontal)
+            .padding()
+            .frame(minHeight: 100)
+            .backgroundCard(
+                color: .white,
+                cornerRadius: 10,
+                shadowRadius: 2,
+                shadowColor: Color(.systemGray4)
+            )
+        } .buttonStyle(PlainButtonStyle())
+            .accessibilityElement(children: .combine)
+            .padding(.horizontal)
+            .padding(.vertical, 4)
     }
 }
 
-//#Preview {
-//    ServiceCellView(service: MockManger.shared.serviceMockModel, selectedServices: .constant([]))
-//}
+#Preview {
+    ServiceCellView(
+        service: ServiceItem.mockService,
+        selectedServices: .constant([])
+    )
+}

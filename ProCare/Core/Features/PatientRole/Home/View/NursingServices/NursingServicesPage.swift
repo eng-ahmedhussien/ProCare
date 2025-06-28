@@ -23,7 +23,7 @@ struct NursingServicesPage: View {
     @ViewBuilder
     private var content: some View {
         ScrollView {
-            LazyVStack(spacing: 12) {
+            LazyVStack(spacing: 16) {
                 ForEach(vm.subCategories, id: \.id){ nursingServices in
                     NursingServiceCell(nursingServices: nursingServices){
                         handleNursingServiceTap(nursingServices)
@@ -32,7 +32,7 @@ struct NursingServicesPage: View {
                  .padding(.horizontal)
                  
             }
-            .padding(.top)
+            .padding(.top,12)
         }
         .redacted(reason: isLoading ? .placeholder : [])
         .onAppear {
