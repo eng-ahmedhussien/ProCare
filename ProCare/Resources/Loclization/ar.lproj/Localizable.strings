@@ -113,7 +113,7 @@
 "visit_Fee" = "رسوم الزيارة";
 //MARK: - NursesList
 "nurses_list" = "قائمة الممرضين";
-"no_nurses_available" = "لا توجد ممرضات حالياً";
+"no_nurses_available" = "لا يوجد ممرضين حالياً";
 "error" = "خطأ";
 "no_title" = "بدون عنوان";
 "no_description" = "لا يوجد وصف متاح";
@@ -121,7 +121,7 @@
 "general_care" = "رعاية عامة";
 "reviews" = "المراجعات";
 "create_request" = "إنشاء طلب";
-
+"this_nurse_is_busy_now" = "هذا الممرض مشغول الآن.";
 //MARK: - Review RequestScreen
 "review_request" = "مراجعة الطلب";
 "no_title" = "بدون عنوان";

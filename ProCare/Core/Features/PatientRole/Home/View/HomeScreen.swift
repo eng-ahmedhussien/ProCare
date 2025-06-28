@@ -12,7 +12,7 @@ struct HomeScreen: View {
     @StateObject var pharmaciesVM = PharmaciesVM()
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
-    @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var profileVM: ProfileVM
     
     var body: some View {
         VStack{
@@ -26,9 +26,9 @@ struct HomeScreen: View {
         switch vm.loadingState {
         case .idle:
             Color.clear.onAppear {
-                vm.fetchCategories {
-                    authManager.logout()
-                    debugPrint("Unauthorized access")
+                fetchHomeData()
+                Task{
+                    await  profileVM.fetchProfile()
                 }
             }
             
@@ -43,15 +43,22 @@ struct HomeScreen: View {
             VStack {
                 Spacer()
                 RetryView(message: message){
-                    vm.fetchCategories {
-                        authManager.logout()
-                        debugPrint("Unauthorized access")
-                    }
+                    fetchHomeData()
                 }
                 Spacer()
             }
         }
     }
+    
+    fileprivate func fetchHomeData()  {
+        Task{
+            await  vm.fetchCategories {
+                authManager.logout()
+                debugPrint("Unauthorized access")
+            }
+        }
+    }
+    
     
     fileprivate func handleCategoryTap(_ id: Int) {
         switch id {
@@ -87,10 +94,7 @@ struct HomeScreen: View {
             .padding()
         }
         .refreshable {
-            vm.fetchCategories {
-                authManager.logout()
-                debugPrint("Unauthorized access")
-            }
+            fetchHomeData()
         }
     }
 }

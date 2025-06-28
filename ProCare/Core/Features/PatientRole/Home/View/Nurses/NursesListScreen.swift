@@ -54,46 +54,11 @@ struct NursesListScreen: View {
             ProgressView()
                 .appProgressStyle(color: .appPrimary)
                 .padding()
-            
         case .pagingLoading, .refreshing, .loaded:
-            ScrollView {
-                LazyVStack(spacing: 0) {
-                    ForEach(vm.nurseList, id: \.id) { nurse in
-                        let distance: Double? = {
-                            guard let userLocation = LocationManager.shared.location,
-                                  let nurseLocation = nurse.coordinate else { return nil }
-                            return userLocation.distance(from: nurseLocation)
-                        }()
-                        NurseCellView(nurse: nurse, distance: distance)
-                            .onAppear {
-                                if nurse.id == vm.nurseList.last?.id, vm.hasNextPage {
-                                    Task {
-                                        await vm.fetchNurses(loadType: .paging)
-                                    }
-                                }
-                            }
-                            .onTapGesture {
-                                appRouter.pushView(
-                                    NurseDetailsScreen(
-                                        servicesIds: servicesIds,
-                                        nurse: nurse,
-                                        total: total
-                                    ).environmentObject(vm)
-                                )
-                            }
-                    }
-                    .redacted(reason: vm.paginationViewState == .pagingLoading ? .placeholder : [])
-                    
-                    if vm.paginationViewState == .pagingLoading {
-                        ProgressView()
-                            .appProgressStyle(color: .appPrimary)
-                            .padding()
-                    }
-                }
-            }
-        
+            nurseList
+                .redacted(reason: vm.paginationViewState == .pagingLoading ? .placeholder : [])
         case .empty:
-            AppEmptyView(message: "no_nurses_available")
+            AppEmptyView(message: "no_nurses_available".localized())
         
         case .error(let message):
             RetryView(message: "error".localized() + ": \(message)") {
@@ -103,14 +68,69 @@ struct NursesListScreen: View {
             }
         }
     }
+    
+    var nurseList: some View {
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(vm.nurseList, id: \.id) { nurse in
+                    NurseCellView(nurse: nurse, distance: getDistance(nurse))
+                        .onAppear {
+                            if nurse.id == vm.nurseList.last?.id, vm.hasNextPage {
+                                Task {
+                                    await vm.fetchNurses(loadType: .paging)
+                                }
+                            }
+                        }
+                        .onTapGesture {
+                            handleTapOnNurse(nurse)
+                        }
+                }
+               // .redacted(reason: vm.paginationViewState == .pagingLoading ? .placeholder : [])
+                
+                if vm.paginationViewState == .pagingLoading {
+                    ProgressView()
+                        .appProgressStyle(color: .appPrimary)
+                        .padding()
+                }
+            }
+        }
+    }
+    
+    private func handleTapOnNurse(_ nurse: Nurse) {
+        if !(nurse.isBusy ?? false) {
+            appRouter.pushView(
+                NurseDetailsScreen(
+                    servicesIds: servicesIds,
+                    nurse: nurse,
+                    total: total
+                ).environmentObject(vm)
+            )
+        }else{
+            showToast(
+                "this_nurse_is_busy_now".localized(),
+                appearance: .warning
+            )
+        }
+    }
+}
+
+//MARK: helper
+extension NursesListScreen {
+    private func getDistance(_ nurse: Nurse) -> Double?{
+        return {
+            guard let userLocation = LocationManager.shared.location,
+                  let nurseLocation = nurse.coordinate else { return nil }
+            return userLocation.distance(from: nurseLocation)
+        }()
+    }
 }
 
 
-//#Preview {
-//    let mockVM = NursesVM()
-//    mockVM.nurseList = MockManger.shared.NursesListMockModel
-//    return NursesListScreen(vm: mockVM)
-//}
+#Preview {
+    let mockVM = HomeVM()
+    mockVM.nurseList = NurseData.mock.items ?? []
+    return NursesListScreen().environmentObject(mockVM)
+}
 
 
 

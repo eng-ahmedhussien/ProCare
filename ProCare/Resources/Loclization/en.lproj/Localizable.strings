@@ -117,6 +117,7 @@
 "general_care" = "General Care";
 "reviews" = "Reviews";
 "create_request" = "Create request";
+"this_nurse_is_busy_now" = "This nurse is busy now.";
 //MARK: - Review RequestScreen
 "review_request" = "Review Request";
 "no_title" = "No Title";

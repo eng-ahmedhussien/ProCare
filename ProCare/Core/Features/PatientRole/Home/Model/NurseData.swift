@@ -25,6 +25,7 @@ struct Nurse: Codable {
     let rating: Int?
     let latitude, longitude: Double?
     let reviews: [Review]
+    let isBusy: Bool?
     
     var coordinate: CLLocation? {
            if let lat = latitude, let lon = longitude {
@@ -72,7 +73,9 @@ extension Nurse {
             rating: 4,
             latitude: 37.7749,
             longitude: -122.4194,
-            reviews: Review.mockReviews
+            reviews: Review.mockReviews,
+            isBusy: false
+            
         )
     }
 }

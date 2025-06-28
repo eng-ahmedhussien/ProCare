@@ -52,8 +52,7 @@ extension HomeVM{
     
     /// Fetches all available categories
     /// - Parameter onUnauthorized: Callback to handle unauthorized access
-    func fetchCategories(onUnauthorized: @escaping () -> Void) {
-        Task {
+    func fetchCategories(onUnauthorized: @escaping () -> Void) async {
             do {
                 loadingState = .loading
                 let response = try await apiClient.categories()
@@ -71,7 +70,6 @@ extension HomeVM{
             } catch {
                 handleError(error)
             }
-        }
     }
     
     /// Fetches sub-categories for a specific category
