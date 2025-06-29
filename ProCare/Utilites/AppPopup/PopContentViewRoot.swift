@@ -29,7 +29,8 @@ struct PopContentView: View {
             Form {
                 Section(header: Text("Alerts")) {
                     Button("Show Global Alert") {
-                        PopupManager.shared.showAlert(title: "Global Alert", message: "This alert can be triggered from anywhere!")
+//                        PopupManager.shared.showAlert(title: "Global Alert", message: "This alert can be triggered from anywhere!")
+                        showAlert(title: "Global Alert", message: "This alert can be triggered from anywhere!")
                     }
                 }
                 Section(header: Text("Toasts")) {
@@ -54,14 +55,15 @@ struct PopContentView: View {
                     Button("Show Global Custom Popup") {
                         showPopup {
                             VStack(spacing: 16) {
-                                Text("Custom Popup")
+                                Text("Total requests")
                                     .font(.headline)
-                                Text("You can put any SwiftUI view here!")
+                                Text("500")
+                                    .font(.title)
                                 Button("Dismiss") {
                                     PopupManager.shared.dismissCustomPopup()
                                 }
                             }
-                            .frame(maxWidth: 300)
+                            .frame(maxWidth: 200)
                             .padding()
                             .background(.ultraThinMaterial)
                             .cornerRadius(20)
