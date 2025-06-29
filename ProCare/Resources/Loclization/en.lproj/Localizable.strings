@@ -51,8 +51,6 @@
 "within_minutes" = "Within %d min";
 "No requests" = "No requests";
 "call the nurse" = "call the nurse";
-//MARK: - Report
-"total_requests" = "you should take %d EG";
 //MARK: - profile
 "profile" = "Profile";
 "user_info" = "User Info";
@@ -156,6 +154,7 @@
 "accept" = "Accept";
 "reject" = "Reject";
 "km_away" = "km away";
+"no_requests" = "No requests";
 //MARK: - pharmacies
 "pharmacies" = "Pharmacies";
 "phone" = "Phone";
@@ -174,7 +173,7 @@
 "cancel" = "Cancel";
 "total" = "Total";
 "report_added_successfully" = "Report Added successfully";
-"total_requests" = "Total requests: %d";
+"total_requests" = "Total requests";
 "diseases" = "Diseases";
 "select_diseases" = "Select Diseases";
 "select_services" = "Select Services";

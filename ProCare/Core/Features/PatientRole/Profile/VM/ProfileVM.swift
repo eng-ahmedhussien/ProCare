@@ -74,7 +74,8 @@ class ProfileVM: ObservableObject {
             viewState = .loaded
             handleApiResponse(response){
                 if let profileData = response.data{
-                    AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
+                    KeychainHelper.shared.set(profileData, forKey: .profileData)
+                   // AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
                     self.updateProfileData(profileData)
                     self.profileData = profileData
                 }
@@ -90,13 +91,6 @@ class ProfileVM: ObservableObject {
             let response = try await apiClient.deleteProfile()
             viewState = .loaded
             handleApiResponse(response,onSuccess: completion)
-//            if let _ = response.data {
-//                viewState = .loaded
-//                completion()
-//            } else {
-//                viewState = .failed("Response received but no user data")
-//                debugPrint("⚠️⚠️⚠️Response received but no user data")
-//            }
         } catch {
             handleError("⚠️⚠️⚠️Unexpected error: \(error.localizedDescription)")
         }

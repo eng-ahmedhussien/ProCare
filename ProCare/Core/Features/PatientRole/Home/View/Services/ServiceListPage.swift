@@ -42,40 +42,11 @@ struct ServiceListPage: View {
     private var content: some View {
         switch vm.paginationViewState {
         case .initialLoading:
-            ProgressView()
-                .appProgressStyle(color: .appPrimary)
-                .padding()
-            
+            AppProgressView()
         case .pagingLoading, .refreshing, .loaded:
-            VStack(spacing: 0){
-                ScrollView(showsIndicators: false){
-                    LazyVStack(spacing: 20) {
-                        ForEach(vm.serviceItem, id: \.id) { item in
-                            ServiceCellView(service: item, selectedServices: $vm.selectedServices)
-                                .onAppear {
-                                    if item.id == vm.serviceItem.last?.id, vm.hasNextPage {
-                                        Task {
-                                            await vm.fetchServices(id: id, loadType: .paging)
-                                        }
-                                    }
-                                }
-                        }
-                        if vm.paginationViewState == .pagingLoading {
-                            ProgressView()
-                                .padding()
-                        }
-                    }
-                    .padding(.vertical)
-                }
-            
-       
-                    totalView
-                       
-            }
-        
+            serviceListView
         case .empty:
             AppEmptyView(message: "no_services_available")
-        
         case .error(let message):
             RetryView(message: "error".localized() + ": \(message)") {
                 Task {
@@ -85,6 +56,33 @@ struct ServiceListPage: View {
         }
     }
     
+    var serviceListView: some View {
+        VStack(spacing: 0){
+            ScrollView(showsIndicators: false){
+                LazyVStack(spacing: 20) {
+                    ForEach(vm.serviceItem, id: \.id) { item in
+                        ServiceCellView(service: item, selectedServices: $vm.selectedServices)
+                            .onAppear {
+                                if item.id == vm.serviceItem.last?.id, vm.hasNextPage {
+                                    Task {
+                                        await vm.fetchServices(id: id, loadType: .paging)
+                                    }
+                                }
+                            }
+                    }
+                    if vm.paginationViewState == .pagingLoading {
+                        AppProgressView()
+                    }
+                }
+                .padding(.vertical)
+            }
+        
+   
+                totalView
+                   
+        }
+    
+    }
 
 }
 
@@ -123,7 +121,11 @@ extension ServiceListPage{
                 }
 
                 Button {
-                    if LocationManager.shared.isPermissionDenied || profileVM.profileData?.city == nil {
+                    let ProfileLocation =  KeychainHelper.shared.getData(
+                        Profile.self,
+                        forKey: .profileData
+                    )
+                    if LocationManager.shared.isPermissionDenied || ProfileLocation?.city == nil {
                         showAddressAlert.toggle()
                     }else{
                         appRouter.pushView(

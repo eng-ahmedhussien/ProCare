@@ -51,9 +51,7 @@ struct NursesListScreen: View {
     private var content: some View {
         switch vm.paginationViewState {
         case .initialLoading:
-            ProgressView()
-                .appProgressStyle(color: .appPrimary)
-                .padding()
+            AppProgressView()
         case .pagingLoading, .refreshing, .loaded:
             nurseList
                 .redacted(reason: vm.paginationViewState == .pagingLoading ? .placeholder : [])
@@ -88,9 +86,7 @@ struct NursesListScreen: View {
                // .redacted(reason: vm.paginationViewState == .pagingLoading ? .placeholder : [])
                 
                 if vm.paginationViewState == .pagingLoading {
-                    ProgressView()
-                        .appProgressStyle(color: .appPrimary)
-                        .padding()
+                    AppProgressView()
                 }
             }
         }

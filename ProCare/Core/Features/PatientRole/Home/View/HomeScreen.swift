@@ -27,9 +27,9 @@ struct HomeScreen: View {
         case .idle:
             Color.clear.onAppear {
                 fetchHomeData()
-                Task{
-                    await  profileVM.fetchProfile()
-                }
+//                Task{
+//                    await  profileVM.fetchProfile()
+//                }
             }
             
         case .loading:

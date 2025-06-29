@@ -50,10 +50,6 @@
 "within_minutes" = "خلال %d دقيقة";
 "No requests" = "لا يوجد طلبات";
 "call the nurse" = "اتصل بالممرض";
-
-//MARK: - Report
-"total_requests" = "يجب أن تدفع %d EG";
-
 //MARK: - profile
 "profile" = "الملف الشخصي";
 "user_info" = "معلومات المستخدم";
@@ -161,6 +157,7 @@
 "accept" = "قبول";
 "reject" = "رفض";
 "km_away" = "يبعد %.1f كم";
+"no_requests" = "لا توجد طلبات";
 //MARK: - pharmacies
 // Pharmacy List
 "pharmacies" = "الصيدليات";
@@ -180,7 +177,7 @@
 "cancel" = "إلغاء";
 "total" = "الإجمالي";
 "report_added_successfully" = "تمت إضافة التقرير بنجاح";
-"total_requests" = "إجمالي الطلبات: %d";
+"total_requests" = "إجمالي الطلبات";
 "diseases" = "الأمراض";
 "select_diseases" = "اختر الأمراض";
 "select_services" = "اختر الخدمات";
