@@ -33,13 +33,6 @@ struct ReportScreen: View {
         .onTapGesture {
             isDrugsFocused = false
         }
-        .alert("total".localized(), isPresented: $showTotal) {
-            Button("cancel".localized(), role: .cancel) {
-                appRouter.popToRoot()
-            }
-        } message: {
-            Text(String(format: "total_requests".localized(), vm.totalRequest))
-        }
         .appNavigationBar(title: "add_report")
     }
 }
@@ -48,7 +41,7 @@ extension ReportScreen{
     var drugsView: some View {
         VStack(alignment: .leading, spacing : 10){
             Text("drugs")
-                .font(.body)
+                .font(.headline)
                 .foregroundStyle(.appSecode)
             
             AppTextEditor(
@@ -64,7 +57,7 @@ extension ReportScreen{
     var notesView: some View {
         VStack(alignment: .leading, spacing : 10){
             Text("notes")
-                .font(.body)
+                .font(.headline)
                 .foregroundStyle(.appSecode)
             
             AppTextEditor(
@@ -80,7 +73,7 @@ extension ReportScreen{
         VStack(alignment: .leading, spacing : 10){
             
             Text("diseases")
-                .font(.body)
+                .font(.headline)
                 .foregroundStyle(.appPrimary)
             
             Button {
@@ -130,7 +123,7 @@ extension ReportScreen{
         
             VStack(alignment: .leading, spacing : 10){
                 Text("services")
-                    .font(.body)
+                    .font(.headline)
                     .foregroundStyle(.appPrimary)
                 
                 Button {
@@ -177,15 +170,29 @@ extension ReportScreen{
         
     }
 
-   
-    
     var submit: some View {
         Button("submit") {
             Task{
                 await  vm.addOrUpdateReport{ data in
                     if data {
-                        showTotal.toggle()
-                        showToast("report_added_successfully", appearance: .success)
+                        showPopup {
+                            VStack(spacing: 16) {
+                                Text("total_requests")
+                                    .font(.headline)
+                                Text("\(vm.totalRequest)")
+                                    .font(.title)
+                                Button("Dismiss") {
+                                    showToast("report_added_successfully", appearance: .success)
+                                    PopupManager.shared.dismissCustomPopup()
+                                    appRouter.popToRoot()
+                                }
+                            }
+                            .frame(maxWidth: 200)
+                            .padding()
+                            .background(.ultraThinMaterial)
+                            .cornerRadius(20)
+                        }
+                      
                     }
                 }
             }

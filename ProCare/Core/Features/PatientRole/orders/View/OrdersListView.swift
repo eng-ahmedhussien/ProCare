@@ -33,41 +33,39 @@ struct OrdersListView: View {
     private var content: some View {
         switch vm.viewState {
         case .initialLoading:
-            ProgressView()
-                .appProgressStyle(color: .appPrimary)
-                .padding()
-            
+            AppProgressView()
         case .pagingLoading, .refreshing, .loaded:
-            ScrollView {
-                LazyVStack(spacing: 0) {
-                    ForEach(vm.ordersList, id: \.id) { order in
-                        OrderCellView(order: order)
-                            .onAppear {
-                                if order.id == vm.ordersList.last?.id, vm.hasNextPage {
-                                    Task {
-                                        await vm.fetchOrders(loadType: .paging)
-                                    }
-                                }
-                            }
-                    }
-                    .redacted(reason: vm.viewState == .pagingLoading ? .placeholder : [])
-                    
-                    if vm.viewState == .pagingLoading {
-                        ProgressView()
-                            .appProgressStyle(color: .appPrimary)
-                            .padding()
-                    }
-                }
-            }
-        
+            orderListView
         case .empty:
             AppEmptyView(message: "no_orders_available".localized())
-        
         case .error(let message):
-            
             RetryView(message: "error".localized() + ": \(message)") {
                 Task {
                     await vm.fetchOrders(loadType: .initial)
+                }
+            }
+        }
+    }
+    
+    var orderListView: some View {
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(vm.ordersList, id: \.id) { order in
+                    OrderCellView(order: order)
+                        .onAppear {
+                            if order.id == vm.ordersList.last?.id, vm.hasNextPage {
+                                Task {
+                                    await vm.fetchOrders(loadType: .paging)
+                                }
+                            }
+                        }
+                }
+                .redacted(reason: vm.viewState == .pagingLoading ? .placeholder : [])
+                
+                if vm.viewState == .pagingLoading {
+                    ProgressView()
+                        .appProgressStyle(color: .appPrimary)
+                        .padding()
                 }
             }
         }

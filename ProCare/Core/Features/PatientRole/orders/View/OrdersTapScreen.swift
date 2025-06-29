@@ -39,16 +39,6 @@ struct OrdersTapScreen: View {
             }
             Spacer()
         }
-        .onAppear{
-            Task{
-                await vm.fetchCurrentOrder()
-            }
-        }
-        .refreshable {
-            Task {
-                await vm.fetchCurrentOrder()
-            }
-        }
     }
     
     enum ProfileSection : String, CaseIterable {

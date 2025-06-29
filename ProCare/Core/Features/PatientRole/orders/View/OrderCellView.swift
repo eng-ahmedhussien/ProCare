@@ -12,9 +12,7 @@ struct OrderCellView: View {
     let height = UIScreen.main.bounds.height * 0.1
     
     var body: some View {
-        
         HStack(alignment: .top, spacing: 15){
-            
             AppImage(
                 urlString: order.nursePicture,
                 width: 80,
@@ -28,7 +26,7 @@ struct OrderCellView: View {
                 Text(order.nurseName ?? "")
                     .font(.headline)
                     .bold()
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.appSecode)
                 
                 Text(order.speciality ?? "")
                     .font(.callout)
