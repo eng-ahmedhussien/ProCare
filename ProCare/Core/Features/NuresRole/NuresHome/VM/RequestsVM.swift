@@ -41,18 +41,20 @@ extension RequestsVM{
     func fetchCurrentRequest(onUnauthorized: @escaping () -> Void = {}) async {
         do {
             let response = try await apiClient.getCurrentRequest()
-            if let data = response.data {
-                currentRequest = data
-            } else {
-                currentRequest = nil
-                debugPrint("Response received but no user data")
+            handleApiResponse(response){
+                if let data = response.data {
+                    self.currentRequest = data
+                } else {
+                    self.currentRequest = nil
+                    debugPrint("Response received but no user data")
+                }
             }
         } catch {
             if let apiError = error as? APIResponseError, apiError.status == 401 {
-                debugPrint("HomeVM: Unauthorized error detected")
+                debugPrint("RequestsVM: Unauthorized error detected")
                 onUnauthorized()
             } else {
-                debugPrint("HomeVM: Unexpected error: \(error.localizedDescription)")
+                debugPrint("RequestsVM: Unexpected error: \(error.localizedDescription)")
             }
         }
     }
@@ -74,9 +76,7 @@ extension RequestsVM{
             "pageNumber": "\(pageNumber)",
             "pageSize": "\(pageSize)"
         ]
-        
-        //try? await Task.sleep(nanoseconds: 600_000_000) // 0.3s
-        
+            
         do {
             let response = try await apiClient.getPreviousRequests(parameters: parameters)
             if let data = response.data {
@@ -114,11 +114,10 @@ extension RequestsVM{
     func rejectRequest(id: String) async {
         do {
             let response = try await apiClient.cancelRequest(id: id)
-            if let data = response.data {
-                if data {
-                    Task{
-                        await fetchCurrentRequest()
-                    }
+            handleApiResponse(response) {
+                guard let data = response.data, data else { return }
+                Task {
+                    await self.fetchCurrentRequest()
                 }
             }
         } catch {
@@ -129,9 +128,10 @@ extension RequestsVM{
     func approveRequest(id: String) async {
        do {
            let response = try await apiClient.approveRequest(id: id)
-           if let data = response.data {
-               if data {
-                   await fetchCurrentRequest()
+           handleApiResponse(response) {
+               guard let data = response.data, data else { return }
+               Task {
+                   await self.fetchCurrentRequest()
                }
            }
        } catch {
@@ -144,15 +144,18 @@ extension RequestsVM {
     func fetchReportByPatientId(id: String) async {
         do {
             let response = try await apiClient.getReportByPatientId(id: id)
-            if let data = response.data {
-                report = data
-            } else {
-                debugPrint("Response received but no report data")
+            handleApiResponse(response) {
+                if let data = response.data {
+                    self.report = data
+                } else {
+                    debugPrint("Response received but no report data")
+                }
             }
         } catch {
             debugPrint("Unexpected error: \(error.localizedDescription)")
         }
     }
+    
     func addOrUpdateReport(completion: @escaping (Bool) -> Void) async {
         let parameters: [String : Any] = [
             "requestId": currentRequest?.id ?? "",
@@ -242,5 +245,20 @@ extension RequestsVM {
         selectedServices = report.serviceIds?.compactMap { id in
             allServices.first(where: { $0.id == id })
         } ?? []
+    }
+    
+    private func handleApiResponse<T: Codable>(_ response: APIResponse<T>, onSuccess: (() -> Void)? = nil) {
+        switch response.status {
+        case .Success:
+                onSuccess?()
+        case .Error, .AuthFailure, .Conflict:
+            debugPrint(response.message ?? "network error")
+//            showToast(
+//                response.message ?? "network error",
+//                appearance: .error
+//            )
+        case .none:
+            break
+        }
     }
 }

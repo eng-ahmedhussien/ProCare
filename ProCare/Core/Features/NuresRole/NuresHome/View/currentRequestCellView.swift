@@ -10,6 +10,7 @@ struct currentRequestCellView: View {
     
     @ObservedObject var vm: RequestsVM
     @EnvironmentObject var appRouter: AppRouter
+    @EnvironmentObject var authManager: AuthManager
     let buttonWidth = UIScreen.main.bounds.width * 0.33
     @State var showRejectAlert: Bool = false
     @State var showApproveAlert: Bool = false
@@ -31,6 +32,18 @@ struct currentRequestCellView: View {
             }
             else {
                 AppEmptyView()
+            }
+        }
+        .onFirstAppear {
+            Task{
+                await vm.fetchCurrentRequest(){
+                    authManager.logout()
+                }
+            }
+        }
+        .refreshable {
+            Task {
+                await vm.fetchCurrentRequest()
             }
         }
         .alert("rejection_request".localized(), isPresented: $showRejectAlert) {

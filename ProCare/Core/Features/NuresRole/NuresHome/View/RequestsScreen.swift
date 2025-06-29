@@ -12,7 +12,6 @@ import CoreLocation
 struct RequestsScreen: View {
     
     @StateObject var vm = RequestsVM()
-    @EnvironmentObject var locationManger: LocationManager
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
     @State var segmentationSelection : ProfileSection = .CurrentRequest
@@ -42,20 +41,6 @@ struct RequestsScreen: View {
             }
             Spacer()
         }
-      
-        .onAppear{
-            Task{
-                await vm.fetchCurrentRequest(){
-                    authManager.logout()
-                }
-            }
-        }
-        .refreshable {
-            Task {
-                await vm.fetchCurrentRequest()
-            }
-        }
-        .background(Color(.systemGray6))
     }
     
     enum ProfileSection : String, CaseIterable {
@@ -84,7 +69,7 @@ extension RequestsScreen{
                 }
                 HStack {
                     Image(.location)
-                    Text("\(locationManger.address)")
+                    Text("\(LocationManager.shared.address)")
                         .lineLimit(2)
                 }
                 .font(.subheadline)
@@ -118,5 +103,5 @@ extension RequestsScreen{
 
 
 #Preview {
-    return RequestsScreen()
+    return RequestsScreen().environmentObject( AuthManager())
 }

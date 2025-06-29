@@ -14,9 +14,7 @@ struct RequestCellView: View {
     let height = UIScreen.main.bounds.height * 0.1
     
     var body: some View {
-        
         HStack(alignment: .top, spacing: 15){
-            
             AppImage(
                 urlString: request.patientPicture,
                 width: 80,
@@ -30,18 +28,18 @@ struct RequestCellView: View {
                 Text(request.patientName ?? "")
                     .font(.headline)
                     .bold()
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.appSecode)
                 
                 Text(request.createdDate ?? "")
-                    .font(.callout)
+                    .font(.subheadline)
                     .foregroundStyle(.gray)
                 
                 Text((request.totalPrice ?? 0).asEGPCurrency())
-                    .font(.callout)
+                    .font(.subheadline)
                     .foregroundStyle(.gray)
                 
                 Text(request.status ?? "")
-                    .font(.callout)
+                    .font(.subheadline)
                     .foregroundStyle(request.statusId == .Completed ? .green : .red)
                     .bold()
                 

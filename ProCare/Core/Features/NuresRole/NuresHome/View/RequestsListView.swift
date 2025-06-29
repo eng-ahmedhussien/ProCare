@@ -39,35 +39,11 @@ struct RequestsListView: View {
     private var content: some View {
         switch vm.viewState {
         case .initialLoading:
-            ProgressView()
-                .appProgressStyle(color: .appPrimary)
-                .padding()
-            
+            AppProgressView()
         case .pagingLoading, .refreshing, .loaded:
-            ScrollView {
-                LazyVStack(spacing: 0) {
-                    ForEach(vm.requestList, id: \.id) { request in
-                        RequestCellView(request: request)
-                            .onAppear {
-                                if request.id == vm.requestList.last?.id, vm.hasNextPage {
-                                    Task {
-                                        await vm.fetchRequests(loadType: .paging)
-                                    }
-                                }
-                            }
-                    }
-                    .redacted(reason: vm.viewState == .pagingLoading ? .placeholder : [])
-                    
-                    if vm.viewState == .pagingLoading {
-                        ProgressView()
-                            .appProgressStyle(color: .appPrimary)
-                            .padding()
-                    }
-                }
-            }
-        
+            requestsList
         case .empty:
-            emptyView
+            AppEmptyView(message: "no_requests".localized())
         
         case .error(let message):
             RetryView(message: "Error: \(message)") {
@@ -78,16 +54,28 @@ struct RequestsListView: View {
         }
     }
     
-    private var emptyView: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "person.crop.circle.badge.exclam")
-                .font(.largeTitle)
-                .foregroundColor(.gray)
-            Text("لا توجد ممرضات حالياً")
-                .foregroundColor(.gray)
+    var requestsList: some View {
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(vm.requestList, id: \.id) { request in
+                    RequestCellView(request: request)
+                        .onAppear {
+                            if request.id == vm.requestList.last?.id, vm.hasNextPage {
+                                Task {
+                                    await vm.fetchRequests(loadType: .paging)
+                                }
+                            }
+                        }
+                }
+                .redacted(reason: vm.viewState == .pagingLoading ? .placeholder : [])
+                
+                if vm.viewState == .pagingLoading {
+                    AppProgressView()
+                }
+            }
         }
-        .padding()
     }
+
 }
 
 #Preview {
