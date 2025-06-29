@@ -45,14 +45,12 @@ class LoginVM: ObservableObject {
             if  let userDataLogin = response.data {
                 self.userDataLogin = userDataLogin
             } else {
-                showToast("Response received but no user data", appearance: .error, position: .top)
+                showToast("Response received but no user data", appearance: .error)
                 debugPrint("Response received but no user data")
             }
         } catch let APIError{
-            await MainActor.run {
-                showToast("Unexpected error: \(APIError.localizedDescription)", appearance: .error, position: .top)
-                debugPrint("Unexpected error: \(APIError.localizedDescription)")
-            }
+            showToast("Unexpected error: \(APIError.localizedDescription)", appearance: .error)
+            debugPrint("Unexpected error: \(APIError.localizedDescription)")
         }
     }
     
