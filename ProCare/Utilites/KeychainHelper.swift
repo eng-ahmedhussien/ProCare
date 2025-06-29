@@ -44,5 +44,6 @@ extension KeychainHelper{
         case authToken = "auth_token"
         case deviceToken = "device_token"
         case userData = "user_data"
+        case profileData = "profile_data"
     }
 }
