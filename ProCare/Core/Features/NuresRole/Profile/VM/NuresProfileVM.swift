@@ -20,7 +20,7 @@ class NuresProfileVM: ObservableObject {
     }
     
     // MARK: - API Methods
-    func updateLocation(lat : String, lon : String) async {
+    func updateLocation(lat : Double, lon : Double) async {
         
         let parameters: [String: Any] = [
             "latitude": lat,

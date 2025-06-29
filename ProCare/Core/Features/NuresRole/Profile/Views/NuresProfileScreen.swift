@@ -1,9 +1,9 @@
-//
-//  NuresProfileScreen.swift
-//  ProCare
-//
-//  Created by ahmed hussien on 30/05/2025.
-//
+    //
+    //  NuresProfileScreen.swift
+    //  ProCare
+    //
+    //  Created by ahmed hussien on 30/05/2025.
+    //
 
 import SwiftUI
 
@@ -12,19 +12,18 @@ struct NuresProfileScreen: View {
     @StateObject var vm = NuresProfileVM()
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
-    @EnvironmentObject var locationManager: LocationManager
     
     @State private var isBusy = false // false means Online
     let width =  UIScreen.main.bounds.width * 0.85
-
+    
     var body: some View {
         VStack(spacing: 30) {
-
+            
             Spacer()
             
-            // Online / Offline Switch
+                // Online / Offline Switch
             HStack {
-                // In your Toggle:
+                    // In your Toggle:
                 Toggle(isOn: Binding(
                     get: { !isBusy },
                     set: { isOnline in
@@ -37,7 +36,7 @@ struct NuresProfileScreen: View {
                                     isBusy = false // revert the toggle state if the change fails
                                     
                                 }
-                                    
+                                
                             }
                         }
                     }
@@ -52,26 +51,29 @@ struct NuresProfileScreen: View {
             .backgroundCard(cornerRadius:30 , shadowRadius: 0.5, shadowColor: .black)
             .padding(.horizontal)
             .animation(.easeInOut, value: isBusy)
-
-            // Change Location
-            Button(action: {
-                guard let location = locationManager.location else { return }
-                let lat = String(location.coordinate.latitude)
-                let lon = String(location.coordinate.longitude)
-                Task {
-                    await vm.updateLocation(lat: lat, lon: lon)
+            
+                // Change Location
+            Button(
+                action: {
+                    guard let location = LocationManager.shared.location else {
+                        return
+                    }
+                    let lat = location.coordinate.latitude
+                    let lon = location.coordinate.longitude
+                    Task {
+                        await vm.updateLocation(lat: lat, lon: lon)
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "location.fill")
+                        Text("update_my_location")
+                            .bold()
+                    }
                 }
-            }) {
-                HStack {
-                    Image(systemName: "location.fill")
-                    Text("update_my_location")
-                        .bold()
-                }
-            }
-            .buttonStyle(AppButton(kind: .border))
-            .padding(.horizontal)
-
-            // Logout Button
+                .buttonStyle(AppButton(kind: .border))
+                .padding(.horizontal)
+            
+                // Logout Button
             Button(action: {
                 appRouter.popToRoot()
                 authManager.logout()
@@ -84,11 +86,11 @@ struct NuresProfileScreen: View {
             }
             .buttonStyle(AppButton(kind: .solid))
             .padding(.horizontal)
-
+            
             Spacer()
         }
         .appNavigationBar(title: "profile".localized())
-            
+        
         
     }
 }
@@ -99,7 +101,7 @@ struct NuresProfileScreen: View {
         NuresProfileScreen()
             .appNavigationBar(title: "Profile".localized())
             .environment(\.locale, .init(identifier: "ar")) // "ar" for Arabic, "fr" for French, etc.
-
-    }
         
+    }
+    
 }
