@@ -29,6 +29,16 @@ struct currentOrderCellView: View {
                 AppEmptyView(message: "no_orders_available".localized())
             }
         }
+        .onAppear{
+            Task{
+                await vm.fetchCurrentOrder()
+            }
+        }
+        .refreshable {
+            Task {
+                await vm.fetchCurrentOrder()
+            }
+        }
         .alert("cancel_current_request".localized(), isPresented: $showCancelAlert) {
             Button("cancel".localized(), role: .destructive) { }
             Button("yes".localized(), role: .cancel) {
