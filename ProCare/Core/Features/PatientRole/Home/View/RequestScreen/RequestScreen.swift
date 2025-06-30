@@ -133,7 +133,6 @@ extension RequestScreen{
 
     var ConfirmButton: some View {
         let parameters :[String : Any]  = [
-           // "nurseId": "24998975-118d-4f79-089a-08dd8377516a"
             "nurseId": nurse?.id ?? "",
             "patientId": profile?.id ?? 0,
             "addressId": profile?.addressId ?? 0,

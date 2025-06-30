@@ -35,11 +35,9 @@ struct ProfileTapScreen: View {
             case .loading:
                 VStack {
                     Spacer()
-                    ProgressView()
-                        .appProgressStyle()
+                    AppProgressView()
                     Spacer()
                 }
-               // content
             case .loaded:
                 content
             case .failed(let error):
@@ -54,9 +52,14 @@ struct ProfileTapScreen: View {
                 }
             }
         }
-        .onAppear {
+        .onFirstAppear {
             Task{
                 await  vm.fetchProfile()
+            }
+        }
+        .refreshable {
+            Task {
+                await vm.fetchProfile()
             }
         }
         .photosPicker(isPresented: $openPhotoLibrary, selection: $vm.selectedImage, matching: .images)

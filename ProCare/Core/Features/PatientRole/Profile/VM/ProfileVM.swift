@@ -74,8 +74,6 @@ class ProfileVM: ObservableObject {
             viewState = .loaded
             handleApiResponse(response){
                 if let profileData = response.data{
-                    KeychainHelper.shared.set(profileData, forKey: .profileData)
-                   // AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
                     self.updateProfileData(profileData)
                     self.profileData = profileData
                 }
@@ -146,7 +144,7 @@ class ProfileVM: ObservableObject {
 
     // MARK: - Helper Methods
     func updateProfileData(_ profileData: Profile) {
-        AppUserDefaults.shared.setCodable(profileData, forKey: .profileData)
+        KeychainHelper.shared.set(profileData, forKey: .profileData)
         firstName = profileData.firstName ?? ""
         lastName = profileData.lastName ?? ""
         gender = Gender(rawValue: profileData.gender ?? 0) ?? .notSpecified
