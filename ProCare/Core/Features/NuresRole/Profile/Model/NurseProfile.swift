@@ -14,6 +14,7 @@ struct NurseProfile: Codable {
     let imageUrl: String
     let governorateId: Int
     let cityId: Int
-    let latitude, longitude, city, governorate,licenseNumber: String
+    let latitude, longitude: Double?
+    let city, governorate,licenseNumber: String
 
 }
