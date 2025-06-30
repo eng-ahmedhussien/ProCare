@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-
+@MainActor
 class NuresProfileVM: ObservableObject {
     
     // MARK: - Published Properties
@@ -30,8 +30,7 @@ class NuresProfileVM: ObservableObject {
         do {
             let response = try await apiClient.updateLocation(parameters: parameters)
             if let _ = response.data {
-                showToast("Location updated successfully!", appearance: .success)
-
+                showToast("\(response.message ?? "Success")", appearance: .success)
             } else {
                 debugPrint("Response received but no user data")
             }
@@ -43,20 +42,34 @@ class NuresProfileVM: ObservableObject {
     func changeStatus(isBusy: Bool, onSuccess: ((Bool) -> Void)? = nil) async {
         do {
             let response = try await apiClient.changeStatus(isBusy: isBusy)
-            if let responseData = response.data {
-                switch responseData {
-                case true:
-                    showToast("Status updated successfully!", appearance: .success)
-                    onSuccess?(true)
-                case false:
-                    showToast(" \(response.message ?? "")", appearance: .error)
-                    onSuccess?(false)
-                }
-            } else {
-                debugPrint("Response received but no user data")
-            }
+            handleApiResponse(response, onSuccess: onSuccess)
         } catch {
             showToast("Unexpected error: \(error.localizedDescription)", appearance: .error)
         }
     }
+    
+    private func handleApiResponse<T: Codable>(_ response: APIResponse<T>, onSuccess: ((Bool) -> Void)? = nil) {
+            switch response.status {
+            case .Success:
+                if let responseData = response.data {
+                    switch responseData as! Bool {
+                    case true:
+                        showToast("\(response.message ?? "")", appearance: .success)
+                        onSuccess?(true)
+                    case false:
+                        showToast(" \(response.message ?? "")", appearance: .error)
+                        onSuccess?(false)
+                    }
+                } else {
+                    debugPrint("Response received but no user data")
+                }
+            case .Error, .AuthFailure, .Conflict:
+                showToast(
+                    response.message ?? "network error",
+                    appearance: .error
+                )
+            case .none:
+                break
+            }
+        }
 }
