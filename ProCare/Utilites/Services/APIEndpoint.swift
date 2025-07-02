@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 
-
 protocol APIEndpoint {
     var baseURL: URL { get }
     var path: String { get }
@@ -17,7 +16,6 @@ protocol APIEndpoint {
     var headers: HTTPHeader? { get }
     var task: Parameters { get }
 }
-
 
 extension APIEndpoint {
     var baseURL: URL {
@@ -34,7 +32,7 @@ extension APIEndpoint {
    
     
     func asURLRequest() throws -> URLRequest {
-        var url = baseURL.appendingPathComponent(path)
+        let url = baseURL.appendingPathComponent(path)
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         
@@ -70,7 +68,6 @@ extension APIEndpoint {
 
 }
 
-
 enum HTTPHeader {
     case custom([String: String])
     case `default`
@@ -94,18 +91,18 @@ enum HTTPHeader {
     private static var defaultValues: [String: String] {
         return [
             "accept": "ar-EG",
+            "Accept-Language": "\(currentLanguage)",
             "Content-Type": "application/json"
         ]
     }
     
     private static var bearer: [String: String] {
-       // guard let  token : String = AppUserDefaults.shared.get(forKey: .authToken) else { return [:] }
         guard let  token : String = KeychainHelper.shared.get(forKey: .authToken) else { return [:] }
         return [
             "accept": "*/*",
-            "Authorization": "Bearer \(token)",
+            "Accept-Language": "\(currentLanguage)",
             "Content-Type": "application/json",
-            "Accept-Language": "\(currentLanguage)"
+            "Authorization": "Bearer \(token)",
         ]
     }
     
@@ -137,7 +134,6 @@ enum Parameters {
     case requestWithMultipart(parameters: [String: Any], multipartParamters: MultipartType)
     case requestWithQueryAndBody(query: [String: Any], body: [String: Any], encoding: APIEncoding) // ✅ NEW
 }
-
 
 enum APIEncoding {
     case URLEncoding(_ type: URLEncodingTypes = .default)

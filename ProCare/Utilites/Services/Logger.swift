@@ -55,10 +55,12 @@ class NetworkLogger {
         let url = request.url?.absoluteString ?? "No URL"
         let headers = request.allHTTPHeaderFields ?? [:]
         let body = request.httpBody?.prettyPrintedJSONString ?? "No Body"
-
-        logger.info("🚀🚀🚀 [API Request] Method: \(method), URL: \(url)")
-        logger.debug("🏷 [Headers]: \(headers)")
+        
+        logger.debug("")
+        logger.info("🚀 [Request] Method: \(method), URL: \(url)")
+        logger.debug("📋 [Headers]: \(headers)")
         logger.debug("📦 [Body]: \(body)")
+        logger.debug("")
     }
 
     /// Logs API Response
@@ -67,9 +69,9 @@ class NetworkLogger {
         let statusCode = response.statusCode
         let responseBody = data.prettyPrintedJSONString ?? "No Response Body"
 
-        logger.info("✅✅✅ [API Response] URL: \(url)")
+        logger.info("✅[Response] URL: \(url)")
         logger.debug("🔢 [Status Code]: \(statusCode)")
-        logger.debug("📦 [Response Bod]: \(responseBody)")
+        logger.debug("📦 [Response Bod]: \n \(responseBody)")
     }
 
     /// Logs API Errors
@@ -78,10 +80,10 @@ class NetworkLogger {
         let statusCode = response?.statusCode ?? 0
         let responseBody = data?.prettyPrintedJSONString ?? "No Response Body"
 
-        logger.error(" ❌ [URL]: \(url)")
+        logger.error("❌ [URL]: \(url)")
         logger.debug("❌ [Error]: \(error)")
         logger.debug("🔢 [Status Code]: \(statusCode)")
-        logger.debug("📦 [Response Body]: \(responseBody)")
+        logger.debug("📦 [Response Body]:\n \(responseBody)")
     }
     
     static func logError(request: URLRequest?, error: String) {
