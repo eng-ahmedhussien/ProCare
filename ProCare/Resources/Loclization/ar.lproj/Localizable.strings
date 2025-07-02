@@ -209,3 +209,5 @@
 "submit" = "إرسال";
 //MARK: - Request Limit
 "request_limit_message" = "لديك طلب نشط حالياً. يرجى الانتظار حتى يتم إكماله قبل إنشاء طلب جديد.";
+//MARK: other
+"forced_update" = "تحديث إلزامي";

@@ -205,3 +205,5 @@
 "submit" =  "Submit";
 //MARK: - Request Limit
 "request_limit_message" = "You currently have an active request. Please wait for it to be completed before creating a new one.";
+//MARK: other
+"forced_update" = "Forced Update";
