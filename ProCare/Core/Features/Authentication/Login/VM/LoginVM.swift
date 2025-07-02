@@ -49,7 +49,8 @@ class LoginVM: ObservableObject {
                 debugPrint("Response received but no user data")
             }
         } catch let APIError{
-            showToast("Unexpected error: \(APIError.localizedDescription)", appearance: .error)
+            viewState = .failed(APIError.localizedDescription)
+            showToast("\(APIError.localizedDescription)", appearance: .error)
             debugPrint("Unexpected error: \(APIError.localizedDescription)")
         }
     }

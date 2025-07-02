@@ -42,7 +42,9 @@ final class SignUpVM: ObservableObject {
             viewState = .loaded
             completion(response)
         } catch let APIError{
-            viewState = .loaded
+           // viewState = .loaded
+            viewState = .failed(APIError.localizedDescription)
+            showToast("\(APIError.localizedDescription)", appearance: .error)
            debugPrint("Error in signUp no response : \(APIError)")
         }
     }
