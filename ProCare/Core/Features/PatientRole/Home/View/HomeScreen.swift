@@ -114,7 +114,7 @@ extension HomeScreen{
                     Spacer()
                 }
                 
-                HStack {// AppUserDefaults.shared.getCodable(Profile.self, forKey: .profileData)
+                HStack {
                     if  let profileData =  authManager.profileData{
                         Image(.location)
                         Text("\(profileData.governorate ?? "") - \(profileData.city ?? "") - \(profileData.addressNotes ?? "")")

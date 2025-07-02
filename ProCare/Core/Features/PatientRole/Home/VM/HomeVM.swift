@@ -102,6 +102,7 @@ extension HomeVM{
     }
     
     private func handleError(_ error: Error) {
+        showToast(error.localizedDescription, appearance: .error)
         loadingState = .failed(error.localizedDescription)
     }
     
