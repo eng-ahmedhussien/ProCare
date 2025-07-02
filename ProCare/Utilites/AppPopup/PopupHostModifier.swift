@@ -69,14 +69,17 @@ extension View {
 
 
 // MARK: - Global function for showing a toast
+@MainActor
 func showToast(_ message: String, appearance: ToastStyle, position: ToastPosition = .top) {
     PopupManager.shared.showToast(message: message, style: appearance, position: position)
 }
+@MainActor
 func showPopup<Content: View>(@ViewBuilder content: () -> Content) {
     PopupManager.shared.showCustomPopup {
             AnyView(content())
     }
 }
+@MainActor
 func showAlert(title: String,message: String) {
     PopupManager.shared.showAlert(title: title, message: message)
 }

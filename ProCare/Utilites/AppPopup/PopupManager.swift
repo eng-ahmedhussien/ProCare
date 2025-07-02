@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+@MainActor
 final class PopupManager: ObservableObject {
     static let shared = PopupManager()
 
@@ -19,8 +20,8 @@ final class PopupManager: ObservableObject {
         alert = AlertData(title: title, message: message, button: button, action: action)
     }
 
-    func showToast(message: String, style: ToastStyle, duration: TimeInterval = 3.0,position: ToastPosition) {
-        toast = ToastData(style: style, message: message, duration: duration,position: position)
+    func showToast(message: String, style: ToastStyle, duration: TimeInterval = 3.0, position: ToastPosition) {
+        toast = ToastData(style: style, message: message, duration: duration, position: position)
     }
 
     func showCustomPopup<Content: View>(@ViewBuilder content: () -> Content) {
@@ -31,7 +32,6 @@ final class PopupManager: ObservableObject {
         customPopup = nil
     }
 }
-
 struct AlertData: Identifiable, Equatable {
     let id = UUID()
     let title: String
