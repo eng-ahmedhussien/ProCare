@@ -7,6 +7,9 @@
 import SwiftUI
 
 struct LoadingPage: View {
+    
+    @EnvironmentObject var appManager : AppManager
+    
     @State private var opacity: Double = 0.0
     @State private var scale: CGFloat = 0.8
 
@@ -32,6 +35,11 @@ struct LoadingPage: View {
                     }
             }
 
+        }.onAppear{
+            Task {
+               // await  appManager.checkVersion()
+            }
+           // showAlert(title: "update", message: "this forc update test")
         }
     }
 }

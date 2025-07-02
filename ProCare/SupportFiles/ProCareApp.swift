@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct ProCareApp: App {
+    @StateObject var appManager = AppManager()
     @StateObject var authManager = AuthManager()
     @StateObject var appRouter: AppRouter = AppRouter()
     @StateObject var locationManager = LocationManager.shared
@@ -23,8 +24,10 @@ struct ProCareApp: App {
             Group {
                 if isLoading {
                     LoadingPage()
+                        .environmentObject(appManager)
                 } else {
                     RouterView()
+                        .environmentObject(appManager)
                         .environmentObject(authManager)
                         .environmentObject(appRouter)
                         //.environmentObject(locationManager)
