@@ -11,11 +11,11 @@ import SwiftUI
 
 @MainActor
 class AuthManager: ObservableObject {
+    
     @Published var isLoggedIn: Bool = false
     @Published var userDataLogin: UserDataLogin? = nil
     @Published var profileData: Profile? = nil
 
-   // private let defaults = AppUserDefaults.shared
     private let keychainHelper = KeychainHelper.shared
 
     init() {
