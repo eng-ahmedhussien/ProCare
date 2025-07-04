@@ -12,6 +12,8 @@ import Combine
 class NuresProfileVM: ObservableObject {
     
     // MARK: - Published Properties
+    @Published var nurseProfile: NurseProfile?
+    
     private let apiClient: NurseApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
     
@@ -20,6 +22,19 @@ class NuresProfileVM: ObservableObject {
     }
     
     // MARK: - API Methods
+    func fetchNurseProfile() async {
+        do {
+            let response = try await apiClient.getNurseProfile()
+            if let nurseProfile = response.data {
+                self.nurseProfile = nurseProfile
+            } else {
+                
+            }
+        } catch {
+            showToast("Unexpected error: \(error.localizedDescription)", appearance: .error)
+        }
+    }
+    
     func updateLocation(lat : Double, lon : Double) async {
         
         let parameters: [String: Any] = [

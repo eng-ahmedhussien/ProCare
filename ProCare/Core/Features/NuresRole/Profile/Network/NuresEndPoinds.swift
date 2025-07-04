@@ -10,6 +10,7 @@ import Foundation
 enum NuresProfileEndPoints : APIEndpoint {
     case updateLocation(parameters: [String: Any])
     case changeStatus(isBusy: Bool)
+    case getNurseProfile
     
     var path: String {
         switch self {
@@ -17,6 +18,8 @@ enum NuresProfileEndPoints : APIEndpoint {
             return "/Nurse/UpdateLocation"
         case .changeStatus:
             return "Nurse/changeStatus"
+        case .getNurseProfile:
+            return "Profile/GetNurseProfile"
         }
     }
     
@@ -24,6 +27,8 @@ enum NuresProfileEndPoints : APIEndpoint {
         switch self {
         case .updateLocation, .changeStatus:
             return .put
+        case .getNurseProfile:
+            return .get
         }
     }
     
@@ -39,6 +44,8 @@ enum NuresProfileEndPoints : APIEndpoint {
 
         case .changeStatus(let isBusy):
             return .requestParameters(parameters: ["isBusy": isBusy], encoding: .URLEncoding(.queryString))
+        default:
+            return .requestNoParameters
             
         }
     }

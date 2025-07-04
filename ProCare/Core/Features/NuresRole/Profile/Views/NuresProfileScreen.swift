@@ -18,82 +18,98 @@ struct NuresProfileScreen: View {
     
     var body: some View {
         VStack(spacing: 30) {
-            
             Spacer()
-            
-                // Online / Offline Switch
-            HStack {
-                    // In your Toggle:
-                Toggle(isOn: Binding(
-                    get: { !isBusy },
-                    set: { isOnline in
-                        isBusy = !isOnline
-                        Task {
-                            await vm.changeStatus(isBusy: isBusy){ result in
-                                if result {
-                                    
-                                }else{
-                                    isBusy = false // revert the toggle state if the change fails
-                                    
-                                }
-                                
-                            }
-                        }
-                    }
-                )) {
-                    Text(!isBusy ? "online".localized() : "offline".localized())
-                        .foregroundColor(!isBusy ? .green : .red)
-                        .bold()
-                }
-                .toggleStyle(SwitchToggleStyle(tint: .green))
-            }
-            .padding()
-            .backgroundCard(cornerRadius:30 , shadowRadius: 0.5, shadowColor: .black)
-            .padding(.horizontal)
-            .animation(.easeInOut, value: isBusy)
+                // In your Toggle:
+            statsButton
             
                 // Change Location
-            Button(
-                action: {
-                    guard let location = LocationManager.shared.location else {
-                        return
-                    }
-                    let lat = location.coordinate.latitude
-                    let lon = location.coordinate.longitude
-                    Task {
-                        await vm.updateLocation(lat: lat, lon: lon)
-                    }
-                }) {
-                    HStack {
-                        Image(systemName: "location.fill")
-                        Text("update_my_location")
-                            .bold()
-                    }
-                }
-                .buttonStyle(AppButton(kind: .border))
-                .padding(.horizontal)
+            updateMyLocationButton
             
                 // Logout Button
-            Button(action: {
-                appRouter.popToRoot()
-                authManager.logout()
-            }) {
-                HStack {
-                    Image(systemName: "arrowshape.turn.up.left.fill")
-                    Text("logout")
-                        .bold()
-                }
-            }
-            .buttonStyle(AppButton(kind: .solid))
-            .padding(.horizontal)
+            logoutButton
             
             Spacer()
         }
         .appNavigationBar(title: "profile".localized())
-        
-        
+        .task {
+            await vm.fetchNurseProfile()
+        }
     }
+    
+    var statsButton: some View {
+//        
+//        Toggle(isOn: vm.$isBusy) {
+//               Text("Vibrate on Ring")
+//           }
+        var isBusy = vm.nurseProfile?.isBusy ?? false
+        
+        return Toggle(isOn: Binding(
+            get: { !isBusy },
+            set: { isOnline in
+                isBusy = !isOnline
+                Task {
+                    await vm.changeStatus(isBusy: isBusy){ result in
+                        if result {
+                            
+                        }else{
+                            isBusy = false // revert the toggle state if the change fails
+                            
+                        }
+                        
+                    }
+                }
+            }
+        )) {
+            Text(!isBusy ? "online".localized() : "offline".localized())
+                .foregroundColor(!isBusy ? .green : .red)
+                .bold()
+        }
+        .toggleStyle(SwitchToggleStyle(tint: .green))
+        .padding()
+        .backgroundCard(cornerRadius:30 , shadowRadius: 0.5, shadowColor: .black)
+        .padding(.horizontal)
+        .animation(.easeInOut, value: isBusy)
+    }
+    
+    var updateMyLocationButton: some View {
+        Button(
+            action: {
+                guard let location = LocationManager.shared.location else {
+                    return
+                }
+                let lat = location.coordinate.latitude
+                let lon = location.coordinate.longitude
+                Task {
+                    await vm.updateLocation(lat: lat, lon: lon)
+                }
+            }) {
+                HStack {
+                    Image(systemName: "location.fill")
+                    Text("update_my_location")
+                        .bold()
+                }
+            }
+            .buttonStyle(AppButton(kind: .border))
+            .padding(.horizontal)
+    }
+    
+    var logoutButton: some View {
+        Button(action: {
+            appRouter.popToRoot()
+            authManager.logout()
+        }) {
+            HStack {
+                Image(systemName: "arrowshape.turn.up.left.fill")
+                Text("logout")
+                    .bold()
+            }
+        }
+        .buttonStyle(AppButton(kind: .solid))
+        .padding(.horizontal)
+    }
+    
 }
+
 
 
 #Preview {
@@ -103,5 +119,4 @@ struct NuresProfileScreen: View {
             .environment(\.locale, .init(identifier: "ar")) // "ar" for Arabic, "fr" for French, etc.
         
     }
-    
 }

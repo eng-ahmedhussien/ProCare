@@ -10,6 +10,7 @@ import Foundation
 protocol NurseApiClintProtocol{
     func updateLocation(parameters: [String: Any]) async throws -> APIResponse<NurseProfile>
     func changeStatus(isBusy: Bool) async throws -> APIResponse<Bool>
+    func getNurseProfile() async throws -> APIResponse<NurseProfile>
 }
 
 class NurseApiClint : ApiClient<NuresProfileEndPoints>, NurseApiClintProtocol {
@@ -20,6 +21,10 @@ class NurseApiClint : ApiClient<NuresProfileEndPoints>, NurseApiClintProtocol {
     
     func changeStatus(isBusy: Bool) async throws -> APIResponse<Bool> {
         return try await request(.changeStatus(isBusy: isBusy))
+    }
+    
+    func getNurseProfile() async throws -> APIResponse<NurseProfile> {
+        return try await request(.getNurseProfile)
     }
 }
 
