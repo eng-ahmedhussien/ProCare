@@ -15,7 +15,7 @@ struct RequestsScreen: View {
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
     @State var segmentationSelection : ProfileSection = .CurrentRequest
- 
+    @State private var isRefreshingLocation = false
     init(){
         configSegmentedControl()
     }
@@ -69,8 +69,17 @@ extension RequestsScreen{
                 }
                 HStack {
                     Image(.location)
-                    Text("\(LocationManager.shared.address)")
-                        .lineLimit(2)
+                    if LocationManager.shared.address == ""{
+                        Image(systemName: isRefreshingLocation ? "location.circle.fill" : "arrow.clockwise")
+                            .onTapGesture {
+                                isRefreshingLocation = true
+                                LocationManager.shared.refreshLocation()
+                            }
+                    }else{
+                        Text("\(LocationManager.shared.address)")
+                            .lineLimit(2)
+                    }
+                   
                 }
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.9))

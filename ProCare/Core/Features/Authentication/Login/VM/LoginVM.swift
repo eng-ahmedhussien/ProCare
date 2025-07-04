@@ -45,7 +45,6 @@ class LoginVM: ObservableObject {
             if  let userDataLogin = response.data {
                 self.userDataLogin = userDataLogin
             } else {
-                showToast("Response received but no user data", appearance: .error)
                 debugPrint("Response received but no user data")
             }
         } catch let APIError{
@@ -58,7 +57,3 @@ class LoginVM: ObservableObject {
     
 }
 
-enum UserState {
-    case userNotConfirmed
-    case withToken
-}

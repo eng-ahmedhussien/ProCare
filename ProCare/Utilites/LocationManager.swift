@@ -61,6 +61,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             break
         }
     }
+    func refreshLocation(forceGeocode: Bool = false) {
+        manager.requestLocation()
+    }
 
     // Triggered when the authorization status changes
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

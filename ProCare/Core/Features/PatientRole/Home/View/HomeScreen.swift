@@ -27,9 +27,6 @@ struct HomeScreen: View {
         case .idle:
             Color.clear.onAppear {
                 fetchHomeData()
-//                Task{
-//                    await  profileVM.fetchProfile()
-//                }
             }
             
         case .loading:
@@ -43,7 +40,12 @@ struct HomeScreen: View {
             VStack {
                 Spacer()
                 RetryView(message: message){
-                    fetchHomeData()
+                    Task{
+                        await vm.fetchCategories{
+                            authManager.logout()
+                            debugPrint("Unauthorized access")
+                        }
+                    }
                 }
                 Spacer()
             }
@@ -51,13 +53,20 @@ struct HomeScreen: View {
     }
     
     fileprivate func fetchHomeData()  {
-        Task{
-            await  vm.fetchCategories {
-                authManager.logout()
-                debugPrint("Unauthorized access")
+        Task {
+            async let fetchCategories: () = vm.fetchCategories {
+                Task {
+                    await MainActor.run {
+                        authManager.logout()
+                        debugPrint("Unauthorized access")
+                    }
+                }
             }
+            async let fetchProfile: () = profileVM.fetchProfile()
+            _ = await (fetchCategories, fetchProfile)
         }
     }
+
     
     
     fileprivate func handleCategoryTap(_ id: Int) {
@@ -115,7 +124,7 @@ extension HomeScreen{
                 }
                 
                 HStack {
-                    if  let profileData =  authManager.profileData{
+                    if  let profileData = KeychainHelper.shared.getData(Profile.self, forKey: .profileData){
                         Image(.location)
                         Text("\(profileData.governorate ?? "") - \(profileData.city ?? "") - \(profileData.addressNotes ?? "")")
                             .lineLimit(2)
