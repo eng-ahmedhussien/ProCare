@@ -6,31 +6,31 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 struct LoginScreen: View {
     @StateObject var vm = LoginVM()
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var profileVM: ProfileVM
+    
     private var isFormValid: Bool {
         ValidationRule.email.validate(vm.email) == nil &&
         ValidationRule.password.validate(vm.password) == nil
     }
     
     var body: some View {
-        NavigationView{
+        NavigationView {
             content
                 .disabled(vm.viewState == .loading)
                 .dismissKeyboardOnTap()
-                .toolbar {
-                    changeLanguageButton
-                }
+                .toolbar { changeLanguageButton }
         }
     }
     
     @ViewBuilder
     private var content: some View {
-        ScrollView{
+        ScrollView {
             headerTitle
             
             loginTextFields
@@ -40,7 +40,6 @@ struct LoginScreen: View {
             loginButton
             
             createAccountButton
- 
         }
     }
 }
@@ -69,31 +68,42 @@ extension LoginScreen {
     }
     
     var headerTitle: some View {
-        VStack(alignment: .center){
+        VStack(alignment: .center) {
             Image(.proCareLogo)
                 .resizable()
                 .frame(width: 250, height: 250, alignment: .center)
                 .opacity(0.9)
 
-                Text("hello".localized())
-                Text("log_in_to_start".localized())
+            Text("hello".localized())
+            Text("log_in_to_start".localized())
         }
         .font(.title.bold())
         .foregroundStyle(.appSecode)
-     
     }
     
     var loginTextFields: some View {
-        VStack(alignment: .leading,spacing: 0){
+        VStack(alignment: .leading, spacing: 0) {
             Group {
-                AppTextField(text: $vm.email, placeholder: "email".localized(), validationRules: [.email])
-                AppTextField(text: $vm.password, placeholder: "password".localized(), validationRules: [.password], isSecure: true)
+                AppTextField(
+                    text: $vm.email,
+                    placeholder: "email".localized(),
+                    validationRules: [.email],
+                    keyboardType: .emailAddress,
+                    textContentType: .username
+                )
+                AppTextField(
+                    text: $vm.password,
+                    placeholder: "password".localized(),
+                    validationRules: [.password],
+                    isSecure: true,
+                    textContentType: .password
+                )
             }
             .padding(.horizontal)
             .padding(.vertical, 12)
         }
-        .autocapitalization(.none)
-        .disableAutocorrection(true)
+        // Enable password AutoFill for the login form
+        .textContentType(.username) // This helps iOS identify this as a login form
     }
     
     var forgotPasswordButton: some View {
@@ -111,24 +121,25 @@ extension LoginScreen {
     var loginButton: some View {
         Button {
             Task {
-                await vm.login(){ response in
-                    guard let data = response.data else {return}
+                await vm.login() { response in
+                    guard let data = response.data else { return }
                     
                     switch data.loginStatus {
                     case .Success:
                         if data.token != nil {
+                            authManager.login(userDataLogin: data)
                             Task{
-                                await profileVM.fetchProfile()
+                                    // Save credentials to password manager after successful login
+                                await saveCredentialsToPasswordManager()
                             }
-                            authManager.login(userDataLogin: data )
                         }
                     case .InValidCredintials:
-                        showToast(response.message ?? "" , appearance: .error)
+                        showToast(response.message ?? "", appearance: .error)
                         debugPrint("InValidCredintials")
                     case .UserLockedOut:
                         debugPrint("UserLockedOut")
                     case .UserNotConfirmed:
-                        showToast(response.message ?? "" , appearance: .error)
+                        showToast(response.message ?? "", appearance: .error)
                         appRouter.pushView(OTPScreen(email: vm.email))
                     case .Error:
                         debugPrint("Error")
@@ -146,7 +157,7 @@ extension LoginScreen {
                     .font(.title3)
             }
         }
-        .buttonStyle(AppButton(kind: .solid,width: 300 ,disabled: !isFormValid))
+        .buttonStyle(AppButton(kind: .solid, width: 300, disabled: !isFormValid))
         .disabled(!isFormValid)
         .padding(.horizontal)
     }
@@ -161,6 +172,39 @@ extension LoginScreen {
                 .underline()
         }
         .buttonStyle(AppButton(kind: .plain))
+    }
+    
+    // MARK: - Password Manager Integration
+    
+    /// Save credentials to iOS password manager
+    private func saveCredentialsToPasswordManager() async {
+        // Get your app's bundle identifier or use a custom service identifier
+        let serviceIdentifier = Bundle.main.bundleIdentifier ?? "com.yourapp.login"
+        
+        // Create the credential
+        let credential = ASPasswordCredential(
+            user: vm.email,
+            password: vm.password
+        )
+        
+        // Save to password manager
+        do {
+            try await ASCredentialIdentityStore.shared.saveCredentialIdentities([
+                ASPasswordCredentialIdentity(
+                    serviceIdentifier: ASCredentialServiceIdentifier(
+                        identifier: serviceIdentifier,
+                        type: .URL
+                    ),
+                    user: vm.email,
+                    recordIdentifier: nil
+                )
+            ])
+            
+            // Optional: Show success message
+            debugPrint("Credentials saved to password manager successfully")
+        } catch {
+            debugPrint("Failed to save credentials: \(error)")
+        }
     }
 }
 
