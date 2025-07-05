@@ -47,13 +47,14 @@ struct AppTextFieldPreview: View {
     AppTextFieldPreview()
 }
 
-
 struct AppTextField: View {
     @Binding var text: String
     var placeholder: String = ""
     var validationRules: [ValidationRule] = []
     var isSecure: Bool = false
-    var style: AppTextFieldStyle = .bordered // default style
+    var style: AppTextFieldStyle = .bordered
+    var keyboardType: UIKeyboardType = .default
+    var textContentType: UITextContentType? = nil
     
     @State private var showError = false
     @State private var errorMessage = ""
@@ -65,12 +66,22 @@ struct AppTextField: View {
                 Group {
                     if isSecure && !showPassword {
                         SecureField(placeholder, text: $text)
+                            .textContentType(textContentType)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            // Enable password AutoFill
+                            .textInputAutocapitalization(.never)
                     } else {
                         TextField(placeholder, text: $text)
+                            .textContentType(textContentType)
+                            .keyboardType(keyboardType)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            // Enable AutoFill for username/email
+                            .textInputAutocapitalization(.never)
                     }
                 }
                 .foregroundStyle(.appSecode)
-               // .textFieldStyle(style)
                 .onChange(of: text, perform: { _ in
                     if text.isEmpty {
                         resetValidation()
@@ -97,8 +108,9 @@ struct AppTextField: View {
                             .stroke(showError ? Color.red : Color.appSecode, lineWidth: 1)
                     case .plain:
                         if showError {
-//                            RoundedRectangle(cornerRadius: 30)
-//                                .stroke(Color.red, lineWidth: 1)
+                            // Uncomment if needed
+                            // RoundedRectangle(cornerRadius: 30)
+                            //     .stroke(Color.red, lineWidth: 1)
                         }
                     }
                 }
@@ -133,7 +145,6 @@ struct AppTextField: View {
         }
     }
 }
-
 enum AppTextFieldStyle {
     case plain
     case bordered

@@ -8,113 +8,127 @@
 import SwiftUI
 
 struct NuresProfileScreen: View {
-    
     @StateObject var vm = NuresProfileVM()
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
-    
-    @State private var isBusy = false // false means Online
-    let width =  UIScreen.main.bounds.width * 0.85
-    
+
+    @State private var isBusy: Bool = false
+
     var body: some View {
-        VStack(spacing: 30) {
-            Spacer()
-                // In your Toggle:
-            statsButton
-            
-                // Change Location
-            updateMyLocationButton
-            
-                // Logout Button
-            logoutButton
-            
-            Spacer()
+        ScrollView {
+            VStack(spacing: 24) {
+                profileImageSection
+                VStack(spacing: 20) {
+                    statusToggle
+                    updateLocationButton
+                    logoutButton
+                }
+                .padding()
+                .backgroundCard(cornerRadius: 24, shadowRadius: 1)
+            }
+            .padding()
         }
-        .appNavigationBar(title: "profile".localized())
+        .appNavigationBar(title: "Profile")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            isBusy = vm.nurseProfile?.isBusy ?? false
+        }
         .task {
             await vm.fetchNurseProfile()
         }
     }
-    
-    var statsButton: some View {
-//        
-//        Toggle(isOn: vm.$isBusy) {
-//               Text("Vibrate on Ring")
-//           }
-        var isBusy = vm.nurseProfile?.isBusy ?? false
-        
-        return Toggle(isOn: Binding(
-            get: { !isBusy },
-            set: { isOnline in
-                isBusy = !isOnline
-                Task {
-                    await vm.changeStatus(isBusy: isBusy){ result in
-                        if result {
-                            
-                        }else{
-                            isBusy = false // revert the toggle state if the change fails
-                            
-                        }
-                        
-                    }
-                }
-            }
-        )) {
-            Text(!isBusy ? "online".localized() : "offline".localized())
-                .foregroundColor(!isBusy ? .green : .red)
-                .bold()
+
+    private var profileImageSection: some View {
+        VStack(spacing: 12) {
+            AppImage(
+                urlString: vm.nurseProfile?.imageUrl,
+                width: 120,
+                height: 120,
+                contentMode: .fill,
+                shape: Circle()
+            )
+            .accessibilityLabel("Profile Image")
+            .padding(.top, 16)
+
+            Text("\(vm.nurseProfile?.firstName ?? "") \(vm.nurseProfile?.lastName ?? "")")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .accessibilityAddTraits(.isHeader)
+                .padding(.bottom)
         }
-        .toggleStyle(SwitchToggleStyle(tint: .green))
-        .padding()
-        .backgroundCard(cornerRadius:30 , shadowRadius: 0.5, shadowColor: .black)
-        .padding(.horizontal)
-        .animation(.easeInOut, value: isBusy)
+        .frame(maxWidth: .infinity)
+        .backgroundCard(cornerRadius: 24, shadowRadius: 1)
+        .padding(.bottom, 8)
     }
+
+    private var statusToggle: some View {
+           var isBusy = vm.nurseProfile?.isBusy ?? false
+           return Toggle(isOn: Binding(
+               get: { !isBusy },
+               set: { isOnline in
+                   isBusy = !isOnline
+                   Task {
+                       await vm.changeStatus(isBusy: isBusy){ result in
+                           if result {
+                               
+                           }else{
+                               isBusy = false // revert the toggle state if the change fails
+                               
+                           }
+                           
+                       }
+                   }
+               }
+           )) {
+               Text(!isBusy ? "online".localized() : "offline".localized())
+                   .foregroundColor(!isBusy ? .green : .red)
+                   .bold()
+           }
+           .toggleStyle(SwitchToggleStyle(tint: .green))
+           .padding(.vertical, 8)
+           .accessibilityLabel("Status Toggle")
+       }
     
-    var updateMyLocationButton: some View {
-        Button(
-            action: {
-                guard let location = LocationManager.shared.location else {
-                    return
-                }
-                let lat = location.coordinate.latitude
-                let lon = location.coordinate.longitude
-                Task {
-                    await vm.updateLocation(lat: lat, lon: lon)
-                }
-            }) {
-                HStack {
-                    Image(systemName: "location.fill")
-                    Text("update_my_location")
-                        .bold()
-                }
+    private var updateLocationButton: some View {
+        Button(action: {
+            guard let location = LocationManager.shared.location else { return }
+            Task {
+                await vm.updateLocation(lat: location.coordinate.latitude, lon: location.coordinate.longitude)
             }
-            .buttonStyle(AppButton(kind: .border))
-            .padding(.horizontal)
+        }) {
+            HStack {
+                Image(systemName: "location.fill")
+                Text("update_my_location".localized())
+                    .fontWeight(.semibold)
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(AppButton(kind: .border))
+        .accessibilityLabel("Update My Location")
     }
-    
-    var logoutButton: some View {
+
+    private var logoutButton: some View {
         Button(action: {
             appRouter.popToRoot()
             authManager.logout()
         }) {
             HStack {
                 Image(systemName: "arrowshape.turn.up.left.fill")
-                Text("logout")
-                    .bold()
+                Text("logout".localized())
+                    .fontWeight(.semibold)
             }
+            .frame(maxWidth: .infinity)
         }
         .buttonStyle(AppButton(kind: .solid))
-        .padding(.horizontal)
+        .accessibilityLabel("Logout")
     }
-    
 }
 
-
-
 #Preview {
-    NavigationStack{
-        NuresProfileScreen()
+    var vm = NuresProfileVM()
+    vm.nurseProfile = NurseProfile.mockNurseProfile
+   return NavigationStack{
+       NuresProfileScreen(vm:vm)
             .appNavigationBar(title: "Profile".localized())
             .environment(\.locale, .init(identifier: "ar")) // "ar" for Arabic, "fr" for French, etc.
         

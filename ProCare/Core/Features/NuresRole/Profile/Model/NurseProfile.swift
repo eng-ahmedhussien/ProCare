@@ -17,5 +17,26 @@ struct NurseProfile: Codable {
     let latitude, longitude: Double?
     let city, governorate,licenseNumber: String?
     let isBusy: Bool?
+}
 
+extension NurseProfile {
+    static let mockNurseProfile = NurseProfile(
+        id: "1",
+        firstName: "ahmed",
+        lastName: "hussien",
+        phoneNumber: "01010101010",
+        rate: 5,
+        specialization: "General",
+        specializationId: 1,
+        imageUrl: "https://picsum.photos/200",
+        governorateId: 1,
+        cityId: 1,
+        latitude: 30,
+        longitude: 30,
+        city: "",
+        governorate: "",
+        licenseNumber: "",
+        isBusy: true
+    )
+    
 }

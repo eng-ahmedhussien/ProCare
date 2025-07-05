@@ -50,7 +50,7 @@ struct OrderCellView: View {
             Spacer()
         }
         .padding()
-        .backgroundCard(cornerRadius: 10, shadowRadius: 1, shadowColor: .gray)
+        .backgroundCard(cornerRadius: 10,shadowRadius: 2)
         .padding()
     }
 }
