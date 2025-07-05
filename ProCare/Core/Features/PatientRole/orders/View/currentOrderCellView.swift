@@ -144,7 +144,7 @@ extension currentOrderCellView{
 }
 
 #Preview {
-        var vm = OrdersVM()
+        let vm = OrdersVM()
         vm.currentOrder = Order.mock
         return currentOrderCellView(vm: vm)
 }

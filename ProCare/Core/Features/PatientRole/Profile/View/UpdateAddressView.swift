@@ -112,7 +112,7 @@ extension UpdateAddressView {
 
 #Preview{
     NavigationStack{
-        var vm = ProfileVM()
+        let vm = ProfileVM()
         vm.governorates = Governorates.mockList
         vm.citys = City.mockList
       return  UpdateAddressView()

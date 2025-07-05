@@ -50,7 +50,7 @@ class PharmaciesVM: ObservableObject {
         do {
             let response = try await apiClient.getPharmacies(parameters: parameters)
             if let data = response.data {
-                let newItems = data.items ?? []
+                let newItems = data.items
                 
                 if pageNumber == 1 {
                     pharmacies = newItems
@@ -58,7 +58,7 @@ class PharmaciesVM: ObservableObject {
                     pharmacies.append(contentsOf: newItems)
                 }
                 
-                hasNextPage = data.hasNextPage ?? false
+                hasNextPage = data.hasNextPage
                 pageNumber += 1
                 viewState = pharmacies.isEmpty ? .empty : .loaded
             } else {

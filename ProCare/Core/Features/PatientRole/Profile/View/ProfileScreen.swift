@@ -361,7 +361,7 @@ extension ProfileTapScreen{
 
 
 #Preview {
-    var vm = ProfileVM()
+    let vm = ProfileVM()
     vm.viewState = .loaded
     vm.updateProfileData(Profile.mock)
    return  NavigationView{

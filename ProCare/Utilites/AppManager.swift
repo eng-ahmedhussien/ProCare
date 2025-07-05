@@ -81,8 +81,6 @@ enum AppManagerEndPoints: APIEndpoint {
         switch self {
         case .forceUpdate(let parameters):
             return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
-        default:
-            return .requestNoParameters
        
         }
     }

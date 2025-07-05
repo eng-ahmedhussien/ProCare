@@ -125,7 +125,7 @@ struct NuresProfileScreen: View {
 }
 
 #Preview {
-    var vm = NuresProfileVM()
+    let vm = NuresProfileVM()
     vm.nurseProfile = NurseProfile.mockNurseProfile
    return NavigationStack{
        NuresProfileScreen(vm:vm)

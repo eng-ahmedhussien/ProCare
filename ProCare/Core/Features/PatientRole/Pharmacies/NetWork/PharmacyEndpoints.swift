@@ -29,8 +29,6 @@ extension PharmacyEndpoints: APIEndpoint {
         switch self {
         case .getPharmacies(parameters: let parameters):
                 return .requestParameters(parameters: parameters, encoding: .JSONEncoding(.default))
-        default:
-            return .requestNoParameters
         }
      
     }

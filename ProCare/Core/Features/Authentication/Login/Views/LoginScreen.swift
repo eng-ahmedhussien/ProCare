@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import AuthenticationServices
 
 struct LoginScreen: View {
     @StateObject var vm = LoginVM()
@@ -15,6 +14,8 @@ struct LoginScreen: View {
     @EnvironmentObject var profileVM: ProfileVM
     
     private var isFormValid: Bool {
+        !vm.email.isEmpty &&
+        !vm.password.isEmpty &&
         ValidationRule.email.validate(vm.email) == nil &&
         ValidationRule.password.validate(vm.password) == nil
     }
@@ -102,8 +103,6 @@ extension LoginScreen {
             .padding(.horizontal)
             .padding(.vertical, 12)
         }
-        // Enable password AutoFill for the login form
-        .textContentType(.username) // This helps iOS identify this as a login form
     }
     
     var forgotPasswordButton: some View {
@@ -128,10 +127,6 @@ extension LoginScreen {
                     case .Success:
                         if data.token != nil {
                             authManager.login(userDataLogin: data)
-                            Task{
-                                    // Save credentials to password manager after successful login
-                                await saveCredentialsToPasswordManager()
-                            }
                         }
                     case .InValidCredintials:
                         showToast(response.message ?? "", appearance: .error)
@@ -174,38 +169,6 @@ extension LoginScreen {
         .buttonStyle(AppButton(kind: .plain))
     }
     
-    // MARK: - Password Manager Integration
-    
-    /// Save credentials to iOS password manager
-    private func saveCredentialsToPasswordManager() async {
-        // Get your app's bundle identifier or use a custom service identifier
-        let serviceIdentifier = Bundle.main.bundleIdentifier ?? "com.yourapp.login"
-        
-        // Create the credential
-        let credential = ASPasswordCredential(
-            user: vm.email,
-            password: vm.password
-        )
-        
-        // Save to password manager
-        do {
-            try await ASCredentialIdentityStore.shared.saveCredentialIdentities([
-                ASPasswordCredentialIdentity(
-                    serviceIdentifier: ASCredentialServiceIdentifier(
-                        identifier: serviceIdentifier,
-                        type: .URL
-                    ),
-                    user: vm.email,
-                    recordIdentifier: nil
-                )
-            ])
-            
-            // Optional: Show success message
-            debugPrint("Credentials saved to password manager successfully")
-        } catch {
-            debugPrint("Failed to save credentials: \(error)")
-        }
-    }
 }
 
 #Preview {
