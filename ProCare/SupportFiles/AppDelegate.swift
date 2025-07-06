@@ -11,7 +11,7 @@ import Firebase
 import FirebaseCore
 import FirebaseMessaging
 import UserNotifications
-
+import FirebaseCrashlytics
 
 // MARK: - AppDelegate
 class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {

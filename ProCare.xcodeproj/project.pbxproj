@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B57FD3D2E1AB23F00CCFED4 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6B57FD3C2E1AB23F00CCFED4 /* FirebaseCrashlytics */; };
 		6B93DD412DE7797100CCC296 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6B93DD402DE7797100CCC296 /* FirebaseAnalytics */; };
 		6B93DD432DE7797100CCC296 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6B93DD422DE7797100CCC296 /* FirebaseCore */; };
 		6B93DD452DE7797100CCC296 /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 6B93DD442DE7797100CCC296 /* FirebaseInAppMessaging-Beta */; };
@@ -76,6 +77,7 @@
 				6B93DD472DE7797100CCC296 /* FirebaseMessaging in Frameworks */,
 				6B93DD432DE7797100CCC296 /* FirebaseCore in Frameworks */,
 				6BC115802E02D39C0005AC9D /* KeychainSwift in Frameworks */,
+				6B57FD3D2E1AB23F00CCFED4 /* FirebaseCrashlytics in Frameworks */,
 				6B93DD412DE7797100CCC296 /* FirebaseAnalytics in Frameworks */,
 				6B93DD452DE7797100CCC296 /* FirebaseInAppMessaging-Beta in Frameworks */,
 			);
@@ -98,12 +100,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6B57FD3B2E1AB23F00CCFED4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6BEEF1772D8E0114009FD8B7 = {
 			isa = PBXGroup;
 			children = (
 				6BEEF1822D8E0114009FD8B7 /* ProCare */,
 				6BEEF1932D8E0115009FD8B7 /* ProCareTests */,
 				6BEEF19D2D8E0115009FD8B7 /* ProCareUITests */,
+				6B57FD3B2E1AB23F00CCFED4 /* Frameworks */,
 				6BEEF1812D8E0114009FD8B7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -128,6 +138,10 @@
 				6BEEF17C2D8E0114009FD8B7 /* Sources */,
 				6BEEF17D2D8E0114009FD8B7 /* Frameworks */,
 				6BEEF17E2D8E0114009FD8B7 /* Resources */,
+				6B57FD3E2E1AB33D00CCFED4 /* Upload dSYM to Crashlytics
+Upload dSYM to Crashlytics
+Upload dSYM to Crashlytics
+Uplo */,
 			);
 			buildRules = (
 			);
@@ -143,6 +157,7 @@
 				6B93DD442DE7797100CCC296 /* FirebaseInAppMessaging-Beta */,
 				6B93DD462DE7797100CCC296 /* FirebaseMessaging */,
 				6BC1157F2E02D39C0005AC9D /* KeychainSwift */,
+				6B57FD3C2E1AB23F00CCFED4 /* FirebaseCrashlytics */,
 			);
 			productName = ProCare;
 			productReference = 6BEEF1802D8E0114009FD8B7 /* ProCare.app */;
@@ -266,6 +281,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6B57FD3E2E1AB33D00CCFED4 /* Upload dSYM to Crashlytics
+Upload dSYM to Crashlytics
+Upload dSYM to Crashlytics
+Uplo */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}.debug.dylib",
+			);
+			name = "Upload dSYM to Crashlytics\nUpload dSYM to Crashlytics\nUpload dSYM to Crashlytics\nUplo";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6BEEF17C2D8E0114009FD8B7 /* Sources */ = {
@@ -433,6 +478,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ProCare/Preview Content\"";
 				DEVELOPMENT_TEAM = K6766Y2PZ7;
 				ENABLE_PREVIEWS = YES;
@@ -635,6 +681,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6B57FD3C2E1AB23F00CCFED4 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6B93DD3F2DE7797100CCC296 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
 		6B93DD402DE7797100CCC296 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6B93DD3F2DE7797100CCC296 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
