@@ -16,22 +16,23 @@ struct LoginScreen: View {
     private var isFormValid: Bool {
         !vm.email.isEmpty &&
         !vm.password.isEmpty &&
-        ValidationRule.email.validate(vm.email) == nil &&
+//        ValidationRule.email.validate(vm.email) == nil &&
         ValidationRule.password.validate(vm.password) == nil
     }
     
     var body: some View {
         NavigationView {
             content
-                .disabled(vm.viewState == .loading)
                 .dismissKeyboardOnTap()
+                .disabled(vm.viewState == .loading)
                 .toolbar { changeLanguageButton }
+                .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
     
     @ViewBuilder
     private var content: some View {
-        ScrollView {
+        VStack {
             headerTitle
             
             loginTextFields
@@ -134,7 +135,7 @@ extension LoginScreen {
                     case .UserLockedOut:
                         debugPrint("UserLockedOut")
                     case .UserNotConfirmed:
-                        showToast(response.message ?? "", appearance: .error)
+                        //showToast(response.message ?? "", appearance: .error)
                         appRouter.pushView(OTPScreen(email: vm.email))
                     case .Error:
                         debugPrint("Error")

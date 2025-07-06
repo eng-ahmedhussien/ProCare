@@ -36,6 +36,9 @@ struct NuresProfileScreen: View {
         .task {
             await vm.fetchNurseProfile()
         }
+        .onChange(of: vm.nurseProfile?.isBusy) { newValue in
+            isBusy = newValue ?? false
+        }
     }
 
     private var profileImageSection: some View {
@@ -62,20 +65,15 @@ struct NuresProfileScreen: View {
     }
 
     private var statusToggle: some View {
-           var isBusy = vm.nurseProfile?.isBusy ?? false
            return Toggle(isOn: Binding(
                get: { !isBusy },
                set: { isOnline in
                    isBusy = !isOnline
                    Task {
                        await vm.changeStatus(isBusy: isBusy){ result in
-                           if result {
-                               
-                           }else{
-                               isBusy = false // revert the toggle state if the change fails
-                               
+                           if !result {
+                               isBusy = !isBusy// revert the toggle state if the change fails
                            }
-                           
                        }
                    }
                }

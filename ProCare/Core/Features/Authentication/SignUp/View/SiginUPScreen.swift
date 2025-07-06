@@ -98,7 +98,10 @@ extension SignUPScreen {
                         case .Success:
                             showToast("\(response.message ?? "")", appearance: .success)
                             appRouter.dismissFullScreenOver()
-                            appRouter.pushView(OTPScreen(email: vm.email))
+                            appRouter
+                                .pushView(
+                                    OTPScreen(email: vm.email,comeFrom: .signUp)
+                                )
                         case .Error:
                             showToast("\(response.message ?? "")", appearance: .error)
                         case .AuthFailure:

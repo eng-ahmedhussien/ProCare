@@ -13,6 +13,7 @@ class NuresProfileVM: ObservableObject {
     
     // MARK: - Published Properties
     @Published var nurseProfile: NurseProfile?
+    @Published var isBusy: Bool = false
     
     private let apiClient: NurseApiClintProtocol
     private var cancellables: Set<AnyCancellable> = []
