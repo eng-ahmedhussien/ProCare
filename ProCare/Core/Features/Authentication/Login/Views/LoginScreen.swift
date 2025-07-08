@@ -12,6 +12,9 @@ struct LoginScreen: View {
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var profileVM: ProfileVM
+
+        @State private var showNotConfirmedAlert = false // Add this line
+
     
     private var isFormValid: Bool {
         !vm.email.isEmpty &&
@@ -27,6 +30,16 @@ struct LoginScreen: View {
                 .disabled(vm.viewState == .loading)
                 .toolbar { changeLanguageButton }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
+                .alert("account_not_confirmed".localized(), isPresented: $showNotConfirmedAlert) { // Add this modifier
+                    Button("ok".localized(), role: .cancel) {
+                         appRouter
+                            .pushView(
+                                OTPScreen(email: vm.email,comeFrom: .login)
+                            )
+                     }
+                } message: {
+                    Text("account_not_confirmed_message".localized())
+                }
         }
     }
     
@@ -135,11 +148,10 @@ extension LoginScreen {
                     case .UserLockedOut:
                         debugPrint("UserLockedOut")
                     case .UserNotConfirmed:
+                         showNotConfirmedAlert = true // Show the alert
+
                         //showToast(response.message ?? "", appearance: .error)
-                        appRouter
-                            .pushView(
-                                OTPScreen(email: vm.email,comeFrom: .login)
-                            )
+                       
                     case .Error:
                         debugPrint("Error")
                     case .none:

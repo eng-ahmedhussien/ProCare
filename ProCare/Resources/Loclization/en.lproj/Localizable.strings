@@ -26,6 +26,9 @@
 "password" = "Password";
 "confirm_password" = "Confirm password";
 "have_account" = "Have an account?";
+"account_not_confirmed" = "Account Not Activated";
+"account_not_confirmed_message" = "Your account has not been activated yet. Please check your email for the activation code.";
+"ok" = "OK";
 //NewPasswordScreen
 "new_password" = "New password";
 "confirm_new_password" = "Confirm new password";

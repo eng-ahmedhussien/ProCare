@@ -25,6 +25,9 @@
 "password" = "كلمة المرور";
 "confirm_password" = "تأكيد كلمة المرور";
 "have_account" = "لديك حساب؟";
+"account_not_confirmed" = "لم يتم تفعيل الحساب";
+"account_not_confirmed_message" = "لم يتم تفعيل حسابك بعد. يرجى التحقق من بريدك الإلكتروني للحصول على رمز التفعيل.";
+"ok" = "حسناً";
 //NewPasswordScreen
 "new_password" = "كلمة المرور الجديدة";
 "confirm_new_password" = "تأكيد كلمة المرور الجديدة";
