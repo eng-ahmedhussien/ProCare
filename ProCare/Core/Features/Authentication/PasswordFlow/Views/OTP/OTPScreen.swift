@@ -44,6 +44,12 @@ struct OTPScreen: View {
             VerifyButton
         }
         .appNavigationBar(title: "otp".localized())
+        .task {
+            if comeFrom == .login {
+               let parameter = ["email": email]
+               await vm.resendCode(parameter: parameter)
+            }
+        }
 //        .disabled(vm.viewState == .loading)
         
     }
@@ -136,11 +142,7 @@ extension OTPScreen {
                     }
                 case .forgetPassword:
                     await vm.checkCode(email:email, otp: pinOne + pinTwo + pinThree + pinFour){ resetToken in
-                        //if status {
-                        appRouter.push(.NewPasswordScreen(phone: email,resetToken: resetToken))
-                       // }
-                        
-                        
+                        appRouter.push(.NewPasswordScreen(phone: email,resetToken: resetToken))           
                     }
                 }
                 
