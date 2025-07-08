@@ -136,7 +136,10 @@ extension LoginScreen {
                         debugPrint("UserLockedOut")
                     case .UserNotConfirmed:
                         //showToast(response.message ?? "", appearance: .error)
-                        appRouter.pushView(OTPScreen(email: vm.email))
+                        appRouter
+                            .pushView(
+                                OTPScreen(email: vm.email,comeFrom: .login)
+                            )
                     case .Error:
                         debugPrint("Error")
                     case .none:
