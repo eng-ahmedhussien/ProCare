@@ -138,10 +138,7 @@
 				6BEEF17C2D8E0114009FD8B7 /* Sources */,
 				6BEEF17D2D8E0114009FD8B7 /* Frameworks */,
 				6BEEF17E2D8E0114009FD8B7 /* Resources */,
-				6B57FD3E2E1AB33D00CCFED4 /* Upload dSYM to Crashlytics
-Upload dSYM to Crashlytics
-Upload dSYM to Crashlytics
-Uplo */,
+				6B57FD3E2E1AB33D00CCFED4 /* Upload dSYM to Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -283,10 +280,7 @@ Uplo */,
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6B57FD3E2E1AB33D00CCFED4 /* Upload dSYM to Crashlytics
-Upload dSYM to Crashlytics
-Upload dSYM to Crashlytics
-Uplo */ = {
+		6B57FD3E2E1AB33D00CCFED4 /* Upload dSYM to Crashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -301,7 +295,7 @@ Uplo */ = {
 				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}.debug.dylib",
 			);
-			name = "Upload dSYM to Crashlytics\nUpload dSYM to Crashlytics\nUpload dSYM to Crashlytics\nUplo";
+			name = "Upload dSYM to Crashlytics";
 			outputFileListPaths = (
 			);
 			outputPaths = (
