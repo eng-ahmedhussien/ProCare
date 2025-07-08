@@ -182,7 +182,10 @@ extension ReportScreen{
                                 Text("\(vm.totalRequest)")
                                     .font(.title)
                                 Button("Dismiss") {
-                                    showToast("report_added_successfully", appearance: .success)
+                                    showToast(
+                                        "report_added_successfully".localized(),
+                                        appearance: .success
+                                    )
                                     PopupManager.shared.dismissCustomPopup()
                                     appRouter.popToRoot()
                                 }
