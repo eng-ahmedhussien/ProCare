@@ -13,6 +13,7 @@ protocol PasswordFlowApiClintProtocol {
     func resetPassword(parameters: [String: String]) async throws -> APIResponse<String>
     func forgetPassword(parameters: [String: String]) async throws -> APIResponse<String> // send code
     func confirmCode(parameters: [String: String]) async throws -> APIResponse<UserDataLogin> // after sign up
+    func changePassword( parameters: [String:Any]) async throws -> APIResponse<EmptyData>
     
 }
 
@@ -35,5 +36,9 @@ class PasswordFlowApiClint: ApiClient<PasswordFlowEndPoints>, PasswordFlowApiCli
     
     func confirmCode(parameters: [String : String]) async throws -> APIResponse<UserDataLogin> {
         return try await request(PasswordFlowEndPoints.confirmCode(parameters: parameters))
+    }
+    
+    func changePassword( parameters: [String:Any]) async throws -> APIResponse<EmptyData> {
+        return try await request(PasswordFlowEndPoints.changePassword(parameters: parameters))
     }
 }

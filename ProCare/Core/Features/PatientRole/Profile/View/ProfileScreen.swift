@@ -332,7 +332,7 @@ extension ProfileTapScreen{
                 
                 HStack{
                     Button {
-                        appRouter.pushView(EmailScreen())
+                        appRouter.pushView(ChangePasswordScreen())
                     } label: {
                         Text("change_password")
                             .lineLimit(1)

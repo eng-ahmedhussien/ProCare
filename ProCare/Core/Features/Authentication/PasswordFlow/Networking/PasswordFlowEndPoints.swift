@@ -13,6 +13,7 @@ enum PasswordFlowEndPoints : APIEndpoint {
     case resetPassword(parameters: [String: String])
     case confirmCode(parameters: [String: String])
     case forgetPassword(parameters: [String: String])
+    case changePassword(parameters: [String:Any])
 
     var path: String {
         switch self {
@@ -26,19 +27,25 @@ enum PasswordFlowEndPoints : APIEndpoint {
             return "/Auth/ForgetPassword" // send otp code
         case .confirmCode:
             return "/Auth/ConfirmCode"
+        case .changePassword:
+            return "/Auth/ChangePassword"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .resendCode, .checkCode, .resetPassword, .forgetPassword, .confirmCode:
+        case .resendCode, .checkCode, .resetPassword, .forgetPassword, .confirmCode,
+                .changePassword:
             return .post
         }
     }
     
     
     var headers: HTTPHeader? {
-        get {
+        switch self {
+        case .changePassword:
+            return HTTPHeader.authHeader
+        default:
             return HTTPHeader.default
         }
     }
@@ -54,6 +61,8 @@ enum PasswordFlowEndPoints : APIEndpoint {
         case .forgetPassword(let parameters):
             return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         case .confirmCode(let parameters):
+            return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
+      case .changePassword(parameters: let parameters):
             return .requestParameters(parameters: parameters, encoding: .JSONEncoding())
         }
     }
