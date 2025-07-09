@@ -41,14 +41,12 @@ extension RequestsVM{
     func fetchCurrentRequest(onUnauthorized: @escaping () -> Void = {}) async {
         do {
             let response = try await apiClient.getCurrentRequest()
-            handleApiResponse(response){
                 if let data = response.data {
                     self.currentRequest = data
                 } else {
                     self.currentRequest = nil
                     debugPrint("Response received but no user data")
                 }
-            }
         } catch {
             if let apiError = error as? APIResponseError, apiError.status == 401 {
                 debugPrint("RequestsVM: Unauthorized error detected")
