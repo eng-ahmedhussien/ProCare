@@ -24,7 +24,7 @@ extension RootScreen{
             case .Nurse:
                 RequestsScreen()
             default:
-                TapBarView()
+                EmptyView()
             }
         } else {
             LoginScreen()
