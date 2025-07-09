@@ -1,30 +1,32 @@
-//
-//  NuresApiClint.swift
-//  ProCare
-//
-//  Created by ahmed hussien on 30/05/2025.
-//
+    //
+    //  NuresApiClint.swift
+    //  ProCare
+    //
+    //  Created by ahmed hussien on 30/05/2025.
+    //
 
-import Foundation
+    import Foundation
 
-protocol NurseApiClintProtocol{
-    func updateLocation(parameters: [String: Any]) async throws -> APIResponse<NurseProfile>
-    func changeStatus(isBusy: Bool) async throws -> APIResponse<Bool>
-    func getNurseProfile() async throws -> APIResponse<NurseProfile>
-}
+    protocol NurseApiClintProtocol{
+        func updateLocation(parameters: [String: Any]) async throws -> APIResponse<NurseProfile>
+        func changeStatus(isBusy: Bool) async throws -> APIResponse<Bool>
+        func getNurseProfile() async throws -> APIResponse<NurseProfile>
+    }
 
-class NurseApiClint : ApiClient<NuresProfileEndPoints>, NurseApiClintProtocol {
-    
-    func updateLocation(parameters: [String: Any]) async throws -> APIResponse<NurseProfile> {
-        return try await request(.updateLocation(parameters: parameters))
+    class NurseApiClint : ApiClient<NuresProfileEndPoints>, NurseApiClintProtocol {
+        
+        func updateLocation(parameters: [String: Any]) async throws -> APIResponse<NurseProfile> {
+            return try await request(.updateLocation(parameters: parameters))
+        }
+        
+        func changeStatus(isBusy: Bool) async throws -> APIResponse<Bool> {
+            return try await request(.changeStatus(isBusy: isBusy))
+        }
+        
+        func getNurseProfile() async throws -> APIResponse<NurseProfile> {
+            return try await request(.getNurseProfile)
+        }
+        
+       
     }
-    
-    func changeStatus(isBusy: Bool) async throws -> APIResponse<Bool> {
-        return try await request(.changeStatus(isBusy: isBusy))
-    }
-    
-    func getNurseProfile() async throws -> APIResponse<NurseProfile> {
-        return try await request(.getNurseProfile)
-    }
-}
 

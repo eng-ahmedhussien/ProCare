@@ -14,6 +14,7 @@ struct ProCareApp: App {
     @StateObject var appRouter: AppRouter = AppRouter()
     @StateObject var locationManager = LocationManager.shared
     @StateObject var profileVM = ProfileVM()
+    @StateObject var nuresProfileVM = NuresProfileVM()
     @StateObject var ordersVM =  OrdersVM()
     @State private var isLoading = true
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate   // register app delegate for Firebase setup
@@ -30,6 +31,7 @@ struct ProCareApp: App {
                         .environmentObject(appManager)
                         .environmentObject(authManager)
                         .environmentObject(appRouter)
+                        .environmentObject(nuresProfileVM)
                         //.environmentObject(locationManager)
                         .id(authManager.isLoggedIn)
                         .environmentObject(profileVM)

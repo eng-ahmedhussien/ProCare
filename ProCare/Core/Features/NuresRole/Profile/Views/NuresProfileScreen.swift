@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct NuresProfileScreen: View {
-    @StateObject var vm = NuresProfileVM()
+    @EnvironmentObject var vm: NuresProfileVM
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var appManager: AppManager
     @EnvironmentObject var appRouter: AppRouter
-
+    @State private var showAlertLogout = false
     @State private var isBusy: Bool = false
 
     var body: some View {
@@ -33,11 +34,26 @@ struct NuresProfileScreen: View {
         .onAppear {
             isBusy = vm.nurseProfile?.isBusy ?? false
         }
-        .task {
-            await vm.fetchNurseProfile()
+        .refreshable {
+            Task{
+                await vm.fetchNurseProfile()
+            }
         }
         .onChange(of: vm.nurseProfile?.isBusy) { newValue in
             isBusy = newValue ?? false
+        }
+        .alert("logout".localized(), isPresented: $showAlertLogout) {
+            Button("cancel".localized(), role: .cancel) { }
+            Button("logout".localized(), role: .destructive) {
+                Task{
+                    await appManager.logout(){
+                        appRouter.popToRoot()
+                        authManager.logout()
+                    }
+                }
+            }
+        } message: {
+            Text("are_you_sure_logout".localized())
         }
     }
 
@@ -107,8 +123,7 @@ struct NuresProfileScreen: View {
 
     private var logoutButton: some View {
         Button(action: {
-            appRouter.popToRoot()
-            authManager.logout()
+            showAlertLogout.toggle()
         }) {
             HStack {
                 Image(systemName: "arrowshape.turn.up.left.fill")
@@ -122,13 +137,13 @@ struct NuresProfileScreen: View {
     }
 }
 
-#Preview {
-    let vm = NuresProfileVM()
-    vm.nurseProfile = NurseProfile.mockNurseProfile
-   return NavigationStack{
-       NuresProfileScreen(vm:vm)
-            .appNavigationBar(title: "Profile".localized())
-            .environment(\.locale, .init(identifier: "ar")) // "ar" for Arabic, "fr" for French, etc.
-        
-    }
-}
+//#Preview {
+//    let vm = NuresProfileVM()
+//    vm.nurseProfile = NurseProfile.mockNurseProfile
+//   return NavigationStack{
+//       NuresProfileScreen(vm:vm)
+//            .appNavigationBar(title: "Profile".localized())
+//            .environment(\.locale, .init(identifier: "ar")) // "ar" for Arabic, "fr" for French, etc.
+//
+//    }
+//}
