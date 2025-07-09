@@ -12,7 +12,7 @@ struct RequestScreen: View {
     @EnvironmentObject var appRouter: AppRouter
 
     var nurse: Nurse?
-    let profile = AppUserDefaults.shared.getCodable(Profile.self, forKey: .profileData)
+    let profile =  KeychainHelper.shared.getData(Profile.self, forKey: .profileData)
 
     var body: some View {
         VStack{
@@ -22,7 +22,6 @@ struct RequestScreen: View {
             Spacer()
             ConfirmButton
         }
-      //  .background(.appBackground)
         .appNavigationBar(title: "review_request".localized())
     }
 }
