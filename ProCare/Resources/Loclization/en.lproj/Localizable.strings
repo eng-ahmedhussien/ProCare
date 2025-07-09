@@ -73,6 +73,7 @@
 "cancel" = "Cancel";
 "delete" = "Delete";
 "upload" = "Upload";
+"are_you_sure_logout" = "Are you sure logout";
 //MARK:  - UpdateAddressView
 "update_location" = "Update Location";
 "location_required" = "Location Required";

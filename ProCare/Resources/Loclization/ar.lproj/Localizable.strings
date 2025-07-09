@@ -72,7 +72,7 @@
 "cancel" = "إلغاء";
 "delete" = "حذف";
 "upload" = "رفع";
-
+"are_you_sure_logout" = "هل أنت متأكد من تسجيل الخروج";
 //MARK:  - UpdateAddressView
 "update_location" = "تحديث الموقع";
 "location_required" = "الموقع مطلوب";
