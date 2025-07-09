@@ -50,7 +50,7 @@ class LoginVM: ObservableObject {
         } catch let APIError{
             viewState = .failed(APIError.localizedDescription)
             showToast("\(APIError.localizedDescription)", appearance: .error)
-            debugPrint("Unexpected error: \(APIError.localizedDescription)")
+            debugPrint("\(APIError.localizedDescription)")
         }
     }
     
