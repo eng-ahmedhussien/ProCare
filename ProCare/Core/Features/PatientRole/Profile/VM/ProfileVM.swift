@@ -79,7 +79,7 @@ class ProfileVM: ObservableObject {
                 }
             }
         } catch {
-            handleError("⚠️⚠️⚠️Unexpected error: \(error.localizedDescription)")
+            handleError("\(error.localizedDescription)")
         }
     }
 
@@ -90,7 +90,7 @@ class ProfileVM: ObservableObject {
             viewState = .loaded
             handleApiResponse(response,onSuccess: completion)
         } catch {
-            handleError("⚠️⚠️⚠️Unexpected error: \(error.localizedDescription)")
+            handleError("\(error.localizedDescription)")
         }
     }
     
@@ -109,7 +109,7 @@ class ProfileVM: ObservableObject {
                 }
             }
         } catch {
-            handleError("⚠️⚠️⚠️Unexpected error: \(error.localizedDescription)")
+            handleError("\(error.localizedDescription)")
         }
     }
 
@@ -125,7 +125,7 @@ class ProfileVM: ObservableObject {
                 }
             }
         } catch {
-            handleError("⚠️⚠️⚠️Unexpected error: \(error.localizedDescription)")
+            handleError("\(error.localizedDescription)")
         }
     }
 
@@ -138,7 +138,7 @@ class ProfileVM: ObservableObject {
                 }
             }
         } catch {
-            handleError("⚠️⚠️⚠️Unexpected error: \(error.localizedDescription)")
+            handleError(" \(error.localizedDescription)")
         }
     }
 

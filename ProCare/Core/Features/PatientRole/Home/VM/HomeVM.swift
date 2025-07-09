@@ -53,8 +53,8 @@ extension HomeVM{
     /// Fetches all available categories
     /// - Parameter onUnauthorized: Callback to handle unauthorized access
     func fetchCategories(onUnauthorized: @escaping () -> Void) async {
+        loadingState = .loading
             do {
-                loadingState = .loading
                 let response = try await apiClient.categories()
                 
                 guard let data = response.data else {
@@ -266,14 +266,10 @@ extension HomeVM{
             let response = try await apiClient.submitRequest(Parameters: Parameters)
             switch response.status {
             case .Success:
-                showToast("request crated", appearance: .success, position: .top)
+                showToast(response.message ?? "لقد استلمنا طلبك بنجاح.",appearance: .success)
                 completion()
-            case .Error:
-                showToast(response.message ?? "", appearance: .error, position: .top)
-            case .AuthFailure:
-                showToast(response.message ?? "", appearance: .error, position: .top)
-            case .Conflict:
-                showToast(response.message ?? "", appearance: .error, position: .top)
+            case .Error , .AuthFailure, .Conflict:
+                showToast(response.message ?? "", appearance: .error)
             case .none:
                 return
             }
