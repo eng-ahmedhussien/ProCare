@@ -35,7 +35,7 @@
                 .padding()
                 
                 if segmentationSelection == .CurrentRequest {
-                    currentRequestCellView(vm: vm)
+                    CurrentRequestCellView(vm: vm)
                 } else {
                     ZStack {
                         RequestsListView(vm: vm)
