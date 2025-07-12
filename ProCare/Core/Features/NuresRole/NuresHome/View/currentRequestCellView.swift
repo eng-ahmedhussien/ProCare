@@ -37,7 +37,7 @@ struct CurrentRequestCellView: View {
                 AppEmptyView(message: "no_requests".localized())
             }
         }
-        .background(Color(.systemGroupedBackground))
+//        .background(Color(.systemGroupedBackground))
         .onFirstAppear {
             Task {
                 await vm.fetchCurrentRequest {
@@ -51,8 +51,8 @@ struct CurrentRequestCellView: View {
             }
         }
         .alert("rejection_request".localized(), isPresented: $showRejectAlert) {
-            Button("cancel".localized(), role: .cancel) { }
-            Button("reject".localized(), role: .destructive) {
+            Button("cancel".localized(), role: .destructive) { }
+            Button("reject".localized(), role: .cancel) {
                 Task {
                     await vm.rejectRequest(id: vm.currentRequest?.id ?? "")
                 }
@@ -61,8 +61,8 @@ struct CurrentRequestCellView: View {
             Text("are_you_sure_reject".localized())
         }
         .alert("approve_request".localized(), isPresented: $showApproveAlert) {
-            Button("cancel".localized(), role: .cancel) { }
-            Button("approve".localized()) {
+            Button("cancel".localized(), role: .destructive) { }
+            Button("approve".localized(), role: .cancel) {
                 Task {
                     await vm.approveRequest(id: vm.currentRequest?.id ?? "")
                 }
@@ -71,8 +71,8 @@ struct CurrentRequestCellView: View {
             Text("are_you_sure_approve".localized())
         }
         .alert("finish_request".localized(), isPresented: $showFinishAlert) {
-            Button("cancel".localized(), role: .cancel) { }
-            Button("finish".localized()) {
+            Button("cancel".localized(), role: .destructive) { }
+            Button("finish".localized(), role: .cancel) {
                 appRouter.pushView(ReportScreen(vm: vm))
             }
         } message: {
@@ -179,7 +179,7 @@ extension CurrentRequestCellView {
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
-                .background(Color.green)
+                .background(.appPrimary)
                 .foregroundStyle(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
@@ -204,7 +204,7 @@ extension CurrentRequestCellView {
                     AppButton(
                         kind: .solid,
                         height: 45,
-                        backgroundColor: .blue
+                        backgroundColor: .appSecode
                     )
                 )
                 
@@ -261,6 +261,6 @@ extension CurrentRequestCellView {
         return CurrentRequestCellView(vm: vm)
             .environmentObject(AuthManager())
             .environment(\.locale, .init(identifier: "ar")) // For Arabic text
-                       .environment(\.layoutDirection, .rightToLeft)   //
+            .environment(\.layoutDirection, .rightToLeft)   //
     }
 }
