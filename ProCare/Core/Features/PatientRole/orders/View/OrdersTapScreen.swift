@@ -33,9 +33,7 @@ struct OrdersTapScreen: View {
             if segmentationSelection == .CurrentRequest {
                 currentOrderCellView(vm: vm)
             } else {
-                ZStack {
                     OrdersListView(vm: vm)
-                }
             }
             Spacer()
         }
