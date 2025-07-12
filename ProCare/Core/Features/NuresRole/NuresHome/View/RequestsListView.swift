@@ -79,11 +79,12 @@ struct RequestsListView: View {
 }
 
 #Preview {
-    let vm = OrdersVM()
+    let vm = RequestsVM()
     vm.viewState = .loaded
-    vm.ordersList =  Order.mocklist
+    vm.requestList =  Request.mocklist
 
     return NavigationStack {
-        OrdersListView(vm: vm) // ✅ use the actual instance you configured
+        RequestsListView(vm: vm) // ✅ use the actual instance you configured
     }
 }
+
