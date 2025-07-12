@@ -25,7 +25,6 @@
         var body: some View {
             VStack{
                 header
-                
                 Picker("", selection: $segmentationSelection) {
                     ForEach(ProfileSection.allCases, id: \.self) { option in
                         Text(option.localized)
@@ -37,12 +36,13 @@
                 if segmentationSelection == .CurrentRequest {
                     CurrentRequestCellView(vm: vm)
                 } else {
-                    ZStack {
+//                    ZStack {
                         RequestsListView(vm: vm)
-                    }
+                  //  }
                 }
                 Spacer()
-            }.onAppear {
+            }
+            .onAppear {
                 Task{
                     await nurseProfileVM.fetchNurseProfile{
                                 authManager.logout()

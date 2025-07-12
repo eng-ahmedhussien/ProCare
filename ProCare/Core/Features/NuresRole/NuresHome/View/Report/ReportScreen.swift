@@ -15,6 +15,7 @@ struct ReportScreen: View {
     
     @State private var showDiseaseSheet = false
     @State private var showServiceSheet = false
+    @State private var showSubmitAlert = false
     @State private var showTotal = false
     @FocusState private var isDrugsFocused: Bool
 
@@ -34,6 +35,39 @@ struct ReportScreen: View {
             isDrugsFocused = false
         }
         .appNavigationBar(title: "add_report")
+        .alert("submit_report".localized(), isPresented: $showSubmitAlert) {
+            Button("cancel".localized(), role: .destructive) { }
+            Button("submit".localized(), role: .cancel) {
+                Task{
+                    await  vm.addOrUpdateReport{ data in
+                        if data {
+                            showPopup {
+                                VStack(spacing: 16) {
+                                    Text("total_requests")
+                                        .font(.title)
+                                    Text("\(vm.totalRequest)")
+                                        .font(.title)
+                                    Button("dismiss".localized()) {
+                                        showToast(
+                                            "report_added_successfully".localized(),
+                                            appearance: .success
+                                        )
+                                        PopupManager.shared.dismissCustomPopup()
+                                        appRouter.popToRoot()
+                                    }
+                                }
+                                .frame(maxWidth: 250, maxHeight: 250)
+                                .padding()
+                                .background(.ultraThinMaterial)
+                                .cornerRadius(20)
+                            }
+                        }
+                    }
+                }
+            }
+        } message: {
+            Text("are_you_sure_submit".localized())
+        }
     }
 }
 
@@ -172,37 +206,13 @@ extension ReportScreen{
 
     var submit: some View {
         Button("submit") {
-            Task{
-                await  vm.addOrUpdateReport{ data in
-                    if data {
-                        showPopup {
-                            VStack(spacing: 16) {
-                                Text("total_requests")
-                                    .font(.headline)
-                                Text("\(vm.totalRequest)")
-                                    .font(.title)
-                                Button("Dismiss") {
-                                    showToast(
-                                        "report_added_successfully".localized(),
-                                        appearance: .success
-                                    )
-                                    PopupManager.shared.dismissCustomPopup()
-                                    appRouter.popToRoot()
-                                }
-                            }
-                            .frame(maxWidth: 200)
-                            .padding()
-                            .background(.ultraThinMaterial)
-                            .cornerRadius(20)
-                        }
-                      
-                    }
-                }
-            }
+            showSubmitAlert.toggle()
         }
         .buttonStyle(AppButton(kind: .solid, width: 300))
         .padding()
     }
+    
+    
     
 }
 
@@ -216,4 +226,26 @@ extension ReportScreen{
         vm.allDiseases = Disease.mockDiseases
         return ReportScreen(vm: vm).environment(\.locale, .init(identifier: "ar"))
     }
+}
+
+#Preview {
+        VStack(spacing: 16) {
+            Text("total_requests")
+                .font(.title)
+            Text("500")
+                .font(.title)
+            Button("finish".localized()) {
+                showToast(
+                    "report_added_successfully".localized(),
+                    appearance: .success
+                )
+                PopupManager.shared.dismissCustomPopup()
+         
+            }
+        }
+        .frame(maxWidth: 250, maxHeight: 250)
+        .padding()
+        .background(.ultraThinMaterial)
+        .cornerRadius(20)
+        .environment(\.locale, .init(identifier: "ar"))
 }
