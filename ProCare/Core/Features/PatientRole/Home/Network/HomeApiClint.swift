@@ -14,7 +14,7 @@ protocol HomeApiClintProtocol {
     func getServices(parameters: [String: String], id: Int) async throws -> APIResponse<ServiceData>
     func getVisitService() async throws -> APIResponse<ServiceItem>
     //MARK: - Reservation
-    func reservation(parameters: [String: Any]) async throws -> APIResponse<String>
+    func reservation(parameters: [String: Any]) async throws -> APIResponse<Bool>
     //MARK: - Nurses
     func getAllNurses(parameters: [String: Any]) async throws -> APIResponse<NurseData>
     //MARK: - Request
@@ -37,7 +37,7 @@ class HomeApiClint: ApiClient<HomeEndPoints>, HomeApiClintProtocol {
         return try await request(HomeEndPoints.visitService)
     }
     //MARK: - Reservation
-    func reservation(parameters: [String: Any]) async throws -> APIResponse<String> {
+    func reservation(parameters: [String: Any]) async throws -> APIResponse<Bool> {
         return try await request(HomeEndPoints.reservation(parameters: parameters))
     }
     //MARK: - Nurses
