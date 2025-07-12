@@ -11,7 +11,9 @@ struct NursingServicesPage: View {
     @EnvironmentObject var vm : HomeVM
     @EnvironmentObject var ordersVM: OrdersVM
     @EnvironmentObject var appRouter: AppRouter
+    
     @State private var isLoading = true
+    @State private var showContactOptions = false
     var id  = 0
     
     @State var isSelected = false
@@ -29,29 +31,51 @@ struct NursingServicesPage: View {
                         handleNursingServiceTap(nursingServices)
                     }
                 }
-                 .padding(.horizontal)
-                 
+                .padding(.horizontal)
+                
             }
             .padding(.top,12)
         }
         .redacted(reason: isLoading ? .placeholder : [])
         .onAppear {
-                Task {
-                    await loadData()
-                    await ordersVM.fetchCurrentOrder()
-                }
+            Task {
+                await loadData()
+                await ordersVM.fetchCurrentOrder()
+            }
         }
         .refreshable {
             Task {
                 await loadData()
             }
         }
+        .confirmationDialog(
+            "contact_options".localized(),
+            isPresented: $showContactOptions,
+            titleVisibility: .visible
+        ) {
+            Button("call".localized()) {
+                if let url = URL(string: "tel://01097478188"),
+                   UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            Button("WhatsApp") {
+                let phone = "01097478188"
+                if let url = URL(string: "https://wa.me/\(phone)") {
+                    UIApplication.shared.open(url)
+                    
+                }
+            }
+            Button("cancel".localized(), role: .cancel) { }
+        }
+        
+  
         
     }
-    
     private func handleNursingServiceTap(_ nursingServices: NursingServices) {
         if nursingServices.fromCallCenter ?? false {
             debugPrint(nursingServices.name ?? "")
+            showContactOptions.toggle()
         } else {
             switch nursingServices.id {
             case 1:
@@ -77,14 +101,13 @@ struct NursingServicesPage: View {
             }
         }
     }
-    
-    
+
     private func loadData() async {
         vm.fetchSubCategories(for: id)
         isLoading = false
     }
+    
 }
-
 
 #Preview {
     let mockVM = HomeVM()
