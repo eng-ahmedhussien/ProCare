@@ -181,8 +181,8 @@ extension HomeVM {
 }
 //MARK: - reservation
 extension HomeVM{
-    func reservation(onSuccess: @escaping () -> Void) async {
-        let patientData = AppUserDefaults.shared.getCodable(Profile.self, forKey: .profileData)
+    func submitReservation(onSuccess: @escaping () -> Void) async {
+        let patientData = KeychainHelper.shared.getData(Profile.self, forKey: .profileData)
         let parameters: [String : Any] = [
             "date": "\(date.toAPIDateString())",
             "time": "\(time.toAPITimeString())",
@@ -193,8 +193,13 @@ extension HomeVM{
         
         do {
             let response = try await apiClient.reservation(parameters: parameters)
-            if let _ = response.data {
-                onSuccess()
+            if let data = response.data {
+                if data {
+                    showToast(response.message ?? "", appearance: .success)
+                    onSuccess()
+                }else{
+                    showToast(response.message ?? "", appearance: .error)
+                }
             } else {
                 debugPrint("Response received but no service data")
             }
