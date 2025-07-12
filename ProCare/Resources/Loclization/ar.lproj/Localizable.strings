@@ -28,6 +28,7 @@
 "account_not_confirmed" = "لم يتم تفعيل الحساب";
 "account_not_confirmed_message" = "لم يتم تفعيل حسابك بعد. يرجى التحقق من بريدك الإلكتروني للحصول على رمز التفعيل.";
 "ok" = "حسناً";
+"old_password" = "كلمة المرور القديمة";
 //NewPasswordScreen
 "new_password" = "كلمة المرور الجديدة";
 "confirm_new_password" = "تأكيد كلمة المرور الجديدة";
@@ -185,6 +186,8 @@
 "select_diseases" = "اختر الأمراض";
 "select_services" = "اختر الخدمات";
 "Done" = "تم";
+"are_you_sure_submit" = "هل أنت متأكد أنك تريد إرسال التقرير؟";
+"submit_report" = "إرسال التقرير";
 //MARK: gender enum
 "not_specified" = "غير محدد";
 "male" = "ذكر";

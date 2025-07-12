@@ -29,6 +29,7 @@
 "account_not_confirmed" = "Account Not Activated";
 "account_not_confirmed_message" = "Your account has not been activated yet. Please check your email for the activation code.";
 "ok" = "OK";
+"old_password" = "Old password";
 //NewPasswordScreen
 "new_password" = "New password";
 "confirm_new_password" = "Confirm new password";
@@ -182,6 +183,9 @@
 "select_diseases" = "Select Diseases";
 "select_services" = "Select Services";
 "Done" = "Done";
+"are_you_sure_submit" = "Are you sure you want to submit the report?";
+"submit_report" = "Submit Report";
+
 //MARK: gender enum
 "not_specified" = "Not Specified";
 "male" = "Male";
