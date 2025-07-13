@@ -11,6 +11,10 @@ project.xcworkspace/
 *.xcodeproj/project.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/
 
+# Include Package.resolved for SPM
+!*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+
 # Derived Data
 DerivedData/
 
