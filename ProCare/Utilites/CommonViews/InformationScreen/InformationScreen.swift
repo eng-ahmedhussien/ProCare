@@ -5,42 +5,12 @@
     //  Created by ahmed hussien on 12/07/2025.
     //
 
-    import SwiftUI
-
-enum SupportInfoType: String, CaseIterable {
-    case tel = "0224554050"
-    case whatsapp = "+201119858928"
-    case general = "info@procare.live"
-    case hr = "hr@procare.live"
-    case support = "support@procare.live"
-    case address = "6 Al-Tabar Street, Helwan Metro Station, Ground Floor, Apartment 1, Cairo"
-    case agreement = "Terms and conditions"
-    
-    var icon: String {
-        switch self {
-        case .tel: return "phone.fill"
-        case .whatsapp: return "message.circle.fill"
-        case .general, .hr: return "envelope.fill"
-        case .support: return "wrench.fill"
-        case .address: return "building.2.fill"
-        case .agreement: return "doc.text.fill"
-        }
-    }
-    
-    var label: String {
-        switch self {
-        case .tel: return "Tel:"
-        case .whatsapp: return "WhatsApp:"
-        case .general: return "General:"
-        case .hr: return "HR:"
-        case .support: return "Support:"
-        case .address: return "Address:"
-        case .agreement: return "Agreement:"
-        }
-    }
-}
+import SwiftUI
 
 struct InformationScreen: View {
+    @State private var showMapOptions = false
+    @State private var selectedAddress: String?
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -54,11 +24,56 @@ struct InformationScreen: View {
             .padding(.top, 24)
         }
         .appNavigationBar(title: "information".localized())
+        .confirmationDialog("Open in", isPresented: $showMapOptions, titleVisibility: .visible) {
+            if let address = selectedAddress {
+                Button("Apple Maps") {
+                    openInAppleMaps(address: address)
+                }
+                Button("Google Maps") {
+                    openInGoogleMaps(address: address)
+                }
+            }
+            Button("Cancel", role: .cancel) { }
+        }
     }
     
     private func handleTap(on info: SupportInfoType) {
-            // Handle tap based on type
-        print("Tapped on: \(info.label) \(info.rawValue)")
+        switch info {
+        case .tel:
+            openURL("tel://\(info.rawValue)")
+        case .whatsapp:
+            openURL("https://wa.me/\(info.rawValue)")
+        case .general, .hr, .support:
+            openURL("mailto:\(info.rawValue)")
+        case .agreement:
+            openURL("https://www.procare.live/terms")
+        case .address:
+            selectedAddress = info.rawValue
+            showMapOptions = true
+        }
+    }
+    
+    private func openURL(_ urlString: String) {
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url)
+        }
+    }
+    
+    private func openInAppleMaps(address: String) {
+        let encoded = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        openURL("http://maps.apple.com/?q=\(encoded)")
+    }
+    
+    private func openInGoogleMaps(address: String) {
+        let encoded = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let urlString = "comgooglemaps://?q=\(encoded)"
+        
+            // Fallback to web if app not installed
+        if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        } else {
+            openURL("https://www.google.com/maps/search/?api=1&query=\(encoded)")
+        }
     }
 }
 
