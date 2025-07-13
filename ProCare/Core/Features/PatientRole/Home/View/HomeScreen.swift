@@ -14,6 +14,8 @@ struct HomeScreen: View {
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var profileVM: ProfileVM
     
+    @State private var isRefreshingLocation = false
+    
     var body: some View {
         VStack{
             header
@@ -123,16 +125,33 @@ extension HomeScreen{
                     Spacer()
                 }
                 
+//                HStack {
+//                    if  let profileData = KeychainHelper.shared.getData(Profile.self, forKey: .profileData){
+//                        Image(.location)
+//                        Text("\(profileData.governorate ?? "") - \(profileData.city ?? "")")
+//                            .lineLimit(1)
+//                    } else {
+//                        Image(.location)
+//                        Text("unknown_location")
+//                            .lineLimit(2)
+//                    }
+//                }
+//                .font(.subheadline)
+//                .foregroundColor(.white.opacity(0.9))
+                
                 HStack {
-                    if  let profileData = KeychainHelper.shared.getData(Profile.self, forKey: .profileData){
-                        Image(.location)
-                        Text("\(profileData.governorate ?? "") - \(profileData.city ?? "") - \(profileData.addressNotes ?? "")")
-                            .lineLimit(2)
-                    } else {
-                        Image(.location)
-                        Text("unknown_location")
+                    Image(.location)
+                    if LocationManager.shared.address == ""{
+                        Image(systemName: isRefreshingLocation ? "location.circle.fill" : "arrow.clockwise")
+                            .onTapGesture {
+                                isRefreshingLocation = true
+                                LocationManager.shared.refreshLocation()
+                            }
+                    }else{
+                        Text("\(LocationManager.shared.address)")
                             .lineLimit(2)
                     }
+                   
                 }
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.9))
