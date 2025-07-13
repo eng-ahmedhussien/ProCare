@@ -27,18 +27,28 @@ struct ReviewCellView: View {
             
             Spacer()
             
-            HStack{
-                Text("\(review.rating ?? 0)")
-                    
-                Image(systemName: "star.fill")
-                    .foregroundColor(.yellow)
-            }
+            Label("\(review.rating ?? 0)", systemImage: stareRate(review.rating ?? 0))
+                .labelStyle(.titleAndIcon)
+                .foregroundColor(.yellow)
+                .font(.subheadline)
+                .accessibilityLabel(Text("Rating"))
                
         }
        // .padding()
        // .backgroundCard(color: .white, cornerRadius: 10, shadowRadius: 2, shadowColor: .gray)
         .padding(.horizontal)
     }
+    
+    private func stareRate(_ rate: Int) -> String {
+              switch rate {
+              case 1...3:
+                  return "star.leadinghalf.filled"
+              case 4...5:
+                  return "star.fill"
+              default:
+                  return "star"
+              }
+          }
 }
 
 

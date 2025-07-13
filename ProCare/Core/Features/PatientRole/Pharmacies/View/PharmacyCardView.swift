@@ -22,8 +22,8 @@ struct PharmacyCardView: View {
             
             // Line number and buttons
             HStack {
-                if let lineNumber = pharmacy.lineNumber {
-                    Text("\("line".localized()): \(lineNumber)")
+                if let lineNumber = pharmacy.phoneNumber {
+                    Text("\("phone_number".localized()): \(lineNumber)")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
