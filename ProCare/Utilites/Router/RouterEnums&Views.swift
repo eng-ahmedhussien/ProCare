@@ -26,6 +26,8 @@ extension AppRouter {
             NewPasswordScreen(phone: phone, resetToken: resetToken)
         case .ChangePasswordScreen:
             ChangePasswordScreen()
+        case.InformationScreen:
+            InformationScreen()
 
         }
     }
@@ -63,6 +65,7 @@ enum Screen: Identifiable, Hashable {
     case EmailScreen
     case NewPasswordScreen(phone: String, resetToken: String)
     case ChangePasswordScreen
+    case InformationScreen
 
     var id: Self { return self }
 }
