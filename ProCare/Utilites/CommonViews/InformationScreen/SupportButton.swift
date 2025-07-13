@@ -9,13 +9,13 @@ import SwiftUI
 
 struct SupportButton:  View {
     @EnvironmentObject var appRouter: AppRouter
-    
+    var color : Color = Color.white 
     var body: some View {
         Button(action: {
-            
+            appRouter.push(.InformationScreen)
         }) {
             Image(systemName: "questionmark.circle")
-                .foregroundStyle(.white)
+                .foregroundStyle(color)
         }.padding(.horizontal)
     }
 }
