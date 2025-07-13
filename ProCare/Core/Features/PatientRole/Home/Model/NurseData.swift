@@ -70,7 +70,7 @@ extension Nurse {
             specializationId: 1,
             licenseNumber: "123456",
             image: "https://fastly.picsum.photos/id/214/200/300.jpg?hmac=XWc2pr4xabaprbyVoKEw9VsBDZ0ibySoVWMJaKokGRU",
-            rating: 4,
+            rating: 2,
             latitude: 37.7749,
             longitude: -122.4194,
             reviews: Review.mockReviews,

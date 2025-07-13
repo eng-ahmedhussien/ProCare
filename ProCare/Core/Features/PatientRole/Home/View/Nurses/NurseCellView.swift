@@ -66,7 +66,7 @@
             switch rate {
             case 1...3:
                 return "star.leadinghalf.filled"
-            case 4..<5:
+            case 4...5:
                 return "star.fill"
             default:
                 return "star"
@@ -75,7 +75,8 @@
     }
 
 
-    #Preview {
+
+#Preview {
         VStack{
             NurseCellView(nurse: Nurse.mock, distance: 100)
             NurseCellView(nurse: Nurse.mock, distance: 100)

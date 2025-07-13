@@ -17,7 +17,7 @@ struct NuresProfileScreen: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            LazyVStack(spacing: 24) {
                 profileImageSection
                 VStack(spacing: 20) {
                     statusToggle
@@ -29,8 +29,10 @@ struct NuresProfileScreen: View {
             }
             .padding()
         }
-        .appNavigationBar(title: "Profile")
-        .navigationBarTitleDisplayMode(.inline)
+        .safeAreaInset(edge: .top) {
+            header
+                .background(.regularMaterial)
+        }
         .onAppear {
             isBusy = vm.nurseProfile?.isBusy ?? false
         }
@@ -56,6 +58,34 @@ struct NuresProfileScreen: View {
             Text("are_you_sure_logout".localized())
         }
     }
+    
+    private  var header: some View {
+              HStack {
+                  SupportButton()
+                  
+                  Spacer()
+                  
+                  Text("profile")
+                      .padding(5)
+                      .font(.title)
+                      .foregroundStyle(.white)
+                  
+                  Spacer()
+                  
+                  Button(action: {
+                      if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                          if UIApplication.shared.canOpenURL(appSettings) {
+                              UIApplication.shared.open(appSettings)
+                          }
+                      }
+                  }) {
+                      Image(systemName: "globe")
+                          .foregroundStyle(.white)
+                  }.padding(.horizontal)
+                  
+              }
+              .background(.appPrimary)
+          }
 
     private var profileImageSection: some View {
         VStack(spacing: 12) {
@@ -137,13 +167,14 @@ struct NuresProfileScreen: View {
     }
 }
 
-//#Preview {
-//    let vm = NuresProfileVM()
-//    vm.nurseProfile = NurseProfile.mockNurseProfile
-//   return NavigationStack{
-//       NuresProfileScreen(vm:vm)
-//            .appNavigationBar(title: "Profile".localized())
-//            .environment(\.locale, .init(identifier: "ar")) // "ar" for Arabic, "fr" for French, etc.
-//
-//    }
-//}
+#Preview {
+    let vm = NuresProfileVM()
+    vm.nurseProfile = NurseProfile.mockNurseProfile
+    return
+         NuresProfileScreen()
+            .environmentObject(vm)
+
+            .environment(\.locale, .init(identifier: "ar")) // "ar" for Arabic, "fr" for French, etc.
+
+    
+}

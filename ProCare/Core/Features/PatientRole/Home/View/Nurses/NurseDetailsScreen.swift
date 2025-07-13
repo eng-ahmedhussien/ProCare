@@ -53,17 +53,25 @@ extension NurseDetailsScreen {
                     .foregroundStyle(.appPrimary)
             }
            // Spacer()
-            HStack {
-                if let rating = nurse?.rating {
-                    Text("\(rating)")
-                        .font(.title3)
-                    Image(systemName: "star.fill")
-                        .foregroundColor(.yellow)
-                }
-            }
+            Label("\(nurse?.rating ?? 0)", systemImage: stareRate(nurse?.rating ?? 0))
+                    .labelStyle(.titleAndIcon)
+                    .foregroundColor(.yellow)
+                    .font(.subheadline)
+                    .accessibilityLabel(Text("Rating"))
         }
         .padding(5)
     }
+    
+    private func stareRate(_ rate: Int) -> String {
+              switch rate {
+              case 1...3:
+                  return "star.leadinghalf.filled"
+              case 4...5:
+                  return "star.fill"
+              default:
+                  return "star"
+              }
+          }
 
     var requestButton: some View {
         Button {
