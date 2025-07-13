@@ -10,13 +10,15 @@ import SwiftUI
 struct SignUPScreen: View {
     @StateObject var vm = SignUpVM()
     @EnvironmentObject var appRouter: AppRouter
+    
+    @State var isCheckedTerms = false
     private var isFormValid: Bool {
         ValidationRule.isEmpty.validate(vm.name) == nil &&
         ValidationRule.isEmpty.validate(vm.secondName) == nil &&
         ValidationRule.email.validate(vm.email) == nil &&
         ValidationRule.phone.validate(vm.phone) == nil &&
         ValidationRule.password.validate(vm.password) == nil &&
-        ValidationRule.confirmPassword($vm.password).validate(vm.confirmPassword) == nil
+        ValidationRule.confirmPassword($vm.password).validate(vm.confirmPassword) == nil && isCheckedTerms
     }
     //MARK: - Body
     var body: some View {
@@ -28,23 +30,31 @@ struct SignUPScreen: View {
     
     @ViewBuilder
     private var content: some View {
-        VStack{
+        VStack(alignment: .center){
             header
             signUpForm
             Spacer()
+            TermsCheckboxView(isChecked: $isCheckedTerms)
             SignUpButton
             haveAccountButton
+            
         }
     }
 }
 
 extension SignUPScreen {
-    var header: some View {
-        VStack(alignment: .leading){
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 8) {
             Text("hello".localized())
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+            
             Text("create_account".localized())
+                .font(.title2)
+                .foregroundStyle(.secondary)
         }
-        .font(.title.bold())
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
     }

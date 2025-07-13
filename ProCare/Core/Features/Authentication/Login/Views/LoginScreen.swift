@@ -1,9 +1,9 @@
-//
-//  LoginScreen.swift
-//  ProCare
-//
-//  Created by ahmed hussien on 02/04/2025.
-//
+    //
+    //  LoginScreen.swift
+    //  ProCare
+    //
+    //  Created by ahmed hussien on 02/04/2025.
+    //
 
 import SwiftUI
 
@@ -11,15 +11,13 @@ struct LoginScreen: View {
     @StateObject var vm = LoginVM()
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var authManager: AuthManager
-    @EnvironmentObject var profileVM: ProfileVM
-
-        @State private var showNotConfirmedAlert = false // Add this line
-
+    
+    @State private var showNotConfirmedAlert = false // Add this line
     
     private var isFormValid: Bool {
         !vm.email.isEmpty &&
         !vm.password.isEmpty &&
-//        ValidationRule.email.validate(vm.email) == nil &&
+            //        ValidationRule.email.validate(vm.email) == nil &&
         ValidationRule.password.validate(vm.password) == nil
     }
     
@@ -28,15 +26,22 @@ struct LoginScreen: View {
             content
                 .dismissKeyboardOnTap()
                 .disabled(vm.viewState == .loading)
-                .toolbar { changeLanguageButton }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        changeLanguageButton
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        SupportButton(color: .appPrimary)
+                    }
+                }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
                 .alert("account_not_confirmed".localized(), isPresented: $showNotConfirmedAlert) { // Add this modifier
                     Button("ok".localized(), role: .cancel) {
-                         appRouter
+                        appRouter
                             .pushView(
                                 OTPScreen(email: vm.email,comeFrom: .login)
                             )
-                     }
+                    }
                 } message: {
                     Text("account_not_confirmed_message".localized())
                 }
@@ -61,7 +66,6 @@ struct LoginScreen: View {
 
 extension LoginScreen {
     var changeLanguageButton: some View {
-        HStack {
             Button(action: {
                 if let appSettings = URL(string: UIApplication.openSettingsURLString) {
                     if UIApplication.shared.canOpenURL(appSettings) {
@@ -77,9 +81,6 @@ extension LoginScreen {
             }
             .font(.callout)
             .padding(.horizontal)
-            
-            Spacer()
-        }
     }
     
     var headerTitle: some View {
@@ -88,7 +89,7 @@ extension LoginScreen {
                 .resizable()
                 .frame(width: 250, height: 250, alignment: .center)
                 .opacity(0.9)
-
+            
             Text("hello".localized())
             Text("log_in_to_start".localized())
         }
@@ -148,10 +149,10 @@ extension LoginScreen {
                     case .UserLockedOut:
                         debugPrint("UserLockedOut")
                     case .UserNotConfirmed:
-                         showNotConfirmedAlert = true // Show the alert
-
-                        //showToast(response.message ?? "", appearance: .error)
-                       
+                        showNotConfirmedAlert = true // Show the alert
+                        
+                            //showToast(response.message ?? "", appearance: .error)
+                        
                     case .Error:
                         debugPrint("Error")
                     case .none:
