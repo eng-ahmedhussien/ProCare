@@ -109,7 +109,8 @@ class ProfileVM: ObservableObject {
                 }
             }
         } catch {
-            handleError("\(error.localizedDescription)")
+            viewState = .loaded
+            showToast("\(error.localizedDescription)", appearance: .error)
         }
     }
 
@@ -149,7 +150,7 @@ class ProfileVM: ObservableObject {
         lastName = profileData.lastName ?? ""
         gender = Gender(rawValue: profileData.gender ?? 0) ?? .notSpecified
         dateOfBirth = profileData.birthDate?.toAPIDate()
-        location = "\(profileData.city ?? "") - \(profileData.governorate ?? "") - \(profileData.addressNotes ?? "")"
+        location = "\(profileData.governorate ?? "") - \(profileData.city ?? "") - \(profileData.addressNotes ?? "")"
         profileImage = profileData.image ?? ""
         phoneNumber = profileData.phoneNumber ?? ""
         selectedGovernorate = profileData.governorateId ?? 0

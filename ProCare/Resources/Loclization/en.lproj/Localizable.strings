@@ -30,6 +30,8 @@
 "account_not_confirmed_message" = "Your account has not been activated yet. Please check your email for the activation code.";
 "ok" = "OK";
 "old_password" = "Old password";
+"agree_to_terms_prefix" = "I agree to the";
+"terms_and_conditions" = "Terms and Conditions";
 //NewPasswordScreen
 "new_password" = "New password";
 "confirm_new_password" = "Confirm new password";
@@ -75,6 +77,8 @@
 "delete" = "Delete";
 "upload" = "Upload";
 "are_you_sure_logout" = "Are you sure logout";
+"current_location" = "Current location"; // en
+"no_address_selected" = "No address selected"; // en
 //MARK:  - UpdateAddressView
 "update_location" = "Update Location";
 "location_required" = "Location Required";
@@ -166,6 +170,9 @@
 "line" = "Line";
 "cancel" = "Cancel";
 "choose_number_to_call" = "Choose a number to call";
+"open_in" = "Open in";
+"google_maps" = "Google Maps";
+"apple_maps" = "Apple Maps";
 // Pharmacy Card
 "location_separator" = ", ";
 //MARK: - ReportScreen
@@ -215,3 +222,4 @@
 "request_limit_message" = "You currently have an active request. Please wait for it to be completed before creating a new one.";
 //MARK: other
 "forced_update" = "Forced Update";
+"information" = "information";

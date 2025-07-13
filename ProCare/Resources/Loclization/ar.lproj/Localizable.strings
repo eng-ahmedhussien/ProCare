@@ -29,6 +29,8 @@
 "account_not_confirmed_message" = "لم يتم تفعيل حسابك بعد. يرجى التحقق من بريدك الإلكتروني للحصول على رمز التفعيل.";
 "ok" = "حسناً";
 "old_password" = "كلمة المرور القديمة";
+"agree_to_terms_prefix" = "أوافق على";
+"terms_and_conditions" = "الشروط والأحكام";
 //NewPasswordScreen
 "new_password" = "كلمة المرور الجديدة";
 "confirm_new_password" = "تأكيد كلمة المرور الجديدة";
@@ -74,6 +76,9 @@
 "delete" = "حذف";
 "upload" = "رفع";
 "are_you_sure_logout" = "هل أنت متأكد من تسجيل الخروج";
+"no_address_selected" = "لم يتم تحديد عنوان"; // ar
+"current_location" = "الموقع الحالي"; // ar
+
 //MARK:  - UpdateAddressView
 "update_location" = "تحديث الموقع";
 "location_required" = "الموقع مطلوب";
@@ -169,6 +174,10 @@
 "line" = "خط";
 "cancel" = "إلغاء";
 "choose_number_to_call" = "اختر رقماً للاتصال";
+"open_in" = "افتح في";
+"google_maps" = "خريطة جوجل";
+"apple_Maps" = "خريطة ابل";
+
 // Pharmacy Card
 "location_separator" = "، ";
 //MARK: - ReportScreen
@@ -217,3 +226,4 @@
 "request_limit_message" = "لديك طلب نشط حالياً. يرجى الانتظار حتى يتم إكماله قبل إنشاء طلب جديد.";
 //MARK: other
 "forced_update" = "تحديث إلزامي";
+"information" = "المعلومات";
