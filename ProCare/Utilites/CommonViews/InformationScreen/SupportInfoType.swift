@@ -1,8 +1,16 @@
+//
+//  SupportInfoType.swift
+//  ProCare
+//
+//  Created by ahmed hussien on 12/07/2025.
+//
+
+
 import SwiftUI
 
 enum SupportInfoType: String, CaseIterable {
     case tel = "0224554050"
-    case whatsapp = "+201119858928"
+    case whatsapp = "01119858928"
     case general = "info@procare.live"
     case hr = "hr@procare.live"
     case support = "support@procare.live"
