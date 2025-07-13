@@ -7,7 +7,7 @@
 xcuserdata/
 
 # Xcode project settings
-project.xcworkspace/
+# project.xcworkspace/
 *.xcodeproj/project.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/
 
