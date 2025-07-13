@@ -60,7 +60,7 @@ extension Review {
     
 
 // MARK: - Preview Helpers
-#if DEBUG
+
 extension Nurse {
     static var mock: Nurse {
         return Nurse(
@@ -126,4 +126,4 @@ extension Review {
         )]
     }
 }
-#endif
+

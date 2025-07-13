@@ -89,32 +89,32 @@ extension NurseDetailsScreen {
 }
 
 extension NurseDetailsScreen {
+    
     var reviewsSection: some View {
-      //  let reviews = nurse?.reviews ?? []
-        
-        guard let reviews = nurse?.reviews, !reviews.isEmpty  else { return EmptyView()}
-        
-        return Section {
-            VStack(spacing: 8) {
-                ForEach(reviews.prefix(2), id: \.id) { review in
-                    ReviewCellView(review: review)
-                    
-                    Divider()
-                }
-                if reviews.count > 2 {
-                    Button(action: { showAllReviews = true }) {
-                        Text("See More")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+        Group {
+            if let reviews = nurse?.reviews, !reviews.isEmpty {
+                Section {
+                    VStack(spacing: 8) {
+                        ForEach(reviews.prefix(2), id: \.id) { review in
+                            ReviewCellView(review: review)
+                            Divider()
+                        }
+                        if reviews.count > 2 {
+                            Button(action: { showAllReviews = true }) {
+                                Text("See More")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                    }
+                } header: {
+                    HStack {
+                        Text("reviews".localized())
+                            .font(.title2)
+                            .bold()
+                        Spacer()
                     }
                 }
-            }
-        } header: {
-            HStack {
-                Text("reviews".localized())
-                    .font(.title2)
-                    .bold()
-                Spacer()
             }
         }
     }

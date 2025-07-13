@@ -37,7 +37,6 @@ struct PharmacyItem: Codable, Identifiable {
 }
 
 // MARK: - Preview Helpers
-#if DEBUG
 
 extension PharmacyPagedResult {
     static var mock: PharmacyPagedResult {
@@ -70,4 +69,4 @@ extension PharmacyItem {
         )
     }
 }
-#endif 
+
