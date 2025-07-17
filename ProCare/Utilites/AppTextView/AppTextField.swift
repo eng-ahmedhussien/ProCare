@@ -32,6 +32,7 @@ struct AppTextFieldPreview: View {
             
             AppTextField(text: $name,placeholder: "name",  validationRules: [.isEmpty], style:  .plain
             )
+            
         }
         .padding()
         .onAppear {
@@ -95,6 +96,8 @@ struct AppTextField: View {
                         showPassword.toggle()
                     } label: {
                         Image(systemName: showPassword ? "eye.slash" : "eye")
+                            .resizable()
+                            .frame(width: 20, height: 20)
                             .foregroundColor(.gray)
                     }
                 }
