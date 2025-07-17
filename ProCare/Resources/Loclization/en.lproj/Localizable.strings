@@ -114,6 +114,7 @@
 "retry" = "Retry";
 "visit_fee_message" = "The visit fee is fixed for any number of services.";
 "visit_Fee" = "Visit Fee";
+"50_discount" = "discount 50 for Qena";
 //MARK: - NursesList
 "nurses_list" = "Nurses List";
 "no_nurses_available" = "No nurses available at the moment";

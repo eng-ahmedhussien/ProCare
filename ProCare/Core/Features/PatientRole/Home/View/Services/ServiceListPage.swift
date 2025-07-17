@@ -90,7 +90,7 @@ extension ServiceListPage{
     private var totalView: some View {
         let total = vm.totalPrice + (vm.visitServicePrice ?? 0)
         return VStack {
-            Text("خصم ٥٠٪ لمحافظة قنا")
+            Text("50_discount")
                 .font(.footnote)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)

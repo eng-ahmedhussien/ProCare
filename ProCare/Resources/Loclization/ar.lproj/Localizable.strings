@@ -116,6 +116,7 @@
 "retry" = "إعادة المحاولة";
 "visit_fee_message" = "رسوم الزيارة ثابتة لاي عدد من الخدمات";
 "visit_Fee" = "رسوم الزيارة";
+"50_discount" = "خصم ٥٠٪ لمحافظة قنا";
 //MARK: - NursesList
 "nurses_list" = "قائمة الممرضين";
 "no_nurses_available" = "لا يوجد ممرضين حالياً";
