@@ -49,7 +49,8 @@
                 }
 
                 Spacer()
-                Label("\(nurse.rating ?? 0)", systemImage: stareRate(nurse.rating ?? 0))
+
+                Label(String(format: "%.1f", nurse.rating ?? 0), systemImage: (nurse.rating ?? 0).starRateIcon)
                         .labelStyle(.titleAndIcon)
                         .foregroundColor(.yellow)
                         .font(.subheadline)
@@ -60,17 +61,6 @@
             .padding(.horizontal)
             .padding(.vertical,8)
             .opacity(nurse.isBusy ?? false ? 0.5 : 1)
-        }
-        
-        private func stareRate(_ rate: Int) -> String {
-            switch rate {
-            case 1...3:
-                return "star.leadinghalf.filled"
-            case 4...5:
-                return "star.fill"
-            default:
-                return "star"
-            }
         }
     }
 

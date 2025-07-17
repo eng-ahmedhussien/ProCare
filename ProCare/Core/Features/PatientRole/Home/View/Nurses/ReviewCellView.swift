@@ -27,7 +27,7 @@ struct ReviewCellView: View {
             
             Spacer()
             
-            Label("\(review.rating ?? 0)", systemImage: stareRate(review.rating ?? 0))
+            Label(String(format: "%.1f", review.rating ?? 0), systemImage: (review.rating ?? 0).starRateIcon)
                 .labelStyle(.titleAndIcon)
                 .foregroundColor(.yellow)
                 .font(.subheadline)
@@ -38,17 +38,7 @@ struct ReviewCellView: View {
        // .backgroundCard(color: .white, cornerRadius: 10, shadowRadius: 2, shadowColor: .gray)
         .padding(.horizontal)
     }
-    
-    private func stareRate(_ rate: Int) -> String {
-              switch rate {
-              case 1...3:
-                  return "star.leadinghalf.filled"
-              case 4...5:
-                  return "star.fill"
-              default:
-                  return "star"
-              }
-          }
+
 }
 
 

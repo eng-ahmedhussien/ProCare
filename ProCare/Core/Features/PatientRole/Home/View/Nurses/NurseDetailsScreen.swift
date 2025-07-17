@@ -53,25 +53,18 @@ extension NurseDetailsScreen {
                     .foregroundStyle(.appPrimary)
             }
            // Spacer()
-            Label("\(nurse?.rating ?? 0)", systemImage: stareRate(nurse?.rating ?? 0))
-                    .labelStyle(.titleAndIcon)
-                    .foregroundColor(.yellow)
-                    .font(.subheadline)
-                    .accessibilityLabel(Text("Rating"))
+            Label(
+                String(format: "%.1f", nurse?.rating ?? 0),
+                systemImage: (nurse?.rating ?? 0).starRateIcon
+            )
+                .labelStyle(.titleAndIcon)
+                .foregroundColor(.yellow)
+                .font(.subheadline)
+                .accessibilityLabel(Text("Rating"))
         }
         .padding(5)
     }
-    
-    private func stareRate(_ rate: Int) -> String {
-              switch rate {
-              case 1...3:
-                  return "star.leadinghalf.filled"
-              case 4...5:
-                  return "star.fill"
-              default:
-                  return "star"
-              }
-          }
+
 
     var requestButton: some View {
         Button {
