@@ -1,21 +1,33 @@
-//
-//  SupportInfoType.swift
-//  ProCare
-//
-//  Created by ahmed hussien on 12/07/2025.
-//
+    //
+    //  SupportInfoType.swift
+    //  ProCare
+    //
+    //  Created by ahmed hussien on 12/07/2025.
+    //
 
 
 import SwiftUI
 
 enum SupportInfoType: String, CaseIterable {
-    case tel = "0224554050"
-    case whatsapp = "01119858928"
-    case general = "info@procare.live"
-    case hr = "hr@procare.live"
-    case support = "support@procare.live"
-    case address = "6 Al-Tabar Street, Helwan Metro Station, Ground Floor, Apartment 1, Cairo"
-    case agreement = "Terms and conditions"
+    case tel
+    case whatsapp
+    case general
+    case hr
+    case support
+    case address
+    case agreement
+    
+    var value: String {
+        switch self {
+        case .tel: return AppConstants.supportNumber
+        case .whatsapp: return AppConstants.supportNumber
+        case .general: return "info@procare.live"
+        case .hr: return "hr@procare.live"
+        case .support: return "support@procare.live"
+        case .address: return "6 Al-Tabar Street, Helwan Metro Station, Ground Floor, Apartment 1, Cairo"
+        case .agreement: return "https://www.procare.live/terms"
+        }
+    }
     
     var icon: String {
         switch self {

@@ -54,13 +54,15 @@ struct NursingServicesPage: View {
             titleVisibility: .visible
         ) {
             Button("call".localized()) {
-                if let url = URL(string: "tel://01097478188"),
+                if let url = URL(
+                    string: "tel://\(AppConstants.womenNurseNumber)"
+                ),
                    UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url)
                 }
             }
             Button("WhatsApp") {
-                let phone = "01097478188"
+                let phone = AppConstants.womenNurseNumber
                 if let url = URL(string: "https://wa.me/\(phone)") {
                     UIApplication.shared.open(url)
                     

@@ -40,15 +40,15 @@ struct InformationScreen: View {
     private func handleTap(on info: SupportInfoType) {
         switch info {
         case .tel:
-            openURL("tel://\(info.rawValue)")
+            openURL("tel://\(info.value)")
         case .whatsapp:
-            openURL("https://wa.me/\(info.rawValue)")
+            openURL("https://wa.me/\(info.value)")
         case .general, .hr, .support:
-            openURL("mailto:\(info.rawValue)")
+            openURL("mailto:\(info.value)")
         case .agreement:
-            openURL("https://www.procare.live/terms")
+            openURL(info.value)
         case .address:
-            selectedAddress = info.rawValue
+            selectedAddress = info.value
             showMapOptions = true
         }
     }
@@ -91,7 +91,7 @@ struct SupportRow: View {
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundColor(.gray)
-                Text(info.rawValue)
+                Text(info.value)
                     .font(.body)
                     .foregroundColor(.black)
             }
