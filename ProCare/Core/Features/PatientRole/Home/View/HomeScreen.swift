@@ -1,26 +1,47 @@
-//
-//  HomeScreen.swift
-//  ProCare
-//
-//  Created by ahmed hussien on 18/04/2025.
-//
+    //
+    //  HomeScreen.swift
+    //  ProCare
+    //
+    //  Created by ahmed hussien on 18/04/2025.
+    //
 
 import SwiftUI
 
 struct HomeScreen: View {
     @StateObject var vm = HomeVM()
+    @StateObject var reviewVM = ReviewVM()
     @StateObject var pharmaciesVM = PharmaciesVM()
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject var appRouter: AppRouter
     @EnvironmentObject var profileVM: ProfileVM
     
     @State private var isRefreshingLocation = false
+    @State private var showReviewSheet: Bool = false
     
     var body: some View {
         VStack{
             header
             content
+        }.onFirstAppear {
+            Task{
+                await reviewVM.getLastRequestIdNotReviewed { requestId in
+                    Task{
+                        await  vm.getRequestById(requestId: requestId)
+                    }
+                    showReviewSheet.toggle()
+                }
+            }
         }
+        .sheet(isPresented: $showReviewSheet) {
+            if let order =  vm.lastOrder  {
+                ReviewPromptSheet(
+                    showSheet: $showReviewSheet,
+                    order: order
+                )
+                .environmentObject(reviewVM)
+            }
+        }
+        
     }
     
     @ViewBuilder
@@ -42,12 +63,7 @@ struct HomeScreen: View {
             VStack {
                 Spacer()
                 RetryView(message: message){
-                    Task{
-                        await vm.fetchCategories{
-                            authManager.logout()
-                            debugPrint("Unauthorized access")
-                        }
-                    }
+                    fetchHomeData()
                 }
                 Spacer()
             }
@@ -68,7 +84,7 @@ struct HomeScreen: View {
             _ = await (fetchCategories, fetchProfile)
         }
     }
-
+    
     
     
     fileprivate func handleCategoryTap(_ id: Int) {
@@ -78,8 +94,8 @@ struct HomeScreen: View {
                 .environmentObject(vm)
             appRouter.pushView(nursingView)
         case 3,4:
-        //3 ambulance
-        //4 doctor
+                //3 ambulance
+                //4 doctor
             showAlert(
                 title: "alert".localized(),
                 message: "this_feature_coming_soon".localized()
@@ -125,19 +141,6 @@ extension HomeScreen{
                     Spacer()
                 }
                 
-//                HStack {
-//                    if  let profileData = KeychainHelper.shared.getData(Profile.self, forKey: .profileData){
-//                        Image(.location)
-//                        Text("\(profileData.governorate ?? "") - \(profileData.city ?? "")")
-//                            .lineLimit(1)
-//                    } else {
-//                        Image(.location)
-//                        Text("unknown_location")
-//                            .lineLimit(2)
-//                    }
-//                }
-//                .font(.subheadline)
-//                .foregroundColor(.white.opacity(0.9))
                 
                 HStack {
                     Image(.location)
@@ -151,13 +154,13 @@ extension HomeScreen{
                         Text("\(LocationManager.shared.address)")
                             .lineLimit(2)
                     }
-                   
+                    
                 }
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.9))
             }
             Spacer()
-              
+            
         }
         .padding()
         .background(.appPrimary)
@@ -171,7 +174,7 @@ extension HomeScreen{
     HomeScreen(vm: HomeVM.preview)
         .environmentObject(AuthManager())
         .environmentObject(AppRouter())
-       // .environmentObject(LocationManager())
+        // .environmentObject(LocationManager())
     
 }
 #endif

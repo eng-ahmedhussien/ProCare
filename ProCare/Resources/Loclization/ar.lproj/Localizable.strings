@@ -203,9 +203,9 @@
 "female" = "أنثى";
 //MARK: - validation text fields
 "validation_empty" = "هذا الحقل مطلوب";
-"validation_phone" = "يجب أن يبدأ رقم الهاتف بـ +20 (مثال: +201XXXXXXXXX)";
+"validation_phone" = "رقم غير صحيح (مثال: 01XXXXXXXXX)";
 "validation_email" = "البريد الإلكتروني غير صالح";
-"validation_password" = "كلمة المرور يجب أن تكون 8 أحرف على الأقل وتحتوي على حرف كبير وصغير ورقم ورمز.";
+"validation_password" = "كلمة المرور ضعيفة (٨ أحرف على الأقل، حرف كبير، حرف صغير، رقم، ورمز)";
 "validation_confirm_password" = "كلمتا المرور غير متطابقتين";
 "validation_number" = "يجب أن يكون رقمًا صحيحًا";
 "validation_min" = "يجب أن تكون القيمة ≥ %@";
@@ -224,6 +224,17 @@
 "submit" = "إرسال";
 //MARK: - Request Limit
 "request_limit_message" = "لديك طلب نشط حالياً. يرجى الانتظار حتى يتم إكماله قبل إنشاء طلب جديد.";
+//MARK: - Review
+"rate_experience" = "قيّم تجربتك";
+"add_comment_optional" = "أضف تعليقًا (اختياري)";
+"share_experience_placeholder" = "شارك تجربتك...";
+"review_service" = "مراجعة الخدمة";
+"dont_show_again" = "عدم العرض مرة أخرى";
+"rating_poor" = "ضعيف";
+"rating_fair" = "مقبول";
+"rating_good" = "جيد";
+"rating_very_good" = "جيد جدًا";
+"rating_excellent" = "ممتاز";
 //MARK: other
 "forced_update" = "تحديث إلزامي";
 "information" = "المعلومات";

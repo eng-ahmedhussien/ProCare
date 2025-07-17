@@ -20,6 +20,7 @@ enum HomeEndPoints{
     case getAllNurses(parameters: [String : Any])
     
     case submitRequest(Parameters: [String:Any])
+    case getRequestById(requestId: String)
 }
 
 extension HomeEndPoints: APIEndpoint {
@@ -40,12 +41,14 @@ extension HomeEndPoints: APIEndpoint {
             return "/Nurse/GetAllMobileNurses"
         case .submitRequest:
             return "/Request/Submit"
+        case .getRequestById(let requestId):
+            return "/Request/GetById/\(requestId)"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .categories, .subCategories, .visitService:
+        case .categories, .subCategories, .visitService, .getRequestById:
             return .get
         case .services, .reservation, .getAllNurses, .submitRequest:
             return  .post

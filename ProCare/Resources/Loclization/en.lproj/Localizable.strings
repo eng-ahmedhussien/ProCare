@@ -199,9 +199,10 @@
 "female" = "Female";
 //MARK: - validation text fields
 "validation_empty" = "This field cannot be empty";
-"validation_phone" = "Phone number must start with +20 (e.g. +201XXXXXXXXX)";
+"validation_email" = "email is not valid";
+"validation_phone" = "Invalid phone (e.g. 01XXXXXXXXX)";
 "validation_empty" = "email is not valid";
-"validation_password" = "Password must be 8+ characters, with uppercase, lowercase, number, and symbol.";
+"validation_password" = "Weak password (min 8, upper, lower, number, symbol)";
 "validation_confirm_password" = "Passwords do not match";
 "validation_number" = "Must be a valid number";
 "validation_min" = "Value must be ≥ %@";
@@ -220,6 +221,17 @@
 "submit" =  "Submit";
 //MARK: - Request Limit
 "request_limit_message" = "You currently have an active request. Please wait for it to be completed before creating a new one.";
+//MARK: - Review
+"rate_experience" = "Rate your experience";
+"add_comment_optional" = "Add a comment (optional)";
+"share_experience_placeholder" = "Share your experience...";
+"review_service" = "Review Service";
+"dont_show_again" = "Don't show again";
+"rating_poor" = "Poor";
+"rating_fair" = "Fair";
+"rating_good" = "Good";
+"rating_very_good" = "Very Good";
+"rating_excellent" = "Excellent";
 //MARK: other
 "forced_update" = "Forced Update";
 "information" = "information";

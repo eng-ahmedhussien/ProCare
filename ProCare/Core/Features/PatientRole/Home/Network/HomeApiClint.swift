@@ -19,6 +19,7 @@ protocol HomeApiClintProtocol {
     func getAllNurses(parameters: [String: Any]) async throws -> APIResponse<NurseData>
     //MARK: - Request
     func submitRequest(Parameters: [String : Any]) async throws -> APIResponse<String>
+    func getRequestById(requestId: String) async throws -> APIResponse<Order>
 }
 
 
@@ -48,5 +49,7 @@ class HomeApiClint: ApiClient<HomeEndPoints>, HomeApiClintProtocol {
     func submitRequest(Parameters: [String : Any]) async throws -> APIResponse<String>{
         return try await request(HomeEndPoints.submitRequest(Parameters: Parameters))
     }
-
+    func getRequestById(requestId: String) async throws -> APIResponse<Order> {
+        return try await request(HomeEndPoints.getRequestById(requestId: requestId))
+    }
 } 

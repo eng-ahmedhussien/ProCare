@@ -36,6 +36,8 @@ class HomeVM: ObservableObject {
     @Published  var note: String = ""
     //MARK: - Nurses
     @Published var nurseList: [Nurse] = []
+   //MARK: - request
+    @Published var lastOrder: Order?
     
     private let apiClient: HomeApiClintProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -265,7 +267,6 @@ extension HomeVM {
 }
 //MARK: - Request
 extension HomeVM{
-    // MARK: - API Methods
     func submitRequest(Parameters: [String : Any],completion: @escaping () -> Void) async {
         do {
             let response = try await apiClient.submitRequest(Parameters: Parameters)
@@ -273,6 +274,24 @@ extension HomeVM{
             case .Success:
                 showToast(response.message ?? "لقد استلمنا طلبك بنجاح.",appearance: .success)
                 completion()
+            case .Error , .AuthFailure, .Conflict:
+                showToast(response.message ?? "", appearance: .error)
+            case .none:
+                return
+            }
+           
+        } catch {
+            debugPrint("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getRequestById(requestId: String) async {
+        do {
+            let response = try await apiClient.getRequestById(requestId: requestId)
+            switch response.status {
+            case .Success:
+                guard let data = response.data else { return }
+                lastOrder =  data
             case .Error , .AuthFailure, .Conflict:
                 showToast(response.message ?? "", appearance: .error)
             case .none:
