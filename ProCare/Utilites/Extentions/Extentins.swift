@@ -66,3 +66,16 @@ extension String {
         return formatter.date(from: self)
     }
 }
+
+extension Double {
+    var starRateIcon: String {
+        switch self {
+        case 1...3:
+            return "star.leadinghalf.filled"
+        case 4...5:
+            return "star.fill"
+        default:
+            return "star"
+        }
+    }
+}
