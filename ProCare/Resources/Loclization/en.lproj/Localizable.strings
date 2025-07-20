@@ -236,3 +236,7 @@
 //MARK: other
 "forced_update" = "Forced Update";
 "information" = "information";
+"update_required" = "Update Required";
+"update_now" = "Update Now";
+"force_update_message" = "A new version of the app is available. Please update to continue using the app and get the latest features.";
+

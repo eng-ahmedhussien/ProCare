@@ -37,7 +37,7 @@ struct LoadingPage: View {
 
         }.onAppear{
             Task {
-               // await  appManager.checkVersion()
+                await  appManager.checkVersion()
             }
            // showAlert(title: "update", message: "this forc update test")
         }

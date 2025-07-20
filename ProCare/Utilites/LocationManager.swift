@@ -104,9 +104,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     // Converts the CLLocation into a human-readable address in Arabic
     private func reverseGeocode(location: CLLocation) {
-        let locale = Locale(identifier: "ar")
+       // let locale = Locale(identifier: "ar")
 
-        geocoder.reverseGeocodeLocation(location, preferredLocale: locale) { [weak self] placemarks, error in
+        geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, error in
             guard let self = self else { return }
 
             DispatchQueue.main.async {
