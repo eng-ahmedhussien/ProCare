@@ -12,7 +12,7 @@ struct RequestScreen: View {
     @EnvironmentObject var appRouter: AppRouter
 
     var nurse: Nurse?
-    let profile =  KeychainHelper.shared.getData(Profile.self, forKey: .profileData)
+    var profile =  KeychainHelper.shared.getData(Profile.self, forKey: .profileData)
 
     var body: some View {
         VStack{
@@ -52,11 +52,14 @@ extension RequestScreen{
                     .font(.subheadline)
                     .bold()
 
-                HStack{
-                    Text("\(nurse?.rating ?? 0)")
-                    Image(systemName: "star.fill")
-                        .foregroundColor(.yellow)
-                }
+                Label(
+                    String(format: "%.1f", nurse?.rating ?? 0),
+                    systemImage: (nurse?.rating ?? 0).starRateIcon
+                )
+                    .labelStyle(.titleAndIcon)
+                    .foregroundColor(.yellow)
+                    .font(.subheadline)
+                    .accessibilityLabel(Text("Rating"))
             }
 
             Spacer()
@@ -66,69 +69,103 @@ extension RequestScreen{
     var addressCell: some View{
         VStack(alignment: .leading){
             Text("address".localized())
-                .bold()
-                .font(.title2)
+                .font(.headline)
+                .foregroundStyle(.appSecode)
 
-            Text("\(profile?.governorate ?? "")-\(profile?.city ?? "")-\(profile?.addressNotes ?? "" )")
-                .font(.title3)
-                .foregroundStyle(.gray)
-                .lineLimit(3)
+                // Location details with improved hierarchy
+                VStack(alignment: .leading, spacing: 4) {
+                    if let governorate = profile?.governorate,
+                       let city = profile?.city,
+                       !governorate.isEmpty || !city.isEmpty {
+                        Text("\(governorate)\(governorate.isEmpty ? "" : " - ")\(city)")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    // Address notes with better conditional rendering
+                    if let addressNotes = profile?.addressNotes, !addressNotes.isEmpty {
+                        Text(addressNotes)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            
+                // Current location with proper spacing
+                if !LocationManager.shared.address.isEmpty {
+                    VStack{
+                        Text("current_location")
+                            .font(.headline)
+                            .foregroundStyle(.appSecode)
+                        
+                        Text(LocationManager.shared.address)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(3)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
         }
         .alignHorizontally(.leading)
         .padding()
         .backgroundCard(color: .white, cornerRadius: 5, shadowRadius: 0.5, shadowColor: .gray)
         .padding()
     }
-
-    var totalRequestView: some View{
-        let totala = (vm.totalPrice + (vm.visitServicePrice ?? 0)).asEGPCurrency()
-       return VStack{
-            VStack{
+    
+    var totalRequestView: some View {
+        let total = (vm.totalPrice + (vm.visitServicePrice ?? 0)).asEGPCurrency()
+        
+        return VStack(alignment: .leading, spacing: 16) {
+            // Service List Section
+            VStack(alignment: .leading, spacing: 8) {
                 Text("services".localized() + ":")
-                    .font(.title2)
-                    .bold()
-                    .alignHorizontally(.leading)
+                    .font(.headline) // Strong section header
+                    .foregroundColor(.primary)
+                    .accessibilityAddTraits(.isHeader)
 
                 ForEach(vm.selectedServices, id: \.id) { result in
-                    HStack{
-                        Text(result.name ?? "" )
-                            .font(.title3)
-
+                    HStack {
+                        Text(result.name ?? "")
+                            .font(.subheadline)
+                            .foregroundColor(.primary)
                         Spacer()
-
                         Text(result.price?.asEGPCurrency() ?? "")
-                           
-                           
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
                 }
-                
-                HStack{
+
+                HStack {
                     Text("visit_Fee".localized())
+                        .font(.subheadline)
+                        .foregroundColor(.primary)
                     Spacer()
                     Text(vm.visitServicePrice?.asEGPCurrency() ?? "")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
-                
             }
 
-            Divider()
-                .padding(.horizontal)
+            Divider().padding(.vertical, 4)
 
-            HStack{
+            // Total Row
+            HStack {
                 Text("total".localized())
-                    .bold()
                     .font(.title2)
-
+                    .fontWeight(.semibold) // Use weight here instead of .bold()
                 Spacer()
-
-                Text(totala)
-                    .bold()
+                Text(total)
                     .font(.title2)
-            }  .foregroundStyle(.appPrimary)
+                    .fontWeight(.semibold)
+            }
+            .foregroundColor(.appPrimary) // Use your app's primary/accent color
         }
         .padding()
         .backgroundCard(color: .white, cornerRadius: 5, shadowRadius: 0.5, shadowColor: .gray)
         .padding()
     }
+
 
     var ConfirmButton: some View {
         let parameters :[String : Any]  = [
@@ -156,6 +193,6 @@ extension RequestScreen{
 
 #Preview {
     NavigationStack{
-        RequestScreen()
+        RequestScreen(profile: Profile.mock).environmentObject(HomeVM())
     }
 }
