@@ -20,16 +20,31 @@ final class PopupManager: ObservableObject {
         alert = AlertData(title: title, message: message, button: button, action: action)
     }
 
-    func showToast(message: String, style: ToastStyle, duration: TimeInterval = 3.0, position: ToastPosition) {
-        toast = ToastData(style: style, message: message, duration: duration, position: position)
+    func showToast(message: String, style: ToastStyle, duration: TimeInterval = 3.0, position: ToastPosition = .top) {
+        toast = nil
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.toast = ToastData(style: style, message: message, duration: duration, position: position)
+        }
     }
 
-    func showCustomPopup<Content: View>(@ViewBuilder content: () -> Content) {
-        customPopup = CustomPopupData(content: AnyView(content()))
-    }
+//    func showCustomPopup<Content: View>(@ViewBuilder content: () -> Content) {
+//        customPopup = CustomPopupData(content: AnyView(content()))
+//    }
+    
+    func showCustomPopup<Content: View>(dismissOnTapOutside: Bool = false, @ViewBuilder content: () -> Content) {
+            customPopup = CustomPopupData(content: AnyView(content()), dismissOnTapOutside: dismissOnTapOutside)
+        }
 
     func dismissCustomPopup() {
         customPopup = nil
+    }
+    
+    func dismissToast() {
+        toast = nil
+    }
+    
+    func dismissAlert() {
+        alert = nil
     }
 }
 struct AlertData: Identifiable, Equatable {
@@ -50,16 +65,27 @@ struct AlertData: Identifiable, Equatable {
 struct CustomPopupData: Identifiable, Equatable {
     let id = UUID()
     let content: AnyView
+    let dismissOnTapOutside: Bool
 
     static func ==(lhs: CustomPopupData, rhs: CustomPopupData) -> Bool {
-        lhs.id == rhs.id
+        lhs.id == rhs.id && lhs.dismissOnTapOutside == rhs.dismissOnTapOutside
     }
 }
 
-struct ToastData: Equatable {
+struct ToastData: Identifiable, Equatable {
+    let id = UUID()
     var style: ToastStyle
     var message: String
     var duration: TimeInterval = 3
     var width: CGFloat = .infinity
     var position: ToastPosition = .top
+    
+    static func ==(lhs: ToastData, rhs: ToastData) -> Bool {
+           lhs.id == rhs.id &&
+           lhs.style == rhs.style &&
+           lhs.message == rhs.message &&
+           lhs.duration == rhs.duration &&
+           lhs.width == rhs.width &&
+           lhs.position == rhs.position
+       }
 }
