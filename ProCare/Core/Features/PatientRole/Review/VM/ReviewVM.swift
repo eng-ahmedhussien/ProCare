@@ -31,7 +31,9 @@ class ReviewVM: ObservableObject {
             } else {
                 debugPrint("Response received but no user data")
             }
-        } catch {
+        }catch let error as APIResponseError where error.status == 401 {
+           
+        }catch {
             showToast("\(error.localizedDescription)", appearance: .error)
             debugPrint("\(error.localizedDescription)")
         }

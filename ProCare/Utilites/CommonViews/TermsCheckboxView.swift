@@ -46,7 +46,7 @@
             .padding()
             .sheet(isPresented: $showTerms) {
                // TermsWebView(isPresented: $showTerms)
-                SafariView(url: URL(string: "https://www.example.com")!)
+                SafariView(url: URL(string: "https://www.procare.live/terms")!)
             }
         }
     }
