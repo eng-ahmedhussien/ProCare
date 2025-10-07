@@ -35,11 +35,11 @@ struct currentOrderCellView: View {
                 AppEmptyView(message: "no_orders_available".localized())
             }
         }
-        .onAppear{
-            Task{
-                await vm.fetchCurrentOrder()
-            }
-        }
+//        .onAppear{
+//            Task{
+//                await vm.fetchCurrentOrder()
+//            }
+//        }
         .refreshable {
             Task {
                 await vm.fetchCurrentOrder()
