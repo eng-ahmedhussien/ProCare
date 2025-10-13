@@ -16,11 +16,11 @@ struct OrdersListView: View {
             content
         }
         .onAppear {
-            if vm.ordersList.isEmpty {
+           // if vm.ordersList.isEmpty {
                 Task {
                     await vm.fetchOrders(loadType: .initial)
                 }
-            }
+            //}
         }
         .refreshable {
             Task {
