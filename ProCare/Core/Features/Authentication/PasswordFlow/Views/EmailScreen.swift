@@ -49,8 +49,7 @@ extension EmailScreen {
                     .font(.title3)
             }
         }
-        .buttonStyle(AppButton(kind: .solid,disabled: !isFormValid))
-        .disabled(!isFormValid)
+        .appButtonStyle(.solid,disabled: !isFormValid)
         .padding()
     }
 }

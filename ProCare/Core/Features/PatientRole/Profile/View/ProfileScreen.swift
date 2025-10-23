@@ -187,30 +187,37 @@ extension ProfileTapScreen{
             .foregroundStyle(.appPrimary)
             .padding(.bottom)
                 // firstName
-            UserInfoRow(label: "first_name") {
+            UserInfoRow(label: "name") {
                 if isEditingUserInfo {
-                    TextField("first_name", text: $vm.firstName)
-                        .textFieldStyle(.roundedBorder)
-                        .foregroundStyle(.appSecode)
-                        .frame(width: screenWidth / 3)
+                    HStack{
+                        TextField("first_name", text: $vm.firstName)
+                            .textFieldStyle(.roundedBorder)
+                            .foregroundStyle(.appSecode)
+                            .frame(width: screenWidth / 3)
+                        
+                        TextField("last_name", text: $vm.lastName)
+                            .textFieldStyle(.roundedBorder)
+                            .foregroundStyle(.appSecode)
+                            .frame(width: screenWidth / 3)
+                    }
                 } else {
-                    Text(vm.firstName)
+                    Text(vm.firstName + " " + vm.lastName)
                         .foregroundStyle(.appSecode)
                 }
             }
             
                 // last_name
-            UserInfoRow(label: "last_name") {
-                if isEditingUserInfo {
-                    TextField("last_name", text: $vm.lastName)
-                        .textFieldStyle(.roundedBorder)
-                        .foregroundStyle(.appSecode)
-                        .frame(width: screenWidth / 3)
-                } else {
-                    Text(vm.lastName)
-                        .foregroundStyle(.appSecode)
-                }
-            }
+//            UserInfoRow(label: "last_name") {
+//                if isEditingUserInfo {
+//                    TextField("last_name", text: $vm.lastName)
+//                        .textFieldStyle(.roundedBorder)
+//                        .foregroundStyle(.appSecode)
+//                        .frame(width: screenWidth / 3)
+//                } else {
+//                    Text(vm.lastName)
+//                        .foregroundStyle(.appSecode)
+//                }
+//            }
                 // gender
             UserInfoRow(label: "gender") {
                 if isEditingUserInfo {
@@ -362,8 +369,7 @@ extension ProfileTapScreen{
                 }
             }
             .transition(.move(edge: .bottom).combined(with: .opacity))
-            .buttonStyle(AppButton(kind: .solid,width: 300,disabled: !isFormValid))
-            .disabled(!isFormValid)
+            .appButtonStyle(.solid,width: 300,disabled: !isFormValid)
             .padding()
         }else {
             VStack() {

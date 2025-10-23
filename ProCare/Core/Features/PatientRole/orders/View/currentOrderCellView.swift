@@ -35,11 +35,6 @@ struct currentOrderCellView: View {
                 AppEmptyView(message: "no_orders_available".localized())
             }
         }
-//        .onAppear{
-//            Task{
-//                await vm.fetchCurrentOrder()
-//            }
-//        }
         .refreshable {
             Task {
                 await vm.fetchCurrentOrder()
@@ -104,6 +99,10 @@ extension currentOrderCellView{
                 Text(order.speciality ?? "")
                     .font(.callout)
                     .foregroundStyle(.black)
+                
+                Text(order.createdDate ?? "")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
 
                 if let minutes = order.estimatedTimeMinutes {
                     Label {

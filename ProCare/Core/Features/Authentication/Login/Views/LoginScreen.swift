@@ -129,7 +129,7 @@ extension LoginScreen {
                 .font(.title3)
                 .underline()
         }
-        .buttonStyle(AppButton(kind: .plain))
+        .appButtonStyle(.plain)
     }
     
     var loginButton: some View {
@@ -161,16 +161,10 @@ extension LoginScreen {
                 }
             }
         } label: {
-            if vm.viewState == .loading {
-                ProgressView()
-                    .appProgressStyle(color: .white)
-            } else {
                 Text("log_in".localized())
                     .font(.title3)
-            }
         }
-        .buttonStyle(AppButton(kind: .solid, width: 300, disabled: !isFormValid))
-        .disabled(!isFormValid)
+        .appButtonStyle(width: 300, disabled: !isFormValid, isLoading: vm.viewState == .loading)
         .padding(.horizontal)
     }
     
@@ -183,7 +177,7 @@ extension LoginScreen {
                 .foregroundStyle(.appSecode)
                 .underline()
         }
-        .buttonStyle(AppButton(kind: .plain))
+        .appButtonStyle(.plain)
     }
     
 }

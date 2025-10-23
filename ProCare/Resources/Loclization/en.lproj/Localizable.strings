@@ -60,6 +60,7 @@
 //MARK: - profile
 "profile" = "Profile";
 "user_info" = "User Info";
+"name" = "Name";
 "first_name" = "First Name";
 "last_name" = "Last Name";
 "gender" = "Gender";

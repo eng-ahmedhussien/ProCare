@@ -59,6 +59,7 @@
 //MARK: - profile
 "profile" = "الملف الشخصي";
 "user_info" = "معلومات المستخدم";
+"name" = "الاسم";
 "first_name" = "الاسم الأول";
 "last_name" = "اسم العائلة";
 "gender" = "النوع";
@@ -206,7 +207,7 @@
 "validation_empty" = "هذا الحقل مطلوب";
 "validation_phone" = "رقم غير صحيح (مثال: 01XXXXXXXXX)";
 "validation_email" = "البريد الإلكتروني غير صالح";
-"validation_password" = "كلمة المرور ضعيفة (٨ أحرف على الأقل، حرف كبير، حرف صغير، رقم، ورمز)";
+"validation_password" = "كلمة المرور ضعيفة: 8+ أحرف، حرف كبير، حرف صغير، رقم، ورمز";
 "validation_confirm_password" = "كلمتا المرور غير متطابقتين";
 "validation_number" = "يجب أن يكون رقمًا صحيحًا";
 "validation_min" = "يجب أن تكون القيمة ≥ %@";

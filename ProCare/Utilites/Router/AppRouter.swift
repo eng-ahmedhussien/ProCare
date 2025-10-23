@@ -27,6 +27,7 @@ class AppRouter: RouterProtocol {
     @Published var path: NavigationPath = NavigationPath()
     @Published var sheetView: SheetView?
     @Published var fullScreen: FullScreen?
+    @Published var selectTap : TapViewEnum = .home
     
     //MARK: - functions
     func push(_ screen: Screen) {

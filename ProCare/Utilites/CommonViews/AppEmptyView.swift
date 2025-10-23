@@ -11,7 +11,7 @@ import SwiftUI
 struct AppEmptyView: View {
     var title: String = ""
     var message: String = ""
-    var imageName: String = "tray" // system icon
+    var imageName: String = "tray.full.fill" // system icon
 
     var body: some View {
         VStack(spacing: 16) {
@@ -24,6 +24,8 @@ struct AppEmptyView: View {
             Text(title)
                 .font(.headline)
                 .foregroundColor(.primary)
+                .isHidden(title.isEmpty, remove: true) 
+
 
             Text(message)
                 .font(.subheadline)
@@ -37,7 +39,14 @@ struct AppEmptyView: View {
     }
 }
 
-#Preview {
-    AppEmptyView()
+#Preview("With Title") {
+    AppEmptyView(title: "Requests", message: "Some request data")
         .padding()
 }
+
+#Preview("Empty Title") {
+    AppEmptyView(title: "", message: "no request data")
+        .padding()
+}
+
+

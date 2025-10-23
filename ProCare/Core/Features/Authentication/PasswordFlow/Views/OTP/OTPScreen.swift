@@ -21,7 +21,7 @@ struct OTPScreen: View {
     @State private var pinFour: String  = ""
     @State private var isLoading        = false
     @FocusState private var pinFocusState : FocusPin?
-
+    
     var email: String                   = ""
     var comeFrom: ComeFrom              = .login
     
@@ -38,7 +38,7 @@ struct OTPScreen: View {
             header
             
             pinView
-         
+            
             ResendOTPView(vm: vm, email: email)
             
             VerifyButton
@@ -46,11 +46,11 @@ struct OTPScreen: View {
         .appNavigationBar(title: "otp".localized())
         .task {
             if comeFrom == .login {
-               let parameter = ["email": email]
-               await vm.resendCode(parameter: parameter)
+                let parameter = ["email": email]
+                await vm.resendCode(parameter: parameter)
             }
         }
-//        .disabled(vm.viewState == .loading)
+        //        .disabled(vm.viewState == .loading)
         
     }
 }
@@ -71,7 +71,7 @@ extension OTPScreen {
         }
         .font(.title.bold())
         .foregroundStyle(.appSecode)
-     
+        
     }
     
     var pinView: some View {
@@ -142,7 +142,7 @@ extension OTPScreen {
                     }
                 case .forgetPassword:
                     await vm.checkCode(email:email, otp: pinOne + pinTwo + pinThree + pinFour){ resetToken in
-                        appRouter.push(.NewPasswordScreen(phone: email,resetToken: resetToken))           
+                        appRouter.push(.NewPasswordScreen(phone: email,resetToken: resetToken))
                     }
                 }
                 
@@ -150,20 +150,11 @@ extension OTPScreen {
             }
             
         } label: {
-            
-            if isLoading {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    .scaleEffect(2)
-            }
-            else{
-                Text("Verify".localized())
-                    .font(.title3)
-                    .foregroundColor(.white)
-            }
+            Text("Verify".localized())
+                .font(.title3)
+                .foregroundColor(.white)
         }
-        .buttonStyle(AppButton(kind: .solid,disabled: pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty))
-        .disabled(pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty)
+        .appButtonStyle(disabled: pinOne.isEmpty || pinTwo.isEmpty || pinThree.isEmpty || pinFour.isEmpty, isLoading: isLoading )
         .padding(.horizontal)
     }
 }

@@ -10,13 +10,14 @@ import SwiftUI
 struct TapBarView: View {
 
     @State var selectTap : TapViewEnum = .home
+    @EnvironmentObject var appRouter: AppRouter
     
     init() {
         setupTapViewAppearance()
     }
     
     var body: some View {
-        TabView (selection:$selectTap){
+        TabView (selection:$appRouter.selectTap){
             ForEach(TapViewEnum.allCases){ tab in
                 let tabItem = tab.tabItem
                 tab

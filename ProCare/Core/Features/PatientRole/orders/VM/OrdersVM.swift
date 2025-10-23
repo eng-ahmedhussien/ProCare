@@ -102,6 +102,7 @@ class OrdersVM: ObservableObject {
                 if data as! Bool {
                     Task{
                         await fetchCurrentOrder()
+                        await fetchOrders(loadType: .initial)
                     }
                 }
             }else{

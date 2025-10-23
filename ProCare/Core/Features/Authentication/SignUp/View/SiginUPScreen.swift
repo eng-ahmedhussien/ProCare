@@ -123,17 +123,10 @@ extension SignUPScreen {
                 }
             }
         } label: {
-            if vm.viewState == .loading {
-                ProgressView()
-                    .appProgressStyle()
-            } else {
                 Text("sign_up".localized())
                     .font(.title3)
-            }
-      
         }
-        .buttonStyle(AppButton(kind: .solid,disabled: !isFormValid))
-        .disabled(!isFormValid)
+        .appButtonStyle(.solid, disabled: !isFormValid, isLoading: vm.viewState == .loading)
         .padding(.horizontal)
     }
     

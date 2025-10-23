@@ -40,8 +40,7 @@ struct NewPasswordScreen: View {
                 Text("save".localized())
                     .font(.title3)
             }
-            .buttonStyle(AppButton(kind: .solid,disabled: !isFormValid))
-            .disabled(!isFormValid)
+            .appButtonStyle(.solid,disabled: !isFormValid)
             .padding(.horizontal)
         }
         .appNavigationBar(title: "reset_password".localized())

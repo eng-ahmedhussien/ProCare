@@ -8,7 +8,7 @@
 
 struct NurseProfile: Codable {
     let id, firstName, lastName, phoneNumber: String?
-    let rate: Int?
+    let rate: Double?
     let specialization: String?
     let specializationId: Int?
     let imageUrl: String?

@@ -94,7 +94,7 @@ extension RequestScreen{
             
                 // Current location with proper spacing
                 if !LocationManager.shared.address.isEmpty {
-                    VStack{
+                    VStack(alignment: .leading){
                         Text("current_location")
                             .font(.headline)
                             .foregroundStyle(.appSecode)
@@ -179,6 +179,7 @@ extension RequestScreen{
         return  Button {
             Task{
                 await vm.submitRequest(Parameters: parameters){
+                    appRouter.selectTap = .orders
                     appRouter.popToRoot()
                 }
             }

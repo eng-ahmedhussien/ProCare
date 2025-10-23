@@ -72,6 +72,7 @@ struct AppTextField: View {
                             .disableAutocorrection(true)
                             // Enable password AutoFill
                             .textInputAutocapitalization(.never)
+                            .id("secure")
                     } else {
                         TextField(placeholder, text: $text)
                             .textContentType(textContentType)
@@ -80,6 +81,7 @@ struct AppTextField: View {
                             .disableAutocorrection(true)
                             // Enable AutoFill for username/email
                             .textInputAutocapitalization(.never)
+                            .id("plain")
                     }
                 }
                 .foregroundStyle(.appSecode)
@@ -96,10 +98,12 @@ struct AppTextField: View {
                         showPassword.toggle()
                     } label: {
                         Image(systemName: showPassword ? "eye.slash" : "eye")
-                            .resizable()
-                            .frame(width: 20, height: 20)
+                            .imageScale(.medium)
                             .foregroundColor(.gray)
+                            .frame(width: 30, height: 30) // Bigger tap target
+                            .contentShape(Rectangle())
                     }
+
                 }
             }
             .padding()

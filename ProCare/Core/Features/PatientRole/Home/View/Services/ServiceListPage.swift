@@ -139,7 +139,7 @@ extension ServiceListPage{
                     Text("continue")
                         .font(.title3)
                 }
-                .buttonStyle(AppButton(kind: .solid, disabled: vm.selectedServices.isEmpty))
+                .appButtonStyle(.solid, disabled: vm.selectedServices.isEmpty)
             }
             .padding()
             .background(
